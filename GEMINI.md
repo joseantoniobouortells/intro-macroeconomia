@@ -29,3 +29,4 @@ Este proyecto es una plataforma educativa interactiva diseñada para estudiantes
 1. **Validación Teórica:** Antes de crear una nueva herramienta, se debe mapear la lógica contra las figuras y explicaciones del libro de CORE.
 2. **Consolidación:** Cada nueva herramienta debe ser enlazada en el menú principal del tema y documentada en el README raíz.
 3. **Escalabilidad:** Los parámetros iniciales de los modelos deben ser calibrados para que los equilibrios sean visibles en resoluciones estándar.
+4. **Auto-Mantenimiento de Contexto (CRÍTICO):** Ninguna implementación de herramienta o tema se considera finalizada hasta que se hayan actualizado `MAP.md` y `KNOWLEDGE.md` con la nueva lógica, variables y componentes utilizados. Es responsabilidad del agente mantener la "Inteligencia del Proyecto" al día sin aviso previo del usuario.
