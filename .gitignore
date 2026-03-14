@@ -1,0 +1,9 @@
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Archivos temporales de implementación
+IMPLEMENTACION-COMPLETADA.txt
+GUIA-ACCESO-RAPIDO.md
