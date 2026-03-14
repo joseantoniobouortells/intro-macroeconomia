@@ -1,5 +1,8 @@
 # 📊 Repositorio de Recursos Educativos - Introducción a Macroeconomía
 
+> [!IMPORTANT]
+> **Project Spec-Anchored:** Este proyecto se rige por los mandatos definidos en [GEMINI.md](./GEMINI.md). Cualquier modificación o nueva herramienta debe respetar estrictamente la fuente de verdad (CORE Economics) y los estándares de diseño allí especificados.
+
 ## 📑 Descripción General
 
 Este es un repositorio modular y escalable de recursos educativos para la asignatura de **Introducción a Macroeconomía** del Grado en Economía. Contiene temas temáticos organizados en carpetas independientes, cada uno con su propio contenido interactivo, análisis, y materiales de apoyo.
