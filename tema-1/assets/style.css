@@ -307,6 +307,47 @@ input[type="range"]::-webkit-slider-thumb {
 .li-link { color: #0a66c2; border-color: #0a66c2; }
 .yt-link svg, .li-link svg { width: 14px; height: 14px; }
 
+/* ── Exam Pills ── */
+.exam-box {
+  background: #fff9e6;
+  border: 1.5px solid #ffcc00;
+  border-radius: 16px;
+  padding: 20px;
+  margin-top: 24px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.exam-icon {
+  font-size: 1.5rem;
+  background: #ffcc00;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.exam-content h4 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #b38f00;
+  margin-bottom: 6px;
+}
+
+.exam-content p {
+  font-size: 0.95rem;
+  color: #5c4d00;
+  line-height: 1.5;
+}
+
+.exam-content strong { color: #000; }
+
 /* ── Tool cards (index page) ── */
 .tools-grid {
   display: grid;

@@ -5,6 +5,8 @@ Este mapa permite a los agentes de IA localizar la lógica del proyecto rápidam
 ## 🏗️ Estructura del Repositorio
 - `index.html`: Portal de entrada a todos los temas.
 - `GEMINI.md`: Constitución y estándares del proyecto (**LEER PRIMERO**).
+- `MAP.md`: Índice de inteligencia para navegación rápida.
+- `EXAMS.md`: Base de datos de preguntas reales y su lógica técnica.
 - `tema-1/`: El Mercado del Trabajo (Capítulo 9 CORE).
     - `index.html`: Menú de herramientas del tema.
     - `equilibrio-general.html`: Simulación de u* (Equilibrio de Nash).

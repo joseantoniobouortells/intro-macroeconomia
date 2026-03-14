@@ -33,8 +33,11 @@ Para mantener la consistencia visual y el ahorro de tokens, **use SIEMPRE** esta
 | **Panel de Control** | `.controls-card` | Fondo oscuro (`#1d1d1f`) para sliders. |
 | **Bloque KaTeX** | `.formula-display` | Contenedor azul claro para ecuaciones. |
 | **Parámetro** | `.formula-param-item`| Fila con nombre de variable y valor destacado. |
+| **Píldora Examen**| `.exam-box` | Caja dorada con icono de birrete para tips de examen. |
 
 ## 🛠️ Reglas de Implementación
 1. **Gráficos:** Use `Chart.js` con `type: 'linear'` para el eje X si usa coordenadas `{x, y}`.
 2. **Matemáticas:** Renderice siempre con `KaTeX` usando la función `CORE.kHTML` (o equivalente) para asegurar legibilidad.
 3. **Javascript:** Importe siempre `assets/economic-logic.js` para usar las fórmulas validadas.
+4. **Exámenes:** Si una herramienta tiene una pregunta relacionada en `EXAMS.md`, integre un `.exam-box` al final de la sección de explicación para guiar al estudiante.
+
