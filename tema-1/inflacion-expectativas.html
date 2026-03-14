@@ -100,7 +100,7 @@
 
       <div class="control-group" style="margin-bottom: 0;">
         <div class="control-header">
-          <span class="control-title">Inflación Esperada ($\pi^e$)</span>
+          <span class="control-title">Inflación Esperada (<span id="math-exp-inf-label"></span>)</span>
           <span id="labelExpInf" class="control-value">2.0%</span>
         </div>
         <input type="range" id="paramExpInf" min="0" max="10" step="0.5" value="2.0">
@@ -118,8 +118,8 @@
     <div class="card" style="margin-bottom: 48px;">
       <h2>📖 Teoría de la Estabilidad de Precios</h2>
       <div style="line-height: 1.7; color: #3a3a3c;">
-        <p>En el <strong>Equilibrio de Nash (u*)</strong>, la brecha de negociación es cero. Los salarios reales que exigen los trabajadores son consistentes con los que las empresas están dispuestas a pagar. La inflación es constante e igual a la esperada.</p>
-        <p style="margin-top: 12px;">Si el desempleo cae por debajo de <strong>u*</strong>, los trabajadores tienen mayor poder y exigen salarios reales más altos. Como esto reduce el margen de beneficio de las empresas, estas suben los precios para restaurarlo, generando una inflación superior a la esperada.</p>
+        <p>En el <strong>Equilibrio de Nash (<span id="math-ustar-theory"></span>)</strong>, la brecha de negociación es cero. Los salarios reales que exigen los trabajadores son consistentes con los que las empresas están dispuestas a pagar. La inflación es constante e igual a la esperada.</p>
+        <p style="margin-top: 12px;">Si el desempleo cae por debajo de <strong><span id="math-ustar-theory-2"></span></strong>, los trabajadores tienen mayor poder y exigen salarios reales más altos. Como esto reduce el margen de beneficio de las empresas, estas suben los precios para restaurarlo, generando una inflación superior a la esperada.</p>
       </div>
     </div>
 
@@ -130,7 +130,7 @@
         <h4>Directo al Examen — Septiembre 2024 (Q7)</h4>
         <p>Suelen preguntar por la inflación resultante dada una brecha de negociación.<br>
         <strong>Pregunta:</strong> Si la inflación esperada es del 3% y la brecha de negociación es del 1%, ¿cuál es la inflación actual?<br>
-        <strong>Respuesta:</strong> $\text{Inflación} = \text{Esperada} + \text{Brecha} = 3\% + 1\% = 4\%$.<br>
+        <strong>Respuesta:</strong> <span id="math-inf-calc-exam"></span>.<br>
         <strong>Práctica:</strong> Ajusta la inflación esperada a 3.0% y mueve el desempleo a 4.0% para ver cómo se genera esa brecha en las métricas superiores.</p>
       </div>
     </div>
@@ -236,7 +236,18 @@
     document.getElementById('paramU').addEventListener('input', (e) => { u = parseFloat(e.target.value); updateAll(); });
     document.getElementById('paramExpInf').addEventListener('input', (e) => { expInf = parseFloat(e.target.value); updateAll(); });
 
-    document.addEventListener('DOMContentLoaded', () => { initChart(); updateAll(); });
+    function kHTML(latex) {
+      return katex.renderToString(latex, { throwOnError: false });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initChart();
+      updateAll();
+
+      // Renderizar símbolos estáticos
+      document.getElementById('math-pi-e').innerHTML = kHTML('\\pi^e');
+      document.getElementById('math-inf-calc').innerHTML = kHTML('\\text{Inflación} = \\text{Esperada} + \\text{Brecha} = 3\\% + 1\\% = 4\\%');
+    });
   </script>
 </body>
 </html>

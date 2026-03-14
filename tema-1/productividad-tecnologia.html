@@ -130,7 +130,7 @@
         <h4>Directo al Examen — Junio 2025 (Q6)</h4>
         <p><strong>Pregunta:</strong> Como resultado de la difusión de nuevas tecnologías, ¿qué esperaríamos a largo plazo?<br>
         <strong>Respuesta Correcta:</strong> Que la curva de fijación de precios (PS) se desplace hacia arriba.<br>
-        <strong>Por qué:</strong> Al aumentar $\lambda$, el producto por trabajador es mayor. Como el markup $\mu$ depende de la competencia (que no ha cambiado), el salario real debe subir para que el reparto se mantenga proporcional.</p>
+        <strong>Por qué:</strong> Al aumentar <span id="math-lambda-exam"></span>, el producto por trabajador es mayor. Como el markup <span id="math-mu-exam"></span> depende de la competencia (que no ha cambiado), el salario real debe subir para que el reparto se mantenga proporcional.</p>
       </div>
     </div>
   </div>
@@ -213,6 +213,10 @@
     document.addEventListener('DOMContentLoaded', () => {
       initChart();
       updateAll();
+
+      // Renderizar píldora de examen
+      document.getElementById('math-lambda-exam').innerHTML = kHTML('\\lambda');
+      document.getElementById('math-mu-exam').innerHTML = kHTML('\\mu');
     });
   </script>
 </body>

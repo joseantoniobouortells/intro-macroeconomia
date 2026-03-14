@@ -333,9 +333,9 @@
       <div class="exam-icon">🎓</div>
       <div class="exam-content">
         <h4>Directo al Examen — Junio 2024 (Q1)</h4>
-        <p>Suelen preguntar el cálculo de la tasa de desempleo ($u$) dándote el empleo ($N$) y la fuerza laboral ($LF$).<br>
-        <strong>Pregunta:</strong> Si $N=0.76$ y $LF=0.80$, ¿cuál es la tasa de desempleo?<br>
-        <strong>Cálculo:</strong> $u = \frac{LF - N}{LF} = \frac{0.80 - 0.76}{0.80} = 5\%$.</p>
+        <p>Suelen preguntar el cálculo de la tasa de desempleo (<span id="math-u"></span>) dándote el empleo (<span id="math-n"></span>) y la fuerza laboral (<span id="math-lf"></span>).<br>
+        <strong>Pregunta:</strong> Si <span id="math-n-val"></span> y <span id="math-lf-val"></span>, ¿cuál es la tasa de desempleo?<br>
+        <strong>Cálculo:</strong> <span id="math-u-calc"></span>.</p>
       </div>
     </div>
 
@@ -345,7 +345,7 @@
       <div class="exam-content">
         <h4>Directo al Examen — Junio 2024 (Q2)</h4>
         <p>¿Qué ocurre si aumenta el grado de competencia en el mercado de bienes?<br>
-        <strong>Lógica:</strong> $\uparrow$ Competencia $\rightarrow$ $\downarrow \mu$ (markup) $\rightarrow$ $\uparrow$ PS (la curva de precios sube).<br>
+        <strong>Lógica:</strong> <span id="math-comp-logic"></span>.<br>
         <strong>Resultado:</strong> En el nuevo equilibrio, el <strong>salario real aumenta</strong> y el <strong>desempleo disminuye</strong>. Compruébalo moviendo el slider de Markup a la izquierda.</p>
       </div>
     </div>
@@ -673,6 +673,15 @@
       document.getElementById('labelA').innerHTML      = kHTML('a') + ' — Coste del esfuerzo';
       document.getElementById('labelLambda').innerHTML = kHTML('\\lambda') + ' — Productividad';
       document.getElementById('labelMu').innerHTML     = kHTML('\\mu') + ' — Markup empresarial';
+
+      // Renderizar píldoras de examen
+      document.getElementById('math-u').innerHTML = kHTML('u');
+      document.getElementById('math-n').innerHTML = kHTML('N');
+      document.getElementById('math-lf').innerHTML = kHTML('LF');
+      document.getElementById('math-n-val').innerHTML = kHTML('N=0.76');
+      document.getElementById('math-lf-val').innerHTML = kHTML('LF=0.80');
+      document.getElementById('math-u-calc').innerHTML = kHTML('u = \\frac{LF - N}{LF} = \\frac{0.80 - 0.76}{0.80} = 5\\%');
+      document.getElementById('math-comp-logic').innerHTML = kHTML('\\uparrow \\text{Competencia} \\rightarrow \\downarrow \\mu \\rightarrow \\uparrow PS');
     }
 
     // ─────────────────────────────────────────────

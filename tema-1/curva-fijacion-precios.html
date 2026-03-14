@@ -322,7 +322,7 @@
     <div class="exam-content">
       <h4>Directo al Examen — Junio 2024 (Q2)</h4>
       <p><strong>Pregunta:</strong> ¿Qué efecto tiene un aumento del grado de competencia?<br>
-      <strong>Lógica:</strong> $\uparrow$ Competencia $\rightarrow$ $\downarrow \mu$ (markup). Al reducirse el margen que la empresa añade al coste, el salario real ($W/P$) que pueden recibir los trabajadores <strong>aumenta</strong>.<br>
+      <strong>Lógica:</strong> <span id="math-comp-logic-precios"></span>. Al reducirse el margen que la empresa añade al coste, el salario real (<span id="math-wp-precios"></span>) que pueden recibir los trabajadores <strong>aumenta</strong>.<br>
       <strong>Práctica:</strong> Mueve el slider de Markup a la izquierda (o Elasticidad a la derecha) y observa cómo sube la línea azul en la gráfica de la economía.</p>
     </div>
   </div>
@@ -439,6 +439,10 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('labelMu').innerHTML        = kHTML('\\mu') + ' — Markup (margen)';
   document.getElementById('labelElasticity').innerHTML = kHTML('\\varepsilon') + ' — Elasticidad de demanda';
   document.getElementById('labelW').innerHTML          = kHTML('W') + ' — Salario nominal';
+
+  // Renderizar píldora de examen
+  document.getElementById('math-comp-logic-precios').innerHTML = kHTML('\\uparrow \\text{Competencia} \\rightarrow \\downarrow \\mu');
+  document.getElementById('math-wp-precios').innerHTML = kHTML('W/P');
 
   initCharts();
   attachListeners();

@@ -148,7 +148,7 @@
       <div class="exam-content">
         <h4>Directo al Examen — Septiembre 2024 (Desarrollo 2)</h4>
         <p><strong>Pregunta:</strong> Represente y discuta los efectos de una contracción de la demanda agregada.<br>
-        <strong>Respuesta Clave:</strong> La economía se desplaza de <strong>X</strong> a <strong>B</strong>. El desempleo sube por encima del nivel natural (desempleo cíclico). 
+        <strong>Respuesta Clave:</strong> La economía se desplaza de <span id="math-x-point"></span> a <span id="math-b-point"></span>. El desempleo sube por encima del nivel natural (desempleo cíclico). 
         Para corregirlo sin intervención, las empresas deberían bajar salarios y precios, pero el ajuste suele fallar por la <strong>rigidez salarial</strong>.<br>
         <strong>Práctica:</strong> Baja la demanda al 80% y pulsa el modo "🏛️ Estímulo del Gobierno" para ver la solución óptima del examen.</p>
       </div>
@@ -253,7 +253,18 @@
     document.getElementById('pDemand').addEventListener('input', (e) => { currentDemand = parseInt(e.target.value); updateAll(); });
     document.getElementById('pWageCut').addEventListener('input', (e) => { wageCut = parseInt(e.target.value); updateAll(); });
 
-    document.addEventListener('DOMContentLoaded', () => { initCharts(); updateAll(); });
+    function kHTML(latex) {
+      return katex.renderToString(latex, { throwOnError: false });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => { 
+      initCharts(); 
+      updateAll(); 
+
+      // Renderizar puntos teóricos
+      document.getElementById('math-x-point').innerHTML = kHTML('\\text{X}');
+      document.getElementById('math-b-point').innerHTML = kHTML('\\text{B}');
+    });
   </script>
 </body>
 </html>
