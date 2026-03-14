@@ -18,15 +18,16 @@ web/
 │
 ├── tema-1/                    # Tema 1: El Mercado del Trabajo
 │   ├── index.html            # Página principal del tema
-│   ├── curva-fijacion-precios.html
-│   ├── curva-fijacion-salarios.html
+│   ├── curva-fijacion-precios.html   # ✓ Disponible
+│   ├── curva-fijacion-salarios.html  # ✓ Disponible
+│   ├── equilibrio-general.html       # ✓ Disponible — WS + PS, u* y W/P*
 │   ├── assets/               # Recursos (CSS, JS, fuentes, librerías)
 │   │   ├── style.css
 │   │   ├── chart.umd.min.js
 │   │   ├── katex.min.js
 │   │   ├── katex.min.css
 │   │   └── ...
-│   └── README.md             # Documentación específica del tema (opcional)
+│   └── README.md             # Documentación específica del tema
 │
 ├── tema-2/                    # Tema 2: [Capítulo 10 - En Desarrollo]
 │   ├── css/                  # Estilos CSS específicos
