@@ -153,9 +153,10 @@
         },
         options: {
           responsive: true, maintainAspectRatio: false,
+          animation: false,
           scales: {
-            x: { display: true, title: { display: true, text: 'Empleo (N)' }, ticks: { display: false } },
-            y: { min: 0, max: 3.0, title: { display: true, text: 'Salario Real / Producto' } }
+            x: { type: 'linear', min: 0, max: 100, title: { display: true, text: 'Empleo (N)' }, ticks: { display: false } },
+            y: { type: 'linear', min: 0, max: 3.0, title: { display: true, text: 'Salario Real / Producto' } }
           },
           plugins: {
             legend: { position: 'top' },

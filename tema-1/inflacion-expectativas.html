@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inflación y Expectativas — Tema 1</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/katex.min.css">
+  <script src="assets/chart.umd.min.js"></script>
+  <script src="assets/katex.min.js"></script>
+  <style>
+    body { padding: 0; background: #f5f5f7; }
+    .site-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      height: 48px; display: flex; align-items: center; padding: 0 24px;
+    }
+    .nav-back { display: flex; align-items: center; gap: 4px; font-size: 0.8rem; font-weight: 500; color: #0071e3; text-decoration: none; width: 120px; }
+    .nav-center { flex: 1; text-align: center; font-size: 0.8rem; font-weight: 500; color: #1d1d1f; pointer-events: none; }
+    .nav-spacer { width: 120px; }
+    .container { padding-top: 0 !important; }
+    .inner { max-width: 1000px; margin: 0 auto; padding: 0 24px 80px; }
+
+    /* ── Metrics ── */
+    .metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; margin-top: 32px; }
+    .metric-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 18px; padding: 20px; text-align: center; }
+    .metric-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6e6e73; margin-bottom: 10px; }
+    .metric-value { font-size: 2.4rem; font-weight: 800; color: #1d1d1f; letter-spacing: -1px; }
+    .metric-card.alert { border-color: #ff3b30; background: #fff9f9; }
+    .metric-card.alert .metric-value { color: #ff3b30; }
+
+    /* ── Charts ── */
+    .chart-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 20px; padding: 24px; margin-bottom: 24px; }
+    .chart-container { position: relative; height: 400px; }
+
+    /* ── Controls ── */
+    .controls-card { background: #1d1d1f; color: #fff; border-radius: 20px; padding: 28px; margin-bottom: 24px; }
+    .control-group { margin-bottom: 24px; }
+    .control-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .control-title { font-size: 1rem; font-weight: 700; }
+    .control-value { font-size: 1.4rem; font-weight: 800; color: #0071e3; }
+    input[type=range] { width: 100%; cursor: pointer; }
+
+    /* ── Explanation ── */
+    .spiral-box { background: #f0f6ff; border-radius: 16px; padding: 24px; margin-bottom: 24px; border-left: 5px solid #0071e3; }
+    .spiral-step { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
+    .spiral-arrow { color: #0071e3; font-size: 1.2rem; }
+
+    .katex { font-size: 1.1em !important; }
+  </style>
+</head>
+<body>
+  <nav class="site-nav">
+    <a href="index.html" class="nav-back"><span class="chevron">‹</span> Tema 1</a>
+    <span class="nav-center">CORE Economics · Inflación y Expectativas</span>
+    <span class="nav-spacer"></span>
+  </nav>
+
+  <div class="inner">
+    <header style="margin-top: 48px; text-align: center;">
+      <p style="font-size:0.75rem; font-weight:600; letter-spacing:0.8px; text-transform:uppercase; color:#0071e3; margin-bottom:8px;">Capítulo 9.11 y 15</p>
+      <h1 style="font-size: 2.5rem; letter-spacing: -1px;">📊 Inflación y Brecha de Negociación</h1>
+      <p style="color: #6e6e73; max-width: 600px; margin: 0 auto;">Entiende la espiral precios-salarios y cómo el mercado laboral determina la estabilidad de precios.</p>
+    </header>
+
+    <div class="metrics-row">
+      <div class="metric-card" id="cardGap">
+        <div class="metric-label">Brecha de Negociación</div>
+        <div id="valGap" class="metric-value">0.0%</div>
+        <div style="font-size: 0.8rem; color: #86868b; margin-top: 4px;">(WS - PS)</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Inflación Esperada</div>
+        <div id="valExpInf" class="metric-value">2.0%</div>
+        <div style="font-size: 0.8rem; color: #86868b; margin-top: 4px;">Inercia del periodo anterior</div>
+      </div>
+      <div class="metric-card alert" id="cardInf">
+        <div class="metric-label">Inflación Actual</div>
+        <div id="valInf" class="metric-value">2.0%</div>
+        <div style="font-size: 0.8rem; color: #ff3b30; margin-top: 4px;">Esperada + Brecha</div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-container">
+        <canvas id="infChart"></canvas>
+      </div>
+    </div>
+
+    <div class="controls-card">
+      <div class="control-group">
+        <div class="control-header">
+          <span class="control-title">Tasa de Desempleo (u)</span>
+          <span id="labelU" class="control-value">5.0%</span>
+        </div>
+        <input type="range" id="paramU" min="1" max="15" step="0.1" value="5.0">
+        <p style="font-size: 0.8rem; color: #86868b; margin-top: 8px;">Bajo desempleo aumenta el poder de negociación de los trabajadores.</p>
+      </div>
+
+      <div class="control-group" style="margin-bottom: 0;">
+        <div class="control-header">
+          <span class="control-title">Inflación Esperada ($\pi^e$)</span>
+          <span id="labelExpInf" class="control-value">2.0%</span>
+        </div>
+        <input type="range" id="paramExpInf" min="0" max="10" step="0.5" value="2.0">
+        <p style="font-size: 0.8rem; color: #86868b; margin-top: 8px;">Desplaza la curva WS hacia arriba: los trabajadores piden más para cubrir el coste de vida.</p>
+      </div>
+    </div>
+
+    <div class="spiral-box">
+      <h3>🌀 La Espiral Precios-Salarios</h3>
+      <div id="spiralSteps">
+        <!-- Dinámico -->
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 48px;">
+      <h2>📖 Teoría de la Estabilidad de Precios</h2>
+      <div style="line-height: 1.7; color: #3a3a3c;">
+        <p>En el <strong>Equilibrio de Nash (u*)</strong>, la brecha de negociación es cero. Los salarios reales que exigen los trabajadores son consistentes con los que las empresas están dispuestas a pagar. La inflación es constante e igual a la esperada.</p>
+        <p style="margin-top: 12px;">Si el desempleo cae por debajo de <strong>u*</strong>, los trabajadores tienen mayor poder y exigen salarios reales más altos. Como esto reduce el margen de beneficio de las empresas, estas suben los precios para restaurarlo, generando una inflación superior a la esperada.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let chart;
+    let u = 5.0;
+    let expInf = 2.0;
+    const uStar = 5.0;
+    const PS_VAL = 0.85;
+
+    function initChart() {
+      const ctx = document.getElementById('infChart').getContext('2d');
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          datasets: [
+            {
+              label: 'WS (Incluye expectativas)',
+              data: Array.from({length: 21}, (_, i) => ({x: i+1, y: 0.45 + (2.5 / (i+1))})),
+              borderColor: '#0071e3', borderWidth: 3, pointRadius: 0, tension: 0.3
+            },
+            {
+              label: 'Curva de Precios (PS)',
+              data: [{x: 1, y: PS_VAL}, {x: 16, y: PS_VAL}],
+              borderColor: '#ff6b35', borderDash: [5, 5], borderWidth: 2, pointRadius: 0
+            },
+            {
+              label: 'Punto Actual',
+              data: [{x: 5, y: 0.85}],
+              type: 'scatter', pointRadius: 10, backgroundColor: '#1d1d1f'
+            }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          animation: false,
+          scales: {
+            x: { type: 'linear', min: 1, max: 15, title: { display: true, text: 'Tasa de Desempleo (%)' } },
+            y: { type: 'linear', min: 0.4, max: 2.0, title: { display: true, text: 'Salario Real' } }
+          }
+        }
+      });
+    }
+
+    function updateAll() {
+      // Cálculo de la WS basado en u y expInf
+      // Una simplificación: la WS sube un 0.05 por cada 1% de inflación esperada
+      const ws_at_u = (0.45 + (2.5 / u)) + (expInf * 0.02);
+      const gap = ((ws_at_u - PS_VAL) / PS_VAL) * 100;
+      const actualInf = expInf + gap;
+
+      // Update Metrics
+      document.getElementById('valGap').textContent = (gap > 0 ? '+' : '') + gap.toFixed(1) + '%';
+      document.getElementById('valExpInf').textContent = expInf.toFixed(1) + '%';
+      document.getElementById('valInf').textContent = actualInf.toFixed(1) + '%';
+      
+      document.getElementById('labelU').textContent = u.toFixed(1) + '%';
+      document.getElementById('labelExpInf').textContent = expInf.toFixed(1) + '%';
+
+      // Estilos de alerta
+      const cardGap = document.getElementById('cardGap');
+      const cardInf = document.getElementById('cardInf');
+      if (gap > 0.1) {
+        cardGap.style.borderColor = '#ff3b30';
+        cardInf.className = 'metric-card alert';
+      } else if (gap < -0.1) {
+        cardGap.style.borderColor = '#34c759';
+        cardInf.className = 'metric-card';
+        cardInf.style.borderColor = '#34c759';
+      } else {
+        cardGap.style.borderColor = '#e5e5e5';
+        cardInf.className = 'metric-card';
+        cardInf.style.borderColor = '#e5e5e5';
+      }
+
+      // Update Chart
+      chart.data.datasets[0].data = Array.from({length: 21}, (_, i) => ({x: i+1, y: (0.45 + (2.5 / (i+1))) + (expInf * 0.02)}));
+      chart.data.datasets[2].data = [{x: u, y: ws_at_u}];
+      chart.update();
+
+      // Update Spiral
+      const spiral = document.getElementById('spiralSteps');
+      if (gap > 0.1) {
+        spiral.innerHTML = `
+          <div class="spiral-step"><span class="spiral-arrow">→</span> Bajo desempleo (${u}%) aumenta el poder de los trabajadores.</div>
+          <div class="spiral-step"><span class="spiral-arrow">→</span> Piden salario real de ${ws_at_u.toFixed(2)} (WS), por encima de ${PS_VAL} (PS).</div>
+          <div class="spiral-step"><span class="spiral-arrow">→</span> Las empresas suben precios para proteger su margen.</div>
+          <div class="spiral-step"><span class="spiral-arrow">→</span> Resultado: La inflación sube al ${actualInf.toFixed(1)}%.</div>
+        `;
+      } else if (gap < -0.1) {
+        spiral.innerHTML = `
+          <div class="spiral-step"><span class="spiral-arrow">→</span> Alto desempleo (${u}%) debilita el poder de negociación.</div>
+          <div class="spiral-step"><span class="spiral-arrow">→</span> Los salarios suben menos que los precios o incluso caen.</div>
+          <div class="spiral-step"><span class="spiral-arrow">→</span> Resultado: La inflación cae al ${actualInf.toFixed(1)}% (Desinflación).</div>
+        `;
+      } else {
+        spiral.innerHTML = `<div class="spiral-step">La economía está en equilibrio estable. La inflación es constante.</div>`;
+      }
+    }
+
+    document.getElementById('paramU').addEventListener('input', (e) => { u = parseFloat(e.target.value); updateAll(); });
+    document.getElementById('paramExpInf').addEventListener('input', (e) => { expInf = parseFloat(e.target.value); updateAll(); });
+
+    document.addEventListener('DOMContentLoaded', () => { initChart(); updateAll(); });
+  </script>
+</body>
+</html>
