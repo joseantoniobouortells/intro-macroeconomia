@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Efecto Multiplicador y Demanda — Tema 1 | Intro. Macroeconomía</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/katex.min.css">
+  <script src="assets/chart.umd.min.js"></script>
+  <script src="assets/katex.min.js"></script>
+  <style>
+    body { padding: 0; background: #f5f5f7; }
+    .site-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.85); backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid rgba(0,0,0,0.08);
+      height: 48px; display: flex; align-items: center; padding: 0 24px;
+    }
+    .nav-back { display: flex; align-items: center; gap: 4px; font-size: 0.8rem; font-weight: 500; color: #0071e3; text-decoration: none; width: 120px; }
+    .nav-center { flex: 1; text-align: center; font-size: 0.8rem; font-weight: 500; color: #1d1d1f; pointer-events: none; }
+    .nav-spacer { width: 120px; }
+    .container { padding-top: 0 !important; }
+    .inner { max-width: 980px; margin: 0 auto; padding: 0 24px 80px; }
+
+    .chart-main { background: #fff; border: 1px solid #e5e5e5; border-radius: 18px; padding: 24px; margin-bottom: 24px; }
+    .chart-container { position: relative; height: 420px; }
+
+    .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+    .metric-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 14px; padding: 16px; text-align: center; }
+    .metric-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; color: #6e6e73; margin-bottom: 8px; }
+    .metric-value { font-size: 1.4rem; font-weight: 700; color: #1d1d1f; }
+    .metric-card.warning { border-color: #ff3b30; background: #fff9f9; }
+    .metric-card.warning .metric-value { color: #ff3b30; }
+
+    .controls-panel { background: #fff; border: 1px solid #e5e5e5; border-radius: 18px; padding: 24px; margin-bottom: 24px; }
+    .control-group { margin-bottom: 20px; }
+    .control-label { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 600; font-size: 0.9rem; }
+    
+    .explanation-box { background: #fff; border: 1px solid #e5e5e5; border-radius: 18px; padding: 24px; margin-bottom: 24px; line-height: 1.6; }
+    .explanation-box h3 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #6e6e73; margin-bottom: 12px; }
+
+    .tag { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
+    .tag-cyclic { background: #ffe5e5; color: #d70000; }
+    .tag-natural { background: #e5f1ff; color: #0071e3; }
+  </style>
+</head>
+<body>
+  <nav class="site-nav">
+    <a href="index.html" class="nav-back"><span class="chevron">‹</span> Tema 1</a>
+    <span class="nav-center">Grado en Economía &nbsp;·&nbsp; Introducción a la Macroeconomía</span>
+    <span class="nav-spacer"></span>
+  </nav>
+
+  <div class="container">
+    <header>
+      <p style="font-size:0.75rem; font-weight:600; letter-spacing:0.8px; text-transform:uppercase; color:#0071e3; margin-bottom:8px;">Grado en Economía &nbsp;·&nbsp; Introducción a la Macroeconomía</p>
+      <h1>🔄 Efecto Multiplicador y Demanda</h1>
+      <p class="subtitle">Tema 1 · Capítulo 9: El Mercado del Trabajo</p>
+      <p class="subtitle" style="font-size:0.875rem; margin-top:4px;">Relación entre demanda de bienes y desempleo cíclico</p>
+    </header>
+  </div>
+
+  <div class="inner">
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">Desempleo Natural (u*)</div>
+        <div class="metric-value" id="valNatural">5.0%</div>
+      </div>
+      <div class="metric-card warning">
+        <div class="metric-label">Desempleo Cíclico</div>
+        <div class="metric-value" id="valCyclic">0.0%</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Desempleo Total</div>
+        <div class="metric-value" id="valTotal">5.0%</div>
+      </div>
+    </div>
+
+    <div class="chart-main">
+      <div class="chart-container">
+        <canvas id="demandChart"></canvas>
+      </div>
+    </div>
+
+    <div class="controls-panel">
+      <div class="control-group">
+        <div class="control-label">
+          <span>Demanda Agregada (Consumo e Inversión)</span>
+          <span id="labelDemand">100%</span>
+        </div>
+        <input type="range" id="paramDemand" min="70" max="130" value="100" step="1">
+        <p style="font-size: 0.75rem; color: #6e6e73; margin-top: 8px;">
+          Baja demanda → Desplazamiento a la izquierda del equilibrio (Punto B del libro, pág. 24).
+        </p>
+      </div>
+    </div>
+
+    <div class="explanation-box">
+      <h3>Análisis de la Demanda</h3>
+      <div id="explanationText">
+        Cuando la demanda de bienes y servicios es <strong>normal (100%)</strong>, la economía se sitúa en el <span class="tag tag-natural">equilibrio de Nash (X)</span>. 
+        Si la demanda cae, las empresas reducen la producción y despiden trabajadores, generando un exceso de desempleo por encima del nivel natural.
+      </div>
+    </div>
+
+    <div class="key-concepts" style="background: #1d1d1f; color: #fff; padding: 24px; border-radius: 18px;">
+      <h3 style="font-size: 0.7rem; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 16px;">¿Por qué persiste el desempleo cíclico?</h3>
+      <p style="font-size: 0.9rem; line-height: 1.6;">
+        Según el modelo de CORE (pág. 25-27), un nivel de desempleo alto (como en el punto B) debería presionar los salarios a la baja. Sin embargo, en la realidad el ajuste es lento debido a la <strong>resistencia de los trabajadores</strong> a recortes salariales nominales y a que la caída de precios puede reducir aún más la demanda. Por eso, el gobierno suele intervenir con políticas fiscales o monetarias para restablecer la demanda.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    let chart = null;
+    let currentDemand = 100;
+    const uNatural = 0.05; // 5% desempleo natural fijo para este ejemplo
+
+    function calculateUnemployment(demand) {
+      // Simplificación: Cada 1% de caída en demanda sube el desempleo un 0.5%
+      const diff = 100 - demand;
+      const cyclic = diff > 0 ? (diff * 0.4) / 100 : 0;
+      return {
+        natural: uNatural,
+        cyclic: cyclic,
+        total: uNatural + cyclic
+      };
+    }
+
+    function updateAll() {
+      const stats = calculateUnemployment(currentDemand);
+      document.getElementById('valNatural').textContent = (stats.natural * 100).toFixed(1) + '%';
+      document.getElementById('valCyclic').textContent = (stats.cyclic * 100).toFixed(1) + '%';
+      document.getElementById('valTotal').textContent = (stats.total * 100).toFixed(1) + '%';
+      document.getElementById('labelDemand').textContent = currentDemand + '%';
+
+      const exp = document.getElementById('explanationText');
+      if (stats.cyclic > 0) {
+        exp.innerHTML = `La demanda ha caído al <strong>${currentDemand}%</strong>. Las empresas se desplazan al <strong>Punto B</strong> del modelo. 
+        Existe un <span class="tag tag-cyclic">desempleo cíclico del ${(stats.cyclic * 100).toFixed(1)}%</span>. 
+        Este desempleo es <strong>involuntario</strong>: hay personas dispuestas a trabajar al salario actual pero no encuentran vacantes porque las empresas no tienen clientes suficientes.`;
+      } else if (currentDemand > 100) {
+        exp.innerHTML = `La demanda está por encima del nivel de equilibrio (<strong>${currentDemand}%</strong>). 
+        Esto reduce el desempleo por debajo del nivel natural, lo que suele presionar los salarios al alza y puede generar inflación (espiral precios-salarios).`;
+      } else {
+        exp.innerHTML = `La economía está en el <span class="tag tag-natural">equilibrio de Nash (X)</span>. El desempleo observado coincide con la tasa natural determinada por la WS y la PS.`;
+      }
+
+      updateChart(stats);
+    }
+
+    function initChart() {
+      const ctx = document.getElementById('demandChart').getContext('2d');
+      chart = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+          datasets: [
+            {
+              label: 'WS (Curva de Salarios)',
+              data: Array.from({length: 21}, (_, i) => ({x: i, y: 5 + 20/(i+1)})),
+              showLine: true, borderColor: '#0071e3', pointRadius: 0, tension: 0.3
+            },
+            {
+              label: 'PS (Curva de Precios)',
+              data: [{x: 0, y: 12}, {x: 20, y: 12}],
+              showLine: true, borderColor: '#ff6b35', pointRadius: 0, borderDash: [5, 5]
+            },
+            {
+              label: 'Equilibrio Nash (X)',
+              data: [{x: 5, y: 12}],
+              pointRadius: 8, backgroundColor: '#1d1d1f'
+            },
+            {
+              label: 'Punto Actual (Cíclico)',
+              data: [{x: 5, y: 12}],
+              pointRadius: 10, backgroundColor: '#ff3b30'
+            }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          scales: {
+            x: { title: { display: true, text: 'Tasa de Desempleo (%)' }, min: 0, max: 20 },
+            y: { title: { display: true, text: 'Salario Real' }, min: 0, max: 30 }
+          }
+        }
+      });
+    }
+
+    function updateChart(stats) {
+      chart.data.datasets[3].data = [{x: stats.total * 100, y: 12}];
+      chart.update();
+    }
+
+    document.getElementById('paramDemand').addEventListener('input', (e) => {
+      currentDemand = parseInt(e.target.value);
+      updateAll();
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initChart();
+      updateAll();
+    });
+  </script>
+</body>
+</html>
