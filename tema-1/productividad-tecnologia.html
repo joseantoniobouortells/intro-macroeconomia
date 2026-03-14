@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Productividad y Tecnología — Tema 1</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/katex.min.css">
+  <script src="assets/chart.umd.min.js"></script>
+  <script src="assets/katex.min.js"></script>
+  <style>
+    body { padding: 0; background: #f5f5f7; }
+    .site-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      height: 48px; display: flex; align-items: center; padding: 0 24px;
+    }
+    .nav-back { display: flex; align-items: center; gap: 4px; font-size: 0.8rem; font-weight: 500; color: #0071e3; text-decoration: none; width: 120px; }
+    .nav-center { flex: 1; text-align: center; font-size: 0.8rem; font-weight: 500; color: #1d1d1f; pointer-events: none; }
+    .nav-spacer { width: 120px; }
+    .container { padding-top: 0 !important; }
+    .inner { max-width: 1000px; margin: 0 auto; padding: 0 24px 80px; }
+
+    /* ── Metrics ── */
+    .metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; margin-top: 32px; }
+    .metric-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 18px; padding: 20px; text-align: center; }
+    .metric-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6e6e73; margin-bottom: 10px; }
+    .metric-value { font-size: 2.4rem; font-weight: 800; color: #1d1d1f; letter-spacing: -1px; }
+    .metric-unit { font-size: 0.85rem; color: #86868b; margin-top: 4px; font-weight: 500; }
+
+    /* ── Charts ── */
+    .chart-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 20px; padding: 24px; margin-bottom: 24px; }
+    .chart-container { position: relative; height: 400px; }
+
+    /* ── Controls ── */
+    .controls-card { background: #1d1d1f; color: #fff; border-radius: 20px; padding: 28px; margin-bottom: 24px; }
+    .control-group { margin-bottom: 24px; }
+    .control-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .control-title { font-size: 1rem; font-weight: 700; }
+    .control-value { font-size: 1.4rem; font-weight: 800; color: #0071e3; }
+    input[type=range] { width: 100%; cursor: pointer; }
+
+    /* ── Formula ── */
+    .formula-display { background: #f0f6ff; border-radius: 16px; padding: 24px; text-align: center; margin-bottom: 24px; border: 1px solid #d0e3ff; }
+    .formula-main { font-size: 1.8rem; margin-bottom: 12px; }
+    
+    .explanation-text { line-height: 1.7; color: #3a3a3c; font-size: 1rem; }
+    .highlight { color: #0071e3; font-weight: 700; }
+
+    .katex { font-size: 1.1em !important; }
+  </style>
+</head>
+<body>
+  <nav class="site-nav">
+    <a href="index.html" class="nav-back"><span class="chevron">‹</span> Tema 1</a>
+    <span class="nav-center">CORE Economics · Productividad y Tecnología</span>
+    <span class="nav-spacer"></span>
+  </nav>
+
+  <div class="inner">
+    <header style="margin-top: 48px; text-align: center;">
+      <p style="font-size:0.75rem; font-weight:600; letter-spacing:0.8px; text-transform:uppercase; color:#0071e3; margin-bottom:8px;">Capítulo 9.5 y 9.11</p>
+      <h1 style="font-size: 2.5rem; letter-spacing: -1px;">🚀 Productividad y Salario Real</h1>
+      <p style="color: #6e6e73; max-width: 600px; margin: 0 auto;">Explora cómo las mejoras tecnológicas (aumento de λ) desplazan la curva de fijación de precios y afectan el reparto de la tarta económica.</p>
+    </header>
+
+    <div class="metrics-row">
+      <div class="metric-card">
+        <div class="metric-label">Productividad (λ)</div>
+        <div id="valLambda" class="metric-value">1.00</div>
+        <div class="metric-unit">unidades por hora</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Salario Real (W/P)</div>
+        <div id="valWP" class="metric-value">0.85</div>
+        <div class="metric-unit">unidades de consumo</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Margen Real (λ·μ)</div>
+        <div id="valProfit" class="metric-value">0.15</div>
+        <div class="metric-unit">beneficio por trabajador</div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-container">
+        <canvas id="prodChart"></canvas>
+      </div>
+    </div>
+
+    <div class="controls-card">
+      <div class="control-group">
+        <div class="control-header">
+          <span class="control-title">Productividad Laboral (λ)</span>
+          <span id="labelLambda" class="control-value">1.00</span>
+        </div>
+        <input type="range" id="paramLambda" min="0.5" max="2.5" step="0.05" value="1.00">
+        <p style="font-size: 0.8rem; color: #86868b; margin-top: 8px;">Un aumento de λ desplaza la curva PS hacia arriba (Pág. 18).</p>
+      </div>
+
+      <div class="control-group" style="margin-bottom: 0;">
+        <div class="control-header">
+          <span class="control-title">Markup Empresarial (μ)</span>
+          <span id="labelMu" class="control-value">15%</span>
+        </div>
+        <input type="range" id="paramMu" min="0.05" max="0.50" step="0.01" value="0.15">
+        <p style="font-size: 0.8rem; color: #86868b; margin-top: 8px;">Determina cómo se reparte el producto entre trabajadores y dueños.</p>
+      </div>
+    </div>
+
+    <div class="formula-display">
+      <div id="formulaPS" class="formula-main"></div>
+      <div id="formulaText" style="font-size: 0.95rem; color: #4a4a4c;"></div>
+    </div>
+
+    <div class="card" style="margin-bottom: 48px;">
+      <h2>📖 Análisis Teórico (CORE)</h2>
+      <div class="explanation-text">
+        <p>Según el manual (pág. 44), un aumento en la calidad de la educación o la tecnología genera un aumento de la <strong>productividad laboral (λ)</strong>. </p>
+        <p style="margin-top: 12px;">Si el nivel de competencia no cambia, el <strong>markup (μ)</strong> se mantiene constante. Esto implica que las empresas pueden pagar un <span class="highlight">salario real más alto</span> manteniendo su margen de beneficio relativo. En el gráfico, esto se visualiza como un desplazamiento hacia arriba de la línea PS.</p>
+        <p style="margin-top: 12px;"><strong>Resultado:</strong> El progreso tecnológico es la clave para que los salarios reales aumenten a largo plazo sin necesidad de reducir el empleo.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let chart;
+    let currentLambda = 1.00;
+    let currentMu = 0.15;
+
+    function kHTML(latex) {
+      return katex.renderToString(latex, { throwOnError: false });
+    }
+
+    function initChart() {
+      const ctx = document.getElementById('prodChart').getContext('2d');
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          datasets: [
+            {
+              label: 'Curva de Fijación de Precios (PS)',
+              data: [{x: 0, y: 0.85}, {x: 100, y: 0.85}],
+              borderColor: '#0071e3', borderWidth: 4, pointRadius: 0, fill: false
+            },
+            {
+              label: 'Productividad (Techo λ)',
+              data: [{x: 0, y: 1.00}, {x: 100, y: 1.00}],
+              borderColor: '#86868b', borderDash: [6, 4], borderWidth: 2, pointRadius: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          scales: {
+            x: { display: true, title: { display: true, text: 'Empleo (N)' }, ticks: { display: false } },
+            y: { min: 0, max: 3.0, title: { display: true, text: 'Salario Real / Producto' } }
+          },
+          plugins: {
+            legend: { position: 'top' },
+            tooltip: { enabled: true }
+          }
+        }
+      });
+    }
+
+    function updateAll() {
+      const wp = currentLambda * (1 - currentMu);
+      const profit = currentLambda * currentMu;
+
+      // Update Metrics (LARGE FONTS)
+      document.getElementById('valLambda').textContent = currentLambda.toFixed(2);
+      document.getElementById('valWP').textContent = wp.toFixed(2);
+      document.getElementById('valProfit').textContent = profit.toFixed(2);
+
+      // Update Slider Labels
+      document.getElementById('labelLambda').textContent = currentLambda.toFixed(2);
+      document.getElementById('labelMu').textContent = (currentMu * 100).toFixed(0) + '%';
+
+      // Update Formulas
+      document.getElementById('formulaPS').innerHTML = kHTML(`\\frac{W}{P} = \\lambda(1 - \\mu) = ${currentLambda.toFixed(2)}(1 - ${currentMu.toFixed(2)}) = ${wp.toFixed(2)}`);
+      document.getElementById('formulaText').innerHTML = `El salario real es el <strong>${((1-currentMu)*100).toFixed(0)}%</strong> de lo que produce un trabajador.`;
+
+      // Update Chart
+      chart.data.datasets[0].data = [{x: 0, y: wp}, {x: 100, y: wp}];
+      chart.data.datasets[1].data = [{x: 0, y: currentLambda}, {x: 100, y: currentLambda}];
+      chart.update();
+    }
+
+    document.getElementById('paramLambda').addEventListener('input', (e) => {
+      currentLambda = parseFloat(e.target.value);
+      updateAll();
+    });
+
+    document.getElementById('paramMu').addEventListener('input', (e) => {
+      currentMu = parseFloat(e.target.value);
+      updateAll();
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initChart();
+      updateAll();
+    });
+  </script>
+</body>
+</html>
