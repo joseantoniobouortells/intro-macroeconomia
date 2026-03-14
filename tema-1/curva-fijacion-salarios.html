@@ -98,7 +98,19 @@
       margin: 4px 0;
       font-size: 0.875rem;
     }
-    .params-display .katex-line span { color: #6e6e73; font-size: 0.875rem; }
+    /* ── Scenario Bar ── */
+    .scenario-bar {
+      display: flex; background: #e5e5ea; border-radius: 12px; padding: 4px; gap: 4px; margin-top: 16px;
+    }
+    .scen-btn {
+      flex: 1; border: none; background: transparent; padding: 10px; border-radius: 8px;
+      font-size: 0.85rem; font-weight: 600; color: #1d1d1f; cursor: pointer; transition: all 0.2s;
+    }
+    .scen-btn.active { background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1); color: #0071e3; }
+    .scen-desc { font-size: 0.8rem; color: #6e6e73; text-align: center; margin-top: 10px; font-weight: 500; }
+
+    .params-display { margin-top: 20px; }
+
   </style>
 </head>
 <body>
@@ -129,12 +141,21 @@
         <div class="chart-container">
           <canvas id="wageChart"></canvas>
         </div>
+        
+        <!-- Barra de Escenarios (Presets) -->
+        <div class="scenario-bar">
+          <button class="scen-btn" id="scen-noUnions" onclick="loadScenario('noUnions')">Bajo Poder</button>
+          <button class="scen-btn active" id="scen-moderate" onclick="loadScenario('moderate')">Estándar</button>
+          <button class="scen-btn" id="scen-strong" onclick="loadScenario('strong')">Alto Poder</button>
+        </div>
+        <p class="scen-desc" id="scenDescription">Escenario actual: Parámetros equilibrados del modelo base.</p>
+
         <div class="params-display" id="paramsDisplay"></div>
       </div>
 
       <!-- SECCIÓN 2: CONTROLES -->
       <div class="controls-section">
-        <h2 style="margin-bottom: 20px; color: #667eea;">⚙️ Parámetros</h2>
+        <h2 style="margin-bottom: 20px; color: #0071e3;">⚙️ Ajuste Manual</h2>
 
         <!-- Control B -->
         <div class="control-group">
@@ -143,7 +164,7 @@
             <span class="value" id="bValue">12</span>
           </div>
           <input type="range" id="paramB" min="2" max="25" value="12" step="1">
-          <small style="color: #666;">Bajo = sin sindicatos &nbsp;|&nbsp; Alto = sindicatos fuertes</small>
+          <small style="color: #6e6e73;">Sube B: los trabajadores exigen más salario real.</small>
         </div>
 
         <!-- Control a -->
@@ -153,19 +174,10 @@
             <span class="value" id="aValue">4</span>
           </div>
           <input type="range" id="paramA" min="1" max="10" value="4" step="0.5">
-          <small style="color: #666;">Bajo = poco sensible al desempleo &nbsp;|&nbsp; Alto = muy sensible</small>
+          <small style="color: #6e6e73;">Sube a: el coste del esfuerzo es mayor (curva más empinada).</small>
         </div>
 
-        <!-- Escenarios predefinidos -->
-        <h3 style="margin-top: 30px; margin-bottom: 15px; color: #667eea; font-size: 1.1em;">Escenarios Predefinidos</h3>
-        <div class="button-group">
-          <button class="scenario-btn" onclick="loadScenario('noUnions')">⚠️ Sin Sindicatos</button>
-          <button class="scenario-btn" onclick="loadScenario('moderate')">⚖️ Sindicatos Moderados</button>
-        </div>
-        <div class="button-group">
-          <button class="scenario-btn" onclick="loadScenario('strong')">✓ Sindicatos Fuertes</button>
-          <button class="reset-btn" onclick="resetToDefault()">🔄 Restablecer</button>
-        </div>
+        <button class="reset-btn" onclick="resetToDefault()" style="margin-top: 20px;">🔄 Restablecer Parámetros</button>
       </div>
     </div>
 
@@ -330,26 +342,33 @@
     }
 
     function loadScenario(scenario) {
-      const params = WageModel.scenarios[scenario];
-      if (params) {
-        currentB = params.B;
-        currentA = params.a;
+      const scenarioParams = WageModel.scenarios[scenario];
+      if (scenarioParams) {
+        currentB = scenarioParams.B;
+        currentA = scenarioParams.a;
         document.getElementById('paramB').value = currentB;
         document.getElementById('paramA').value = currentA;
         document.getElementById('bValue').textContent = currentB.toFixed(1);
         document.getElementById('aValue').textContent = currentA.toFixed(1);
+        
+        // Actualizar descripciones
+        const descriptions = {
+          noUnions: "Bajo Poder: Mercado laboral flexible, menores exigencias salariales.",
+          moderate: "Equilibrio: Parámetros base del modelo macroeconómico estándar.",
+          strong: "Alto Poder: Sindicatos fuertes o mayores prestaciones por desempleo."
+        };
+        document.getElementById('scenDescription').textContent = "Escenario: " + descriptions[scenario];
+        
+        // Actualizar botones activos
+        document.querySelectorAll('.scen-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('scen-' + scenario).classList.add('active');
+
         updateDisplay();
       }
     }
 
     function resetToDefault() {
-      currentB = 12;
-      currentA = 4;
-      document.getElementById('paramB').value = currentB;
-      document.getElementById('paramA').value = currentA;
-      document.getElementById('bValue').textContent = currentB.toFixed(1);
-      document.getElementById('aValue').textContent = currentA.toFixed(1);
-      updateDisplay();
+      loadScenario('moderate');
     }
 
     function updateScenarioButtons() {
