@@ -32,17 +32,19 @@ web/
 │   │   └── ...
 │   └── README.md             # Documentación específica del tema
 │
-├── tema-2/                    # Tema 2: [Capítulo 10 - En Desarrollo]
-│   ├── css/                  # Estilos CSS específicos
-│   ├── js/                   # Scripts JavaScript específicos
-│   ├── assets/               # Recursos compartidos
-│   └── index.html            # Por crear cuando el tema esté listo
+├── tema-2/                    # Tema 2: Bancos y Crédito (Capítulo 10)
+│   ├── index.html            # ✓ Página principal del tema (3/6 herramientas)
+│   ├── rol-del-dinero.html   # ✓ QTM: MV = PY
+│   ├── sistema-bancario.html # ✓ Multiplicador: m = 1/r (con cascada de crédito)
+│   ├── demanda-dinero.html   # ✓ Demanda: L(Y,i) = kY - hi
+│   ├── oferta-dinero.html    # ⏳ Próxima sesión: M1, M2, M3
+│   ├── equilibrio-monetario.html  # ⏳ Próxima sesión: M^s = M^d → i*
+│   ├── politica-monetaria.html    # ⏳ Próxima sesión: Transmisión monetaria
+│   └── assets/
+│       ├── style.css         # Copia de tema-1 (herencia DRY)
+│       └── economic-logic.js # Fórmulas monetarias: QTM, multiplicador, demanda, etc.
 │
-└── tema-3/                    # Tema 3: [Capítulo 11 - En Desarrollo]
-    ├── css/
-    ├── js/
-    ├── assets/
-    └── index.html            # Por crear cuando el tema esté listo
+└── tema-3/                    # Tema 3: [Capítulos 13-15 - Por Implementar]
 ```
 
 ---

@@ -22,6 +22,39 @@ Este documento centraliza la lógica económica y los estándares de construcci�
 - Se produce donde $WS = PS$.
 - Determina la **tasa de desempleo natural**. Cualquier punto fuera de aquí (como el Punto B) genera presiones inflacionistas o deflacionistas.
 
+---
+
+## 📘 Lógica Económica (Capítulo 10 CORE) — TEMA 2
+
+### 💵 Teoría Cuantitativa del Dinero (QTM)
+- **Fórmula:** $M \times V = P \times Y$
+- **Interpretación:** La cantidad de dinero (M) multiplicada por su velocidad (V) igual al nivel de precios (P) multiplicado por el producto (Y).
+- **Neutralidad:** En el largo plazo, cambios en M solo afectan P, no a variables reales como Y o empleo.
+
+### 🏦 Multiplicador Bancario
+- **Fórmula:** $m = \frac{1}{r}$ donde $M_1 = m \times MB$
+- **Mecanismo:** El BC inyecta base monetaria (MB). Los bancos guardan una fracción r como reserva, prestan (1-r). Los préstamos se convierten en depósitos en otros bancos, generando nueva creación de crédito.
+- **Impacto de política:** Aumentar r reduce m (política restrictiva). Vender activos reduce MB (política restrictiva).
+
+### 📊 Demanda de Dinero
+- **Fórmula:** $M^d = kY - hi$
+- **Componentes:**
+  - **Transacciones (kY):** Dinero para realizar compras. Aumenta con el producto Y.
+  - **Especulación (-hi):** Dinero para guardar riqueza si suben tasas de interés. Baja cuando i sube.
+- **Elasticidades:**
+  - k = elasticidad-renta (típicamente 0.3-0.8)
+  - h = semielasticidad-interés (típicamente 1-10)
+
+### ⚖️ Equilibrio Monetario
+- Ocurre donde $M^s = M^d$.
+- Determina la **tasa de interés de equilibrio (i*)**.
+- Desequilibrios generan presiones inflacionistas (dinero abundante) o deflacionistas (dinero escaso).
+
+### 🚀 Transmisión Monetaria
+- Ruta: $\Delta M \to \Delta i \to \Delta I \to \Delta Y, \Delta P$
+- **Corto plazo:** Cambios en M afectan el producto Y y empleo (hay rigideces).
+- **Largo plazo:** Cambios en M solo afectan precios P (neutralidad).
+
 ## 🎨 Estándares de UI (Apple Ecosystem Style)
 
 Para mantener la consistencia visual y el ahorro de tokens, **use SIEMPRE** estas clases CSS definidas en `assets/style.css`:
