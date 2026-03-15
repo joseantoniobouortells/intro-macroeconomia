@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demanda de Dinero | Tema 2 — Intro. Macroeconomía</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.4/katex.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.4/katex.min.css">
+  <script src="assets/economic-logic.js"></script>
+  <style>
+    body { padding: 0; background: #f5f5f7; }
+
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      height: 48px;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+    }
+
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #0071e3;
+      text-decoration: none;
+    }
+    .nav-center {
+      flex: 1;
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #1d1d1f;
+    }
+    .nav-spacer { width: 120px; }
+
+    .page-header {
+      text-align: center;
+      padding: 56px 40px 40px;
+      border-bottom: 1px solid #e5e5e5;
+      background: #fff;
+    }
+    .page-header .eyebrow {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: #0071e3;
+      margin-bottom: 12px;
+    }
+    .page-header h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: #1d1d1f;
+      margin-bottom: 12px;
+    }
+    .page-header p { font-size: 1rem; color: #6e6e73; }
+
+    .content-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    .section { margin-top: 40px; }
+
+    .section-title {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: #6e6e73;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .formula-display {
+      background: #f0f6ff;
+      border-left: 3px solid #0071e3;
+      padding: 24px 28px;
+      border-radius: 0 10px 10px 0;
+      font-size: 1.3rem;
+      line-height: 1.8;
+    }
+
+    .controls-and-chart {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .controls-card {
+      background: #1d1d1f;
+      border-radius: 10px;
+      padding: 20px;
+      height: fit-content;
+      position: sticky;
+      top: 60px;
+    }
+
+    .param-slider {
+      margin-bottom: 20px;
+    }
+    .param-slider label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #f5f5f7;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+    .param-slider input[type="range"] {
+      width: 100%;
+      height: 5px;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.2);
+      outline: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+    .param-slider input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #0071e3;
+      cursor: pointer;
+    }
+    .param-slider input[type="range"]::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #0071e3;
+      border: none;
+      cursor: pointer;
+    }
+    .param-value {
+      display: inline-block;
+      margin-left: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #0071e3;
+    }
+
+    .chart-container {
+      background: #fff;
+      border-radius: 10px;
+      padding: 16px;
+      border: 1px solid #e5e5e5;
+      height: 320px;
+    }
+
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .metric-card {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .metric-label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #6e6e73;
+      margin-bottom: 8px;
+    }
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0071e3;
+    }
+
+    .components-box {
+      background: #fff;
+      border-radius: 10px;
+      padding: 16px;
+      border: 1px solid #e5e5e5;
+      margin-top: 24px;
+    }
+
+    .component-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #e5e5e5;
+      font-size: 0.9rem;
+    }
+
+    .component-item:last-child { border-bottom: none; }
+
+    .component-label { color: #3a3a3c; font-weight: 500; }
+    .component-value { color: #0071e3; font-weight: 600; }
+
+    .explanation-box {
+      background: #f0f0f0;
+      border-left: 3px solid #6e6e73;
+      padding: 16px;
+      border-radius: 0 10px 10px 0;
+      margin-top: 32px;
+      font-size: 0.95rem;
+      color: #3a3a3c;
+      line-height: 1.6;
+    }
+
+    .exam-box {
+      background: #fff8e1;
+      border-left: 3px solid #ffa500;
+      padding: 16px;
+      border-radius: 0 10px 10px 0;
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #3a3a3c;
+    }
+    .exam-box h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #ff9500;
+      margin-bottom: 8px;
+    }
+    .exam-box p { margin: 6px 0; line-height: 1.5; }
+
+    .page-footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #6e6e73;
+      margin-top: 48px;
+      padding: 24px 0;
+      border-top: 1px solid #e5e5e5;
+    }
+
+    @media (max-width: 1000px) {
+      .controls-and-chart { grid-template-columns: 1fr; }
+      .controls-card { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .page-header h1 { font-size: 1.8rem; }
+      .content-wrap { padding: 0 16px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="site-nav">
+    <a href="index.html" class="nav-back"><span>‹</span> Tema 2</a>
+    <span class="nav-center">Introducción a la Macroeconomía · Tema 2</span>
+    <span class="nav-spacer"></span>
+  </nav>
+
+  <!-- Header -->
+  <div class="page-header">
+    <p class="eyebrow">Tema 2 · Bancos y Crédito</p>
+    <h1>Demanda de Dinero</h1>
+    <p>Motivos de Transacción y Especulación</p>
+  </div>
+
+  <!-- Content -->
+  <div class="content-wrap">
+
+    <!-- Ecuación -->
+    <div class="section">
+      <span class="section-title">Ecuación Fundamental</span>
+      <div class="formula-display" id="formula-md"></div>
+    </div>
+
+    <!-- Layout Principal: Controles + Gráfico -->
+    <div class="section">
+      <span class="section-title">Herramienta Interactiva</span>
+      <div class="controls-and-chart">
+
+        <!-- Controles (izquierda) -->
+        <div class="controls-card">
+          <div class="param-slider">
+            <label>Y (Producto)</label>
+            <input type="range" id="slider-y" min="2" max="5" value="3" step="0.1">
+            <span class="param-value" id="value-y">3.0</span>
+          </div>
+          <div class="param-slider">
+            <label>k (Elasticidad renta)</label>
+            <input type="range" id="slider-k" min="0.3" max="0.8" value="0.5" step="0.05">
+            <span class="param-value" id="value-k">0.50</span>
+          </div>
+          <div class="param-slider">
+            <label>h (Elasticidad interés)</label>
+            <input type="range" id="slider-h" min="1" max="10" value="5" step="0.5">
+            <span class="param-value" id="value-h">5.0</span>
+          </div>
+          <div class="param-slider">
+            <label>i (Tasa interés, %)</label>
+            <input type="range" id="slider-i" min="0" max="8" value="3" step="0.5">
+            <span class="param-value"><span id="value-i">3</span>%</span>
+          </div>
+        </div>
+
+        <!-- Gráfico (derecha) -->
+        <div class="chart-container">
+          <canvas id="chart-demand"></canvas>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Métricas -->
+    <div class="section">
+      <span class="section-title">Resultados</span>
+      <div class="metrics-row">
+        <div class="metric-card">
+          <p class="metric-label">M^d (Total)</p>
+          <p class="metric-value" id="metric-md">0.9</p>
+        </div>
+        <div class="metric-card">
+          <p class="metric-label">Transacciones (kY)</p>
+          <p class="metric-value" id="metric-trans">1.5</p>
+        </div>
+        <div class="metric-card">
+          <p class="metric-label">Especulación (-hi)</p>
+          <p class="metric-value" id="metric-spec">-0.6</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Descomposición -->
+    <div class="section">
+      <span class="section-title">Descomposición de Componentes</span>
+      <div class="components-box">
+        <div class="component-item">
+          <span class="component-label">Motivo Transacciones (kY)</span>
+          <span class="component-value" id="comp-trans">1.5</span>
+        </div>
+        <div class="component-item">
+          <span class="component-label">Motivo Especulación (-hi)</span>
+          <span class="component-value" id="comp-spec">-0.6</span>
+        </div>
+        <div class="component-item" style="border-bottom: 2px solid #0071e3; font-weight: 600;">
+          <span class="component-label">Total (M^d)</span>
+          <span class="component-value" id="comp-total">0.9</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Explicación -->
+    <div class="section">
+      <span class="section-title">Análisis</span>
+      <div class="explanation-box" id="explanation-text">
+        Ajusta los parámetros para ver cómo la demanda responde a cambios en Y e i.
+      </div>
+    </div>
+
+    <!-- Píldoras -->
+    <div class="section">
+      <span class="section-title">Píldoras de Examen</span>
+
+      <div class="exam-box">
+        <h4>💡 Pregunta 1: Motivos de Demanda</h4>
+        <p><strong>P:</strong> ¿Cuáles son los dos motivos de demanda de dinero?</p>
+        <p><strong>R:</strong> 1) <strong>Transacciones:</strong> Comprar bienes (sube con Y). 2) <strong>Especulación:</strong> Guardar riqueza (baja cuando i sube).</p>
+      </div>
+
+      <div class="exam-box">
+        <h4>💡 Pregunta 2: Efecto del Producto</h4>
+        <p><strong>P:</strong> Si Y sube de 3 a 4 con k=0.5, ¿cuánto sube M^d?</p>
+        <p><strong>R:</strong> Transacciones suben de 1.5 a 2.0. <strong>M^d sube 0.5 unidades</strong>.</p>
+      </div>
+
+      <div class="exam-box">
+        <h4>💡 Pregunta 3: Efecto de Tasas</h4>
+        <p><strong>P:</strong> Si i sube de 2% a 5% con h=5, ¿cuánto baja M^d?</p>
+        <p><strong>R:</strong> Especulación cae de -0.10 a -0.25. <strong>M^d baja 0.15</strong> cuando i sube.</p>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="page-footer">
+      <p>© 2026 · Tema 2, Capítulo 10: Bancos, Crédito y Dinero</p>
+    </div>
+
+  </div>
+
+  <script>
+    // Renderizar ecuación
+    katex.render('M^d = kY - hi', document.getElementById('formula-md'), { displayMode: true });
+
+    let chartDemand = null;
+
+    // Eventos
+    ['slider-y', 'slider-k', 'slider-h', 'slider-i'].forEach(id => {
+      document.getElementById(id).addEventListener('input', updateAll);
+    });
+
+    function updateAll() {
+      const Y = parseFloat(document.getElementById('slider-y').value);
+      const k = parseFloat(document.getElementById('slider-k').value);
+      const h = parseFloat(document.getElementById('slider-h').value);
+      const i = parseFloat(document.getElementById('slider-i').value) / 100;
+
+      document.getElementById('value-y').textContent = Y.toFixed(1);
+      document.getElementById('value-k').textContent = k.toFixed(2);
+      document.getElementById('value-h').textContent = h.toFixed(1);
+      document.getElementById('value-i').textContent = (i * 100).toFixed(0);
+
+      const result = TEMA2.demandForMoney(Y, k, h, i);
+
+      document.getElementById('metric-md').textContent = result.demanded.toFixed(2);
+      document.getElementById('metric-trans').textContent = result.components.transactional.toFixed(2);
+      document.getElementById('metric-spec').textContent = result.components.speculative.toFixed(2);
+
+      document.getElementById('comp-trans').textContent = result.components.transactional.toFixed(2);
+      document.getElementById('comp-spec').textContent = result.components.speculative.toFixed(2);
+      document.getElementById('comp-total').textContent = result.demanded.toFixed(2);
+
+      updateChart(Y, k, h);
+      updateExplanation(Y, k, h, i, result);
+    }
+
+    function updateChart(Y, k, h) {
+      if (chartDemand) chartDemand.destroy();
+
+      const curve = TEMA2.demandCurve(Y, k, h);
+
+      const ctx = document.getElementById('chart-demand').getContext('2d');
+      chartDemand = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+          datasets: [{
+            label: 'M^d = kY - hi',
+            data: curve,
+            borderColor: '#0071e3',
+            backgroundColor: 'rgba(0,113,227,0.1)',
+            borderWidth: 2,
+            fill: true,
+            pointRadius: 3,
+            pointBackgroundColor: '#0071e3',
+            tension: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: { enabled: true }
+          },
+          scales: {
+            x: { title: { display: true, text: 'Tasa de Interés (%)' }, min: 0, max: 8 },
+            y: { title: { display: true, text: 'M^d Demandado' }, beginAtZero: true }
+          }
+        }
+      });
+    }
+
+    function updateExplanation(Y, k, h, i, result) {
+      let text = `M^d = ${result.demanded.toFixed(2)} (Transacciones: ${result.components.transactional.toFixed(2)}, `;
+      text += `Especulación: ${result.components.speculative.toFixed(2)}). `;
+
+      if (i < 0.02) {
+        text += `Tasas muy bajas → demanda especulativa alta. `;
+      } else if (i > 0.06) {
+        text += `Tasas muy altas → demanda especulativa baja. Prefieren bonos. `;
+      }
+
+      text += `Producto Y=${Y.toFixed(1)} genera transacciones kY=${result.components.transactional.toFixed(2)}.`;
+
+      document.getElementById('explanation-text').innerHTML = text;
+    }
+
+    updateAll();
+  </script>
+
+</body>
+</html>

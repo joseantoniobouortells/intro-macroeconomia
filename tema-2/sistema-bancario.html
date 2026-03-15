@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema Bancario | Tema 2 — Intro. Macroeconomía</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.4/katex.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.4/katex.min.css">
+  <script src="assets/economic-logic.js"></script>
+  <style>
+    body { padding: 0; background: #f5f5f7; }
+
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      height: 48px;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+    }
+
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #0071e3;
+      text-decoration: none;
+    }
+    .nav-center {
+      flex: 1;
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #1d1d1f;
+    }
+    .nav-spacer { width: 120px; }
+
+    .page-header {
+      text-align: center;
+      padding: 56px 40px 40px;
+      border-bottom: 1px solid #e5e5e5;
+      background: #fff;
+    }
+    .page-header .eyebrow {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: #0071e3;
+      margin-bottom: 12px;
+    }
+    .page-header h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: #1d1d1f;
+      margin-bottom: 12px;
+    }
+    .page-header p { font-size: 1rem; color: #6e6e73; }
+
+    .content-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    .section { margin-top: 40px; }
+
+    .section-title {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: #6e6e73;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .formula-display {
+      background: #f0f6ff;
+      border-left: 3px solid #0071e3;
+      padding: 24px 28px;
+      border-radius: 0 10px 10px 0;
+      font-size: 1.1rem;
+      line-height: 1.8;
+    }
+
+    /* Layout: Controles, Tabla y Gráfico */
+    .controls-table-chart {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .controls-card {
+      background: #1d1d1f;
+      border-radius: 10px;
+      padding: 20px;
+      height: fit-content;
+      position: sticky;
+      top: 60px;
+    }
+
+    .param-slider {
+      margin-bottom: 20px;
+    }
+    .param-slider label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #f5f5f7;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+    .param-slider input[type="range"] {
+      width: 100%;
+      height: 5px;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.2);
+      outline: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+    .param-slider input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #0071e3;
+      cursor: pointer;
+    }
+    .param-slider input[type="range"]::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #0071e3;
+      border: none;
+      cursor: pointer;
+    }
+    .param-value {
+      display: inline-block;
+      margin-left: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #0071e3;
+    }
+
+    .right-content {
+      display: grid;
+      grid-template-rows: auto auto;
+      gap: 20px;
+    }
+
+    .table-container {
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #e5e5e5;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .credit-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    .credit-table thead {
+      background: #f5f5f7;
+      border-bottom: 1px solid #e5e5e5;
+      position: sticky;
+      top: 0;
+    }
+
+    .credit-table th {
+      padding: 12px 14px;
+      text-align: right;
+      font-weight: 600;
+      color: #1d1d1f;
+    }
+
+    .credit-table td {
+      padding: 10px 14px;
+      text-align: right;
+      border-bottom: 1px solid #e5e5e5;
+      color: #3a3a3c;
+    }
+
+    .credit-table tr:hover {
+      background: #f9f9f9;
+    }
+
+    .chart-container {
+      background: #fff;
+      border-radius: 10px;
+      padding: 16px;
+      border: 1px solid #e5e5e5;
+      height: 280px;
+    }
+
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .metric-card {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .metric-label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #6e6e73;
+      margin-bottom: 8px;
+    }
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0071e3;
+    }
+
+    .explanation-box {
+      background: #f0f0f0;
+      border-left: 3px solid #6e6e73;
+      padding: 16px;
+      border-radius: 0 10px 10px 0;
+      margin-top: 32px;
+      font-size: 0.95rem;
+      color: #3a3a3c;
+      line-height: 1.6;
+    }
+
+    .exam-box {
+      background: #fff8e1;
+      border-left: 3px solid #ffa500;
+      padding: 16px;
+      border-radius: 0 10px 10px 0;
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #3a3a3c;
+    }
+    .exam-box h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #ff9500;
+      margin-bottom: 8px;
+    }
+    .exam-box p { margin: 6px 0; line-height: 1.5; }
+
+    .page-footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #6e6e73;
+      margin-top: 48px;
+      padding: 24px 0;
+      border-top: 1px solid #e5e5e5;
+    }
+
+    @media (max-width: 1000px) {
+      .controls-table-chart { grid-template-columns: 1fr; }
+      .controls-card { position: static; }
+    }
+
+    @media (max-width: 680px) {
+      .page-header h1 { font-size: 1.8rem; }
+      .content-wrap { padding: 0 16px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="site-nav">
+    <a href="index.html" class="nav-back"><span>‹</span> Tema 2</a>
+    <span class="nav-center">Introducción a la Macroeconomía · Tema 2</span>
+    <span class="nav-spacer"></span>
+  </nav>
+
+  <!-- Header -->
+  <div class="page-header">
+    <p class="eyebrow">Tema 2 · Bancos y Crédito</p>
+    <h1>Sistema Bancario</h1>
+    <p>Multiplicador Monetario y Creación de Crédito</p>
+  </div>
+
+  <!-- Content -->
+  <div class="content-wrap">
+
+    <!-- Ecuaciones -->
+    <div class="section">
+      <span class="section-title">Ecuaciones</span>
+      <div class="formula-display" id="formula-multiplier"></div>
+      <div class="formula-display" id="formula-m1" style="margin-top:12px;"></div>
+    </div>
+
+    <!-- Layout Principal -->
+    <div class="section">
+      <span class="section-title">Herramienta Interactiva</span>
+      <div class="controls-table-chart">
+
+        <!-- Controles (izquierda) -->
+        <div class="controls-card">
+          <div class="param-slider">
+            <label>r (Tasa reserva)</label>
+            <input type="range" id="slider-r" min="0.05" max="0.30" value="0.10" step="0.01">
+            <span class="param-value"><span id="value-r">10</span>%</span>
+          </div>
+          <div class="param-slider">
+            <label>MB (Base monetaria)</label>
+            <input type="range" id="slider-mb" min="50" max="200" value="100" step="10">
+            <span class="param-value" id="value-mb">100</span>
+          </div>
+        </div>
+
+        <!-- Tabla + Gráfico (derecha) -->
+        <div class="right-content">
+          <div class="table-container">
+            <table class="credit-table">
+              <thead>
+                <tr>
+                  <th>Ronda</th>
+                  <th>Depósito</th>
+                  <th>Reserva</th>
+                  <th>Préstamo</th>
+                </tr>
+              </thead>
+              <tbody id="rounds-tbody">
+              </tbody>
+            </table>
+          </div>
+          <div class="chart-container">
+            <canvas id="chart-cascade"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Métricas -->
+    <div class="section">
+      <span class="section-title">Resultados</span>
+      <div class="metrics-row">
+        <div class="metric-card">
+          <p class="metric-label">Multiplicador (m)</p>
+          <p class="metric-value" id="metric-multiplier">10</p>
+        </div>
+        <div class="metric-card">
+          <p class="metric-label">M1 Final</p>
+          <p class="metric-value" id="metric-m1">1000</p>
+        </div>
+        <div class="metric-card">
+          <p class="metric-label">Crédito Creado</p>
+          <p class="metric-value" id="metric-credit">900</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Explicación -->
+    <div class="section">
+      <span class="section-title">Análisis</span>
+      <div class="explanation-box" id="explanation-text">
+        El BC inyecta dinero base. Los bancos crean crédito en rondas sucesivas.
+      </div>
+    </div>
+
+    <!-- Píldoras -->
+    <div class="section">
+      <span class="section-title">Píldoras de Examen</span>
+
+      <div class="exam-box">
+        <h4>💡 Pregunta 1: Cálculo del Multiplicador</h4>
+        <p><strong>P:</strong> Si r = 10%, ¿cuál es el multiplicador?</p>
+        <p><strong>R:</strong> <strong>m = 1/r = 1/0.10 = 10</strong></p>
+      </div>
+
+      <div class="exam-box">
+        <h4>💡 Pregunta 2: Creación de M1</h4>
+        <p><strong>P:</strong> BC inyecta 100€ con r=10%, ¿cuál es M1 final?</p>
+        <p><strong>R:</strong> <strong>M1 = 10 × 100 = 1000€</strong>. Crédito creado: 900€</p>
+      </div>
+
+      <div class="exam-box">
+        <h4>💡 Pregunta 3: Política Restrictiva</h4>
+        <p><strong>P:</strong> Si BC sube r de 10% a 15%, ¿cómo afecta?</p>
+        <p><strong>R:</strong> <strong>m cae de 10 a 6.67.</strong> Política restrictiva reduce oferta de dinero.</p>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="page-footer">
+      <p>© 2026 · Tema 2, Capítulo 10: Bancos, Crédito y Dinero</p>
+    </div>
+
+  </div>
+
+  <script>
+    // Renderizar ecuaciones
+    katex.render('m = \\frac{1}{r}', document.getElementById('formula-multiplier'), { displayMode: true });
+    katex.render('M_1 = m \\times MB = \\frac{1}{r} \\times MB', document.getElementById('formula-m1'), { displayMode: true });
+
+    let chartCascade = null;
+
+    // Eventos
+    ['slider-r', 'slider-mb'].forEach(id => {
+      document.getElementById(id).addEventListener('input', updateAll);
+    });
+
+    function updateAll() {
+      const r = parseFloat(document.getElementById('slider-r').value);
+      const MB = parseFloat(document.getElementById('slider-mb').value);
+
+      document.getElementById('value-r').textContent = (r * 100).toFixed(0);
+      document.getElementById('value-mb').textContent = MB.toFixed(0);
+
+      const result = TEMA2.bankingMultiplier(MB, r);
+      const cascadeData = TEMA2.generateCreditRounds(MB, r);
+
+      document.getElementById('metric-multiplier').textContent = result.multiplier.toFixed(2);
+      document.getElementById('metric-m1').textContent = result.moneySupply.toFixed(0);
+      document.getElementById('metric-credit').textContent = result.creditCreated.toFixed(0);
+
+      // Tabla
+      const tbody = document.getElementById('rounds-tbody');
+      tbody.innerHTML = cascadeData.rounds.map(round => `
+        <tr>
+          <td>${round.round}</td>
+          <td>${round.deposits.toFixed(2)}</td>
+          <td>${(r * 100).toFixed(1)}%</td>
+          <td>${round.loans.toFixed(2)}</td>
+        </tr>
+      `).join('');
+
+      // Gráfico
+      updateChart(cascadeData.rounds);
+
+      // Explicación
+      updateExplanation(r, MB, result);
+    }
+
+    function updateChart(rounds) {
+      if (chartCascade) chartCascade.destroy();
+
+      const ctx = document.getElementById('chart-cascade').getContext('2d');
+      chartCascade = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: rounds.map(r => `R${r.round}`),
+          datasets: [
+            {
+              label: 'Depósitos',
+              data: rounds.map(r => r.deposits),
+              backgroundColor: '#0071e3',
+              borderRadius: 4
+            },
+            {
+              label: 'Préstamos',
+              data: rounds.map(r => r.loans),
+              backgroundColor: '#34C759',
+              borderRadius: 4
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: false,
+          plugins: { legend: { display: true, position: 'top' } },
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+    }
+
+    function updateExplanation(r, MB, result) {
+      let text = `BC inyecta ${MB}€ con r=${(r*100).toFixed(1)}%. `;
+      text += `Multiplicador m=${result.multiplier.toFixed(2)}. `;
+      text += `M1 final=${result.moneySupply.toFixed(0)}€. `;
+      text += `Los bancos crean ${result.creditCreated.toFixed(0)}€ en crédito.`;
+      document.getElementById('explanation-text').innerHTML = text;
+    }
+
+    updateAll();
+  </script>
+
+</body>
+</html>
