@@ -1,0 +1,137 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                        PLAN TEMA 2 — RESUMEN VISUAL                       ║
+║               Bancos y Crédito (Capítulo 10 CORE Economics)               ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 6 HERRAMIENTAS INTERACTIVAS                                                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  1️⃣  ROL DEL DINERO                     Ecuación: M × V = P × Y           │
+│     Variables: M, V, P, Y (4 sliders)   Gráficos: 2 líneas                 │
+│     Complejidad: ⭐ Media                Tiempo: 30 min                    │
+│                                                                              │
+│  2️⃣  SISTEMA BANCARIO                   Ecuación: m = 1/r                  │
+│     Variables: r, MB (2 sliders)        Gráficos: Cascada + Tabla         │
+│     Complejidad: ⭐⭐ Alta               Tiempo: 40 min                    │
+│                                                                              │
+│  3️⃣  DEMANDA DE DINERO                  Ecuación: M^d = kY - hi           │
+│     Variables: Y, k, h (3 sliders)      Gráficos: Curva 2D                │
+│     Complejidad: ⭐⭐ Alta               Tiempo: 35 min                    │
+│                                                                              │
+│  4️⃣  OFERTA DE DINERO                   Agregados: M1, M2, M3            │
+│     Variables: Control BC               Gráficos: Barra + Pie              │
+│     Complejidad: ⭐ Media                Tiempo: 25 min                    │
+│                                                                              │
+│  5️⃣  EQUILIBRIO MONETARIO               Ecuación: M^s = M^d               │
+│     Variables: Ms, Y, k, h (4 sliders)  Gráficos: 2 Curvas                │
+│     Complejidad: ⭐⭐ Alta               Tiempo: 35 min                    │
+│                                                                              │
+│  6️⃣  POLÍTICA MONETARIA                 Transmisión: ΔM → Δi → ΔY        │
+│     Variables: Impulso monetario        Gráficos: 4+ Gráficos             │
+│     Complejidad: ⭐⭐⭐ Muy Alta          Tiempo: 45 min                    │
+│                                                                              │
+│                                     TOTAL: ~3.5 horas | ~30K tokens      │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 6 VALIDACIONES CLAVE (Para que Apruebes)                                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  V1: ¿Están bien mapeados los 6 conceptos?                                │
+│      ✓ Dinero, Sistema Bancario, Demanda, Oferta, Equilibrio, Política   │
+│      Pregunta: ¿SÍ o Cambiar concepto X?                                  │
+│                                                                              │
+│  V2: ¿Es el orden de implementación lógico?                               │
+│      ✓ 1→2→3→4→5→6 (funda conceptos antes de combinaciones)              │
+│      Pregunta: ¿SÍ o Cambiar a orden?                                     │
+│                                                                              │
+│  V3: ¿Aceptas la estructura de carpetas?                                  │
+│      ✓ /tema-2/ con 8 archivos HTML + assets compartidos                 │
+│      Pregunta: ¿SÍ o Cambios?                                             │
+│                                                                              │
+│  V4: ¿OK proceso de gobernanza?                                           │
+│      ✓ Actualizar MAP.md, KNOWLEDGE.md, EXAMS.md, README.md              │
+│      Pregunta: ¿OK o Preocupación?                                        │
+│                                                                              │
+│  V5: ¿Estimación realista?                                               │
+│      ✓ ~30K tokens, ~3.5 horas, 6 herramientas                           │
+│      Pregunta: ¿Realista / Más tokens / Menos tokens?                     │
+│                                                                              │
+│  V6: ¿Calendario preferido?                                               │
+│      ✓ Opción A (1 sesión) / B (3 sesiones) / C (2 sesiones, recomendada)│
+│      Pregunta: ¿Opción A / B / C?                                         │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ OPCIONES DE CALENDARIO                                                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  📋 OPCIÓN A: Una Sesión (Arriesgado)                                      │
+│     • Implementar herramientas 1-6 consecutivas                            │
+│     • Gobernanza al final                                                  │
+│     • 1 commit: "Feat: Tema 2 completo"                                   │
+│     ⚠️  Riesgo: Context exhaustion                                         │
+│                                                                              │
+│  📋 OPCIÓN B: Tres Sesiones (Seguro)                                       │
+│     • Sesión 1: Herramientas 1-2                                          │
+│     • Sesión 2: Herramientas 3-4                                          │
+│     • Sesión 3: Herramientas 5-6                                          │
+│     • Gobernanza: Incremental                                             │
+│     ✅ Seguro, pero 3 startups de contexto                                │
+│                                                                              │
+│  📋 OPCIÓN C: Dos Sesiones HIBRIDA (RECOMENDADA ⭐)                        │
+│     • Sesión 1: Herramientas 1-3 (Dinero + Demanda)                      │
+│     • Commit + validar                                                     │
+│     • Sesión 2: Herramientas 4-6 (Oferta + Equilibrio + Política)        │
+│     • Gobernanza: Fin de cada sesión                                      │
+│     ✅ Balance perfecto: eficiencia + seguridad                           │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ ARCHIVOS GENERADOS PARA TI                                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  1. PLAN-TEMA2-RESUMEN.md ...................... ⭐ EMPIEZA AQUÍ (5 min)  │
+│  2. PLAN-TEMA2-MATRIZ.md ....................... Decisiones (10 min)      │
+│  3. PLAN-TEMA2.md ........................ Plan Completo (15-20 min)      │
+│  4. PLAN-TEMA2-DETALLES-TECNICOS.md .. Código detallado (referencia)     │
+│  5. PLAN-TEMA2-EXAMS.md ................... 16 preguntas reales (referencia)│
+│  6. PLAN-TEMA2-INDICE.md ................... Guía de lectura              │
+│                                                                              │
+│  📍 Ubicación: /web/PLAN-TEMA2-*.md                                        │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ ¿PRÓXIMO PASO?                                                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  1. Lee: PLAN-TEMA2-RESUMEN.md (5 minutos)                                │
+│  2. Responde las 6 validaciones (V1-V6)                                   │
+│  3. Elige calendario (A / B / C)                                          │
+│  4. Comenta: "Proceder con Opción [X]"                                   │
+│  5. Claude implementa                                                      │
+│                                                                              │
+│  Template de respuesta:                                                    │
+│  ═══════════════════════════════════════════════════════════════════════  │
+│  ✅ V1: [SÍ / NO / Cambiar a: ___]                                       │
+│  ✅ V2: [SÍ / Cambiar a: ___]                                            │
+│  ✅ V3: [SÍ / NO / Cambios: ___]                                         │
+│  ✅ V4: [OK / Preocupación: ___]                                         │
+│  ✅ V5: [Realista / Más / Menos]                                         │
+│  ✅ V6: [Opción: A / B / C]                                              │
+│                                                                              │
+│  📝 Notas: [Libre]                                                         │
+│                                                                              │
+│  🚀 ¿PROCEDER?: [SÍ / NO / CAMBIOS PRIMERO]                              │
+│  ═══════════════════════════════════════════════════════════════════════  │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║  ¡PLAN LISTO PARA VALIDAR!                                               ║
+║  6 Herramientas | 5 Documentos | 0 Ambigüedad | 100% Especificado        ║
+╚═══════════════════════════════════════════════════════════════════════════╝
