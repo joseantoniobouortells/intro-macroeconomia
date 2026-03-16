@@ -221,6 +221,8 @@
       </div>
       <div class="step-question">"¿Qué precio maximiza nuestros beneficios dado el mercado?"</div>
       <div class="step-output">
+        <div class="step-output-label">RESTRICCIÓN DE MERCADO</div>
+        <div id="demandRestriction" style="margin-bottom: 8px;"></div>
         <div class="step-output-label">OUTPUT → Precio y cantidad óptimos (Punto B*)</div>
         <div class="step-formula" id="dmFormula"></div>
         <div class="step-value" id="dmValue"></div>
@@ -628,6 +630,8 @@ function updateDepartamentos() {
     `W = ${W} | λ = ${lambda.toFixed(1)} → Coste unitario = ${unitC.toFixed(2)}`;
 
   // Paso 2 - DM
+  document.getElementById('demandRestriction').innerHTML =
+    kHTML(`p = ${P_MAX} - ${(P_MAX/Q_MAX).toFixed(1)}q`);
   document.getElementById('dmFormula').innerHTML =
     kHTML('p^* = \\dfrac{W}{\\lambda}(1 + \\mu)');
   document.getElementById('dmValue').textContent =
@@ -701,6 +705,9 @@ function updateFormulaKatex() {
     </div>
     <div class="formula-param-item">
       ${kHTML('W/\\lambda = ' + unitC.toFixed(2))} <span>= coste unitario</span>
+    </div>
+    <div class="formula-param-item" style="background:#fff9f0; border-color:#ffcc00;">
+      ${kHTML(`p = ${P_MAX} - ${(P_MAX/Q_MAX).toFixed(1)}q`)} <span>= restricción demanda</span>
     </div>
     <div class="formula-param-item" style="grid-column:span 2; background:#f0f4ff;">
       ${kHTML(`\\text{Salario real} = ${WP.toFixed(2)} \\quad \\text{Margen empresa} = ${(lambda * mu).toFixed(2)}`)}
