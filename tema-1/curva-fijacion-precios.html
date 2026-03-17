@@ -219,11 +219,11 @@
         <div class="step-badge">2</div>
         <div class="step-dept">Marketing (DM)</div>
       </div>
-      <div class="step-question">"¿Qué precio maximiza nuestros beneficios dado el mercado?"</div>
+      <div class="step-question">"¿Qué precio fijamos dado nuestro margen de beneficio (markup)?"</div>
       <div class="step-output">
         <div class="step-output-label">RESTRICCIÓN DE MERCADO</div>
         <div id="demandRestriction" style="margin-bottom: 8px;"></div>
-        <div class="step-output-label">OUTPUT → Precio y cantidad óptimos (Punto B*)</div>
+        <div class="step-output-label">OUTPUT → Precio y cantidad fijados (Punto B*)</div>
         <div class="step-formula" id="dmFormula"></div>
         <div class="step-value" id="dmValue"></div>
       </div>
@@ -247,7 +247,7 @@
     <div class="result-card">
       <div class="result-title">📊 Resultado agregado (toda la economía)</div>
       <div class="result-formula" id="resultFormula"></div>
-      <div style="font-size:0.88em; opacity:0.9;">Cuando TODAS las empresas repiten este proceso, determinan colectivamente el nivel de precios P → la curva de fijación de precios es <strong>horizontal</strong>.</div>
+      <div style="font-size:0.88em; opacity:0.9;">Cuando las empresas aplican colectivamente este margen sobre sus costes, determinan el reparto del producto entre salarios y beneficios. El resultado es el salario real (W/P) de equilibrio.</div>
     </div>
 
   </div>
@@ -310,13 +310,20 @@
   <!-- ── SECCIÓN 4: ESCENARIOS ── -->
   <div class="scenarios-row">
     <button class="scenario-btn" onclick="loadScenario('competitive')">🏪 Alta Competencia</button>
-    <button class="scenario-btn" onclick="loadScenario('monopoly')">👑 Monopolio</button>
+    <button class="scenario-btn" onclick="loadScenario('monopoly')">📉 Menor Competencia</button>
     <button class="scenario-btn" onclick="loadScenario('productivity')">🚀 Boom Productividad</button>
     <button class="reset-btn" onclick="resetToDefault()">🔄 Restablecer</button>
   </div>
 
   <!-- ── SECCIÓN 5: EXPLICACIÓN DINÁMICA ── -->
   <div class="explanation" id="explanation"></div>
+
+  <div class="info-box" style="margin-top: 0; margin-bottom: 24px; background: #fdfdfd; border: 1px solid #e5e5e5; border-left: 4px solid #6e6e73;">
+    <h3 style="color: #1d1d1f; font-size: 0.9rem;">💡 Nota Pedagógica: Macro vs Micro</h3>
+    <p style="font-size: 0.85rem; color: #48484a; line-height: 1.5;">
+      En macroeconomía, la curva de fijación de precios no representa la maximización individual de una empresa (IMg=CMg). En su lugar, describe cómo las empresas en su conjunto aplican un <strong>markup estructural</strong> determinado por el grado de competencia. Un mayor poder de mercado se traduce en un menor salario real para los trabajadores.
+    </p>
+  </div>
 
   <!-- 🎓 Píldora de Examen -->
   <div class="exam-box">
@@ -358,21 +365,22 @@ const PriceModel = {
     return lambda * (1 - mu);
   },
 
-  // Coste unitario de producción
+  // Coste unitario de producción (CMg)
   unitCost(W, lambda) {
     return W / lambda;
   },
 
-  // Precio óptimo B*: p* = costeUnitario × (1 + μ) = (W/λ)(1 + μ)
+  // Precio óptimo B*: p* = CMg / (1 - μ) 
+  // Según CORE: μ = (p - CMg)/p  =>  p(1 - μ) = CMg
   optimalPrice(W, lambda, mu) {
-    return (W / lambda) * (1 + mu);
+    return (W / lambda) / (1 - mu);
   },
 
-  // Cantidad óptima B* (función lineal de demanda invertida)
-  // Demanda: p = pMax - slope * q  →  q* = (pMax - p*) / slope
+  // Cantidad óptima B*: q* = qMax * (1 - p*/pMax)
+  // Ajustamos pMax para que el equilibrio sea consistente con la elasticidad
   optimalQuantity(W, lambda, mu, pMax, qMax) {
-    const slope = pMax / qMax;
     const pStar = this.optimalPrice(W, lambda, mu);
+    const slope = pMax / qMax;
     const q = (pMax - pStar) / slope;
     return Math.max(q, 1);
   },
@@ -633,9 +641,9 @@ function updateDepartamentos() {
   document.getElementById('demandRestriction').innerHTML =
     kHTML(`p = ${P_MAX} - ${(P_MAX/Q_MAX).toFixed(1)}q`);
   document.getElementById('dmFormula').innerHTML =
-    kHTML('p^* = \\dfrac{W}{\\lambda}(1 + \\mu)');
+    kHTML('p^* = \\dfrac{W/\\lambda}{1 - \\mu}');
   document.getElementById('dmValue').textContent =
-    `p* = ${unitC.toFixed(2)} × (1 + ${mu.toFixed(2)}) = ${pStar.toFixed(2)} | q* ≈ ${qStar.toFixed(1)}`;
+    `p* = ${unitC.toFixed(2)} / (1 - ${mu.toFixed(2)}) = ${pStar.toFixed(2)} | q* ≈ ${qStar.toFixed(1)}`;
 
   // Paso 3 - DP
   document.getElementById('dpFormula').innerHTML =
@@ -659,11 +667,11 @@ function updateExplanation() {
 
   let contexto = '';
   if (mu <= 0.12)
-    contexto = '<strong>Alta competencia:</strong> el bajo markup indica que la empresa tiene poco poder de mercado. Los salarios reales son altos en relación con la productividad.';
+    contexto = '<strong>Alta competencia:</strong> el bajo markup indica que el mercado es muy competitivo. Los trabajadores capturan una gran parte de la tarta económica como salario real.';
   else if (mu <= 0.25)
-    contexto = '<strong>Competencia moderada:</strong> equilibrio entre margen de la empresa y salario real. Situación típica de un mercado oligopolístico.';
+    contexto = '<strong>Competencia moderada:</strong> equilibrio entre el margen empresarial y el salario real. Situación estándar en mercados con cierto grado de diferenciación.';
   else
-    contexto = '<strong>Alta concentración / monopolio:</strong> el elevado markup permite a la empresa capturar gran parte del valor producido, reduciendo los salarios reales.';
+    contexto = '<strong>Baja competencia:</strong> el elevado poder de mercado permite a las empresas fijar un markup alto, lo que comprime el salario real de los trabajadores.';
 
   const formulaActual = kHTML(`\\frac{W}{P} = ${lambda.toFixed(2)}(1 - ${mu.toFixed(2)}) = ${WP.toFixed(2)}`);
 
