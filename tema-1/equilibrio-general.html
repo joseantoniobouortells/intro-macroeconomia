@@ -224,7 +224,7 @@
     <p style="font-size:0.75rem; font-weight:600; letter-spacing:0.8px; text-transform:uppercase; color:#0071e3; margin-bottom:8px;">Grado en Economía &nbsp;·&nbsp; Introducción a la Macroeconomía</p>
     <h1>⚖️ Equilibrio General</h1>
     <p class="subtitle">Tema 1 · Capítulo 9: El Mercado del Trabajo</p>
-    <p class="subtitle" style="font-size:0.875rem; margin-top:4px;">Intersección de la Curva de Salarios y la Curva de Precios — tasa de desempleo natural</p>
+    <p class="subtitle" style="font-size:0.875rem; margin-top:4px;">Intersección de la Curva de Salarios y la Curva de Precios — tasa de empleo de equilibrio</p>
   </header>
   </div>
 
@@ -233,8 +233,8 @@
     <!-- ── MÉTRICAS DE EQUILIBRIO ── -->
     <div class="eq-badge">
       <div class="eq-card highlight">
-        <div class="eq-label">Desempleo natural u*</div>
-        <div class="eq-value" id="eqU">—</div>
+        <div class="eq-label">Empleo equilibrio e*</div>
+        <div class="eq-value" id="eqE">—</div>
         <div class="eq-unit">% de la fuerza laboral</div>
       </div>
       <div class="eq-card">
@@ -243,14 +243,14 @@
         <div class="eq-unit">unidades de consumo</div>
       </div>
       <div class="eq-card">
-        <div class="eq-label">Tasa de empleo e*</div>
-        <div class="eq-value" id="eqE">—</div>
-        <div class="eq-unit">fracción de la fuerza laboral</div>
+        <div class="eq-label">Desempleo equilibrio u*</div>
+        <div class="eq-value" id="eqU">—</div>
+        <div class="eq-unit">distancia al pleno empleo</div>
       </div>
       <div class="eq-card">
-        <div class="eq-label">Margen empresarial μ</div>
+        <div class="eq-label">Margen beneficio μ</div>
         <div class="eq-value" id="eqMu">—</div>
-        <div class="eq-unit">sobre costes laborales</div>
+        <div class="eq-unit">participación beneficios</div>
       </div>
     </div>
 
@@ -369,20 +369,20 @@
       <h3>Conceptos clave — examen</h3>
       <div class="concepts-grid">
         <div class="concept-item">
-          <h4>¿Qué es el desempleo natural?</h4>
-          <p>Es la tasa de desempleo de equilibrio donde las decisiones de empresas (PS) y trabajadores (WS) son mutuamente consistentes. No es cero porque existen fricciones y poder de mercado.</p>
+          <h4>Tasa de empleo de equilibrio</h4>
+          <p>Es el nivel de empleo (e*) donde las decisiones de fijación de salarios (WS) y precios (PS) son consistentes. Determina cuánta gente está trabajando realmente en equilibrio.</p>
         </div>
         <div class="concept-item">
-          <h4>¿Por qué la PS es horizontal?</h4>
-          <p>La Curva de Precios es horizontal porque el salario real que las empresas pueden pagar (λ/1+μ) depende solo de productividad y markup, no del nivel de desempleo.</p>
+          <h4>Desempleo de equilibrio</h4>
+          <p>En este modelo, el desempleo (u*) es la distancia desde la tasa de empleo de equilibrio hasta el pleno empleo (100%). Es decir: u* = 1 - e*.</p>
         </div>
         <div class="concept-item">
-          <h4>¿Qué desplaza el equilibrio?</h4>
-          <p>La WS sube con mayor poder sindical (B↑) o mayor coste del esfuerzo (a↑). La PS sube con mayor productividad (λ↑) y baja con mayor markup (μ↑). Ambas determinan u*.</p>
+          <h4>La lógica de la PS (Reparto)</h4>
+          <p>La PS es horizontal porque el salario real (λ(1-μ)) depende del reparto del producto entre trabajadores y dueños, no del nivel de empleo directamente.</p>
         </div>
         <div class="concept-item">
-          <h4>Política económica</h4>
-          <p>La demanda agregada no afecta u* en el largo plazo. Solo políticas que cambien la WS o PS (reformas laborales, tecnología) alteran el desempleo natural de forma permanente.</p>
+          <h4>Desplazamientos</h4>
+          <p>Un aumento de productividad (λ↑) desplaza la PS hacia arriba (más empleo). Un aumento en la participación de los beneficios (μ↑) la desplaza hacia abajo (menos empleo).</p>
         </div>
       </div>
     </div>
@@ -416,21 +416,22 @@
     // MODELOS
     // ─────────────────────────────────────────────
 
-    // Curva WS: W/P = B + a/(1-e)   donde e = tasa de empleo, u = 1-e
+    // Curva WS: W/P = B + a/(1-e)   donde e = tasa de empleo
     function wsValue(e, B, a) {
-      if (e >= 0.999) return B + a * 100;
+      if (e >= 0.99) return B + a * 50; // Limitar para evitar saltos visuales extremos
       return B + a / (1 - e);
     }
 
-    // Curva PS: W/P = λ/(1+μ)  — horizontal
+    // Curva PS: W/P = λ(1 - μ)  — horizontal
+    // λ = productividad, μ = participación de beneficios (markup)
     function psValue(lambda, mu) {
-      return lambda / (1 + mu);
+      return lambda * (1 - mu);
     }
 
-    // Equilibrio: B + a/(1-e*) = λ/(1+μ)  →  e* = 1 - a/(psVal - B)
+    // Equilibrio: B + a/(1-e*) = λ(1-μ)  →  e* = 1 - a/(psVal - B)
     function computeEquilibrium(B, a, lambda, mu) {
       const ps = psValue(lambda, mu);
-      if (ps <= B) return null; // sin solución real
+      if (ps <= B) return null; // sin solución real (PS por debajo del salario reserva)
       const eStar = 1 - a / (ps - B);
       if (eStar <= 0 || eStar >= 1) return null;
       const uStar = 1 - eStar;
@@ -456,11 +457,11 @@
     function buildChartData() {
       const { B, a, lambda, mu } = params;
       const ePoints = [];
-      for (let e = 0.01; e <= 0.985; e += 0.005) ePoints.push(e);
+      for (let e = 0.05; e <= 0.98; e += 0.01) ePoints.push(e);
 
-      const wsData = ePoints.map(e => ({ x: (1 - e) * 100, y: wsValue(e, B, a) }));
+      const wsData = ePoints.map(e => ({ x: e * 100, y: wsValue(e, B, a) }));
       const psLevel = psValue(lambda, mu);
-      const psData  = ePoints.map(e => ({ x: (1 - e) * 100, y: psLevel }));
+      const psData  = ePoints.map(e => ({ x: e * 100, y: psLevel }));
 
       const eq = computeEquilibrium(B, a, lambda, mu);
 
@@ -472,7 +473,7 @@
       const { wsData, psData, eq } = buildChartData();
 
       const eqDataset = eq ? [{
-        x: eq.uStar * 100,
+        x: eq.eStar * 100,
         y: eq.wpStar
       }] : [];
 
@@ -521,7 +522,7 @@
               callbacks: {
                 label: (ctx) => {
                   if (ctx.datasetIndex === 2) {
-                    return ` Equilibrio: u* = ${ctx.parsed.x.toFixed(1)}%, W/P* = ${ctx.parsed.y.toFixed(2)}`;
+                    return ` Equilibrio: e* = ${ctx.parsed.x.toFixed(1)}%, W/P* = ${ctx.parsed.y.toFixed(2)}`;
                   }
                   return ` ${ctx.dataset.label}: W/P = ${ctx.parsed.y.toFixed(2)}`;
                 }
@@ -532,10 +533,10 @@
             x: {
               title: {
                 display: true,
-                text: 'Tasa de desempleo u (%)',
+                text: 'Tasa de empleo e (%)',
                 font: { size: 12, weight: '600' }, color: '#6e6e73'
               },
-              min: 0, max: 60,
+              min: 0, max: 100,
               grid: { color: 'rgba(0,0,0,0.05)' },
               ticks: { color: '#6e6e73', font: { size: 11 }, callback: v => v + '%' }
             },
@@ -558,7 +559,7 @@
       const { wsData, psData, eq } = buildChartData();
       chart.data.datasets[0].data = wsData;
       chart.data.datasets[1].data = psData;
-      chart.data.datasets[2].data = eq ? [{ x: eq.uStar * 100, y: eq.wpStar }] : [];
+      chart.data.datasets[2].data = eq ? [{ x: eq.eStar * 100, y: eq.wpStar }] : [];
       chart.update();
     }
 
@@ -570,9 +571,9 @@
       const eq = computeEquilibrium(B, a, lambda, mu);
 
       if (eq) {
-        document.getElementById('eqU').textContent  = (eq.uStar * 100).toFixed(1) + '%';
+        document.getElementById('eqE').textContent  = (eq.eStar * 100).toFixed(1) + '%';
         document.getElementById('eqWP').textContent = eq.wpStar.toFixed(2);
-        document.getElementById('eqE').textContent  = (eq.eStar).toFixed(3);
+        document.getElementById('eqU').textContent  = (eq.uStar * 100).toFixed(1) + '%';
         document.getElementById('eqMu').textContent = (mu * 100).toFixed(0) + '%';
         document.querySelectorAll('.eq-card').forEach(c => c.classList.remove('highlight'));
         document.querySelector('.eq-card').classList.add('highlight');
@@ -592,45 +593,26 @@
       let html = '';
 
       if (!eq) {
-        html = `<p>⚠️ <strong>No existe equilibrio con los parámetros actuales.</strong> La Curva de Precios (PS = ${ps}) está por debajo del salario de reserva (B = ${B}), lo que significa que ningún nivel de desempleo puede igualar las exigencias de trabajadores y empresas simultáneamente.</p>`;
+        html = `<p>⚠️ <strong>No existe equilibrio con los parámetros actuales.</strong> La Curva de Precios (PS = ${ps}) está por debajo del salario de reserva (B = ${B}), lo que significa que el margen de beneficio exigido es demasiado alto para permitir cualquier nivel de empleo estable.</p>`;
       } else {
         const uPct = (eq.uStar * 100).toFixed(1);
         const ePct = (eq.eStar * 100).toFixed(1);
         const wp   = eq.wpStar.toFixed(2);
 
-        // Clasificar el nivel de desempleo
-        let uDesc, uColor;
-        if (eq.uStar < 0.04) { uDesc = 'muy bajo'; uColor = 'tag-up'; }
-        else if (eq.uStar < 0.08) { uDesc = 'moderado'; uColor = 'tag-eq'; }
-        else { uDesc = 'elevado'; uColor = 'tag-down'; }
-
-        // Clasificar poder sindical
-        const sindDesc = B > 15 ? 'fuerte poder sindical' : B > 9 ? 'poder sindical moderado' : 'bajo poder sindical';
-        const prodDesc = lambda > 1.5 ? 'alta productividad' : lambda > 0.9 ? 'productividad media' : 'baja productividad';
-
         html = `
           <p>El equilibrio se alcanza donde la <strong>Curva de Salarios (WS)</strong> y la <strong>Curva de Precios (PS)</strong> se cortan.
-          Con los parámetros actuales — ${sindDesc} (B = ${B}) y ${prodDesc} (λ = ${lambda.toFixed(1)}) —
-          el mercado se equilibra con una tasa de desempleo natural
-          <span class="tag ${uColor}">u* = ${uPct}%</span> y un salario real
-          <span class="tag tag-eq">W/P* = ${wp}</span>.</p>
+          Este punto determina la <span class="tag tag-eq">tasa de empleo de equilibrio e* = ${ePct}%</span>.
+          El salario real resultante es <span class="tag tag-eq">W/P* = ${wp}</span>.</p>
 
           <p style="margin-top:12px;">
-          <strong>Interpretación:</strong> En este punto, el ${ePct}% de la fuerza laboral está empleada.
-          El ${uPct}% de desempleo <strong>no es involuntario</strong> en sentido estricto: es el nivel necesario
-          para que los trabajadores acepten la disciplina laboral que justifica el salario que las empresas pueden pagar.
-          ${eq.uStar < 0.04
-            ? ' El desempleo <strong>muy bajo</strong> refleja condiciones de negociación muy favorables para los trabajadores.'
-            : eq.uStar > 0.12
-              ? ' El desempleo <strong>elevado</strong> sugiere alta rigidez salarial o bajo poder adquisitivo empresarial.'
-              : ' Este nivel de desempleo es compatible con una economía funcional y estable.'}
+          <strong>Interpretación:</strong> La tasa de desempleo de equilibrio es del <strong>${uPct}%</strong> (la distancia desde e* hasta el pleno empleo del 100%). 
+          Este desempleo es necesario para que los trabajadores tengan incentivos a esforzarse al salario que las empresas están dispuestas a pagar dadas su productividad (λ) y su participación en el beneficio (μ).
           </p>
 
           <p style="margin-top:12px;">
-          <strong>Qué desplazaría este equilibrio:</strong>
-          Una subida del salario de reserva B <span class="tag tag-down">↑u*</span> desplaza la WS hacia arriba y aumenta el desempleo natural.
-          Un aumento de productividad λ <span class="tag tag-up">↓u*</span> sube la PS y reduce el desempleo natural.
-          Mayor markup μ <span class="tag tag-down">↓W/P*</span> baja la PS y empeora el salario real de equilibrio.
+          <strong>Dinámica del modelo:</strong>
+          Un aumento de productividad λ <span class="tag tag-up">↑e*</span> desplaza la PS hacia arriba y aumenta el empleo de equilibrio.
+          Mayor margen de beneficio μ <span class="tag tag-down">↓e*</span> desplaza la PS hacia abajo, reduciendo tanto el salario real como el empleo.
           </p>`;
       }
 
@@ -650,17 +632,16 @@
       document.getElementById('paramsWS').innerHTML = `
         <div class="formula-param-item">${kHTML('B = ' + B)} <span>salario reserva</span></div>
         <div class="formula-param-item">${kHTML('a = ' + a)} <span>coste esfuerzo</span></div>
-        <div class="formula-param-item">${kHTML('e')} <span>tasa de empleo</span></div>
-        <div class="formula-param-item">${kHTML('u = 1-e')} <span>tasa de desempleo</span></div>`;
+        <div class="formula-param-item">${kHTML('e')} <span>tasa de empleo</span></div>`;
 
       // PS
       document.getElementById('formulaPS').innerHTML =
-        kHTML(`\\frac{W}{P} = \\frac{\\lambda}{1+\\mu} = ${ps.toFixed(2)}`, true);
+        kHTML(`\\frac{W}{P} = \\lambda(1-\\mu) = ${ps.toFixed(2)}`, true);
       document.getElementById('paramsPS').innerHTML = `
         <div class="formula-param-item">${kHTML('\\lambda = ' + lambda.toFixed(1))} <span>productividad</span></div>
-        <div class="formula-param-item">${kHTML('\\mu = ' + mu.toFixed(2))} <span>markup</span></div>
+        <div class="formula-param-item">${kHTML('\\mu = ' + mu.toFixed(2))} <span>participación beneficio</span></div>
         <div class="formula-param-item" style="grid-column:span 2; background:#fff8f5;">
-          ${kHTML(`\\frac{W}{P}^{PS} = \\frac{${lambda.toFixed(1)}}{1+${mu.toFixed(2)}} = ${ps.toFixed(2)}`)}
+          ${kHTML(`\\frac{W}{P}^{PS} = ${lambda.toFixed(1)}(1-${mu.toFixed(2)}) = ${ps.toFixed(2)}`)}
           <span>nivel actual</span>
         </div>`;
     }
@@ -672,7 +653,7 @@
       document.getElementById('labelB').innerHTML      = kHTML('B') + ' — Salario de reserva';
       document.getElementById('labelA').innerHTML      = kHTML('a') + ' — Coste del esfuerzo';
       document.getElementById('labelLambda').innerHTML = kHTML('\\lambda') + ' — Productividad';
-      document.getElementById('labelMu').innerHTML     = kHTML('\\mu') + ' — Markup empresarial';
+      document.getElementById('labelMu').innerHTML     = kHTML('\\mu') + ' — Participación beneficios';
 
       // Renderizar píldoras de examen
       document.getElementById('math-u').innerHTML = kHTML('u');
