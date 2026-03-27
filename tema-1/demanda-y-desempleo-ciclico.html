@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demanda Agregada y Desempleo Cíclico — Tema 1</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/katex.min.css">
+  <script src="assets/chart.umd.min.js"></script>
+  <script src="assets/katex.min.js"></script>
+  <style>
+    body { padding: 0; background: #f5f5f7; }
+    .site-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.08); height: 48px;
+      display: flex; align-items: center; padding: 0 24px;
+    }
+    .nav-back { display: flex; align-items: center; gap: 4px; font-size: 0.8rem; font-weight: 500; color: #0071e3; text-decoration: none; width: 120px; }
+    .nav-center { flex: 1; text-align: center; font-size: 0.8rem; font-weight: 500; color: #1d1d1f; pointer-events: none; }
+    .nav-spacer { width: 120px; }
+    .inner { max-width: 1000px; margin: 0 auto; padding: 0 24px 80px; }
+
+    .chart-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 20px; padding: 24px; margin-bottom: 24px; margin-top: 32px; }
+    .chart-container { position: relative; height: 420px; }
+
+    .metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+    .metric-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 18px; padding: 20px; text-align: center; }
+    .metric-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; color: #6e6e73; margin-bottom: 8px; }
+    .metric-value { font-size: 2rem; font-weight: 800; color: #1d1d1f; letter-spacing: -1px; }
+    .metric-card.alert { border-color: #ff3b30; background: #fff9f9; }
+    .metric-card.alert .metric-value { color: #ff3b30; }
+
+    .controls-card { background: #1d1d1f; color: #fff; border-radius: 20px; padding: 28px; margin-bottom: 24px; }
+    .slider-group { margin-bottom: 0; }
+    .slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .slider-title { font-size: 1rem; font-weight: 700; }
+    .slider-value { font-size: 1.4rem; font-weight: 800; color: #0071e3; }
+    input[type=range] { width: 100%; cursor: pointer; }
+
+    .explanation-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 20px; padding: 32px; line-height: 1.7; color: #3a3a3c; }
+    .explanation-card h3 { color: #1d1d1f; margin-bottom: 16px; font-size: 1.2rem; }
+    .tag { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; margin: 0 4px; }
+    .tag-x { background: #1d1d1f; color: #fff; }
+    .tag-b { background: #ff3b30; color: #fff; }
+  </style>
+</head>
+<body>
+  <nav class="site-nav">
+    <a href="index.html" class="nav-back"><span class="chevron">‹</span> Tema 1</a>
+    <span class="nav-center">CORE Economics · Cap. 9.7</span>
+    <span class="nav-spacer"></span>
+  </nav>
+
+  <div class="inner">
+    <header style="margin-top: 48px; text-align: center;">
+      <p style="font-size:0.75rem; font-weight:600; letter-spacing:0.8px; text-transform:uppercase; color:#0071e3; margin-bottom:8px;">Capítulo 9.7: Demanda y Desempleo</p>
+      <h1 style="font-size: 2.5rem; letter-spacing: -1.2px;">🔄 Demanda Agregada y Desempleo Cíclico</h1>
+      <p style="color: #6e6e73; max-width: 600px; margin: 0 auto; margin-top: 12px;">Explora cómo la falta de ventas desplaza a la economía de su equilibrio natural, creando desempleo adicional.</p>
+    </header>
+
+    <div class="metrics-row">
+      <div class="metric-card">
+        <div class="metric-label">Salario Real (W/P)</div>
+        <div id="mWP" class="metric-value">0.85</div>
+      </div>
+      <div class="metric-card alert" id="boxCyclic">
+        <div class="metric-label">Desempleo Cíclico</div>
+        <div id="mCyclic" class="metric-value">0.0%</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Tasa de Empleo Actual (e)</div>
+        <div id="mEmployment" class="metric-value">95.0%</div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-container">
+        <canvas id="demandChart"></canvas>
+      </div>
+    </div>
+
+    <div class="controls-card" style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+      <div class="slider-group" style="grid-column: span 2;">
+        <div class="slider-header">
+          <span class="slider-title">Demanda Agregada (Ventas)</span>
+          <span id="lDemand" class="slider-value">100%</span>
+        </div>
+        <input type="range" id="pDemand" min="50" max="100" value="100" step="1">
+      </div>
+
+      <div class="slider-group">
+        <div class="slider-header">
+          <span class="slider-title">Productividad (λ)</span>
+          <span id="lLambda" class="slider-value">1.0</span>
+        </div>
+        <input type="range" id="pLambda" min="0.5" max="2.0" value="1.0" step="0.1">
+      </div>
+
+      <div class="slider-group">
+        <div class="slider-header">
+          <span class="slider-title">Margen (μ)</span>
+          <span id="lMu" class="slider-value">15%</span>
+        </div>
+        <input type="range" id="pMu" min="0.05" max="0.5" value="0.15" step="0.01">
+      </div>
+    </div>
+
+    <div class="explanation-card">
+      <h3>📖 ¿Por qué persiste el desempleo cíclico?</h3>
+      <p>Cuando la demanda cae, las empresas no pueden vender todos sus productos al precio actual. Como respuesta, reducen la producción y el empleo, desplazándose del <span class="tag tag-x">Punto X</span> al <span class="tag tag-b">Punto B</span>.</p>
+      
+      <p style="margin-top: 16px;">En el <strong>Punto B</strong>, el salario real que las empresas pagan es el mismo que en el equilibrio, pero el empleo es menor. Según la teoría, las empresas podrían bajar precios y salarios para vender más y volver a X, pero esto no ocurre rápidamente debido a la <strong>rigidez de los salarios nominales</strong>: los trabajadores se resisten a recortes en su paga monetaria, lo que mantiene a la economía atrapada en una situación de alto desempleo.</p>
+
+      <div class="exam-box" style="margin-top: 32px; background: #fff9e6; border: 1px solid #ffcc00; padding: 20px; border-radius: 16px;">
+        <h4 style="font-size: 0.8rem; text-transform: uppercase; color: #b38f00; margin-bottom: 8px;">Directo al Examen</h4>
+        <p style="font-size: 0.95rem; color: #5c4d00;">El <strong>desempleo total</strong> es siempre la suma del desempleo de equilibrio (determinado por las curvas WS y PS) y el desempleo cíclico (causado por la insuficiencia de demanda agregada).</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let chart;
+    let params = {
+      demand: 100,
+      lambda: 1.0,
+      mu: 0.15,
+      B: 0.4, // Salario reserva base
+      a: 0.5  // Sensibilidad WS
+    };
+
+    function kHTML(latex) {
+      return katex.renderToString(latex, { throwOnError: false });
+    }
+
+    // Modelo WS: y = B + a * e^2
+    function getWS(e) {
+      return params.B + params.a * Math.pow(e, 2);
+    }
+
+    // Modelo PS: y = lambda * (1 - mu)
+    function getPS() {
+      return params.lambda * (1 - params.mu);
+    }
+
+    function initChart() {
+      const ctx = document.getElementById('demandChart').getContext('2d');
+      chart = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+          datasets: [
+            {
+              label: 'WS (Curva de Salarios)',
+              data: Array.from({length: 51}, (_, i) => {
+                const e = i / 50;
+                return { x: e * 100, y: getWS(e) };
+              }),
+              showLine: true, borderColor: '#0071e3', borderWidth: 3, pointRadius: 0, tension: 0.3
+            },
+            {
+              label: 'PS (Curva de Precios)',
+              data: [{x: 0, y: 0.85}, {x: 100, y: 0.85}],
+              showLine: true, borderColor: '#ff6b35', borderDash: [5, 5], borderWidth: 3, pointRadius: 0
+            },
+            {
+              label: 'Equilibrio Nash (X)',
+              data: [{x: 95, y: 0.85}],
+              pointRadius: 8, backgroundColor: '#1d1d1f', z: 10
+            },
+            {
+              label: 'Situación Actual (B)',
+              data: [{x: 80, y: 0.85}],
+              pointRadius: 10, backgroundColor: '#ff3b30', z: 11
+            }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false, animation: false,
+          scales: {
+            x: { type: 'linear', min: 0, max: 100, title: { display: true, text: 'Tasa de Empleo e (%)', font: { weight: 'bold' } } },
+            y: { type: 'linear', min: 0, max: 1.5, title: { display: true, text: 'Salario Real', font: { weight: 'bold' } } }
+          }
+        }
+      });
+    }
+
+    function updateAll() {
+      const psVal = getPS();
+      
+      // 1. Calcular e* (X): B + a*e^2 = PS  => e = sqrt((PS - B)/a)
+      let eStar = Math.sqrt(Math.max(0, (psVal - params.B) / params.a));
+      eStar = Math.min(0.98, eStar); // Limitar para visualización
+      
+      // 2. Calcular e actual (B) basado en demanda
+      // Si demanda es 100%, e = eStar. Si demanda es 50%, e es menor.
+      const eActual = eStar * (params.demand / 100);
+      
+      const uEquilibrium = (1 - eStar) * 100;
+      const uCyclic = (eStar - eActual) * 100;
+
+      // Update UI
+      document.getElementById('mWP').textContent = psVal.toFixed(2);
+      document.getElementById('mCyclic').textContent = uCyclic.toFixed(1) + '%';
+      document.getElementById('mEmployment').textContent = (eActual * 100).toFixed(1) + '%';
+      
+      document.getElementById('lDemand').textContent = params.demand + '%';
+      document.getElementById('lLambda').textContent = params.lambda.toFixed(1);
+      document.getElementById('lMu').textContent = (params.mu * 100).toFixed(0) + '%';
+
+      // Update Chart
+      chart.data.datasets[0].data = Array.from({length: 51}, (_, i) => {
+        const e = i / 50;
+        return { x: e * 100, y: getWS(e) };
+      });
+      chart.data.datasets[1].data = [{x: 0, y: psVal}, {x: 100, y: psVal}];
+      chart.data.datasets[2].data = [{x: eStar * 100, y: psVal}];
+      chart.data.datasets[3].data = [{x: eActual * 100, y: psVal}];
+      
+      chart.update();
+    }
+
+    document.getElementById('pDemand').addEventListener('input', (e) => { params.demand = parseInt(e.target.value); updateAll(); });
+    document.getElementById('pLambda').addEventListener('input', (e) => { params.lambda = parseFloat(e.target.value); updateAll(); });
+    document.getElementById('pMu').addEventListener('input', (e) => { params.mu = parseFloat(e.target.value); updateAll(); });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initChart();
+      updateAll();
+    });
+  </script>
+</body>
+</html>
