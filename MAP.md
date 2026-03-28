@@ -14,6 +14,7 @@ Este mapa permite a los agentes de IA localizar la lógica del proyecto rápidam
     - `curva-fijacion-precios.html`: Determinantes de la curva PS.
     - `efecto-multiplicador.html`: Punto B y desempleo cíclico.
     - `productividad-tecnologia.html`: Desplazamientos de PS por progreso técnico.
+    - `sindicatos.html`: Efectos de negociación y voz sindical en la curva WS.
 
 - `tema-2/`: Bancos y Crédito (Capítulo 10 CORE).
     - `index.html`: Menú de herramientas del tema (6/6 completadas ✓).

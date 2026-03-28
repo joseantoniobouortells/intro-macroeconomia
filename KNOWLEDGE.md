@@ -22,6 +22,11 @@ Este documento centraliza la lógica económica y los estándares de construcci�
 - Se produce donde $WS = PS$.
 - Determina la **tasa de desempleo natural**. Cualquier punto fuera de aquí (como el Punto B) genera presiones inflacionistas o deflacionistas.
 
+### 📢 Efecto de los Sindicatos
+- **Efecto Negociación (Bargaining):** Los sindicatos negocian salarios por encima de la WS original. **Resultado:** WS se desplaza hacia arriba $\rightarrow$ empleo disminuye.
+- **Efecto Voz (Voice):** La participación y reconocimiento reducen la desutilidad del trabajo. **Resultado:** WS se desplaza hacia abajo $\rightarrow$ el empleo puede aumentar, contrarrestando el efecto negociación.
+- **Salario Real:** Si la curva PS es horizontal, el salario real de equilibrio no cambia con la negociación sindical pura; solo varía el nivel de empleo.
+
 ---
 
 ## 📘 Lógica Económica (Capítulo 10 CORE) — TEMA 2
