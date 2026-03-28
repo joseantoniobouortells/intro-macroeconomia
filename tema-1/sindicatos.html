@@ -140,11 +140,11 @@
           datasets: [
             {
               label: 'WS (Sin Sindicato)',
-              data: generateWS(0.4, 0.5),
+              data: generateWS(0.4, 0.05),
               showLine: true, borderColor: '#a29bfe', borderWidth: 3, pointRadius: 0, tension: 0.3
             },
             {
-              label: 'WS Negociada (Bargaining)',
+              label: 'WS Negociada',
               data: [],
               showLine: true, borderColor: '#6c5ce7', borderWidth: 3, pointRadius: 0, tension: 0.3, hidden: true
             },
@@ -159,26 +159,28 @@
               showLine: true, borderColor: '#ff7675', borderDash: [5, 5], borderWidth: 2, pointRadius: 0
             },
             {
-              label: 'Equilibrio X',
+              label: 'Equilibrio',
               data: [{x: 95, y: PS_VAL}],
-              pointRadius: 8, backgroundColor: '#1d1d1f'
+              pointRadius: 8, backgroundColor: '#1d1d1f', z: 10
             }
           ]
         },
         options: {
           responsive: true, maintainAspectRatio: false, animation: false,
           scales: {
-            x: { type: 'linear', min: 70, max: 100, title: { display: true, text: 'Tasa de Empleo N (%)', font: { weight: 'bold' } } },
-            y: { type: 'linear', min: 0.4, max: 1.1, title: { display: true, text: 'Salario Real W/P', font: { weight: 'bold' } } }
+            x: { type: 'linear', min: 0, max: 100, title: { display: true, text: 'Tasa de Empleo e (%)', font: { weight: 'bold' } } },
+            y: { type: 'linear', min: 0, max: 1.2, title: { display: true, text: 'Salario Real W/P', font: { weight: 'bold' } } }
           }
         }
       });
     }
 
     function generateWS(B, a) {
-      return Array.from({length: 31}, (_, i) => {
-        const e = (70 + i) / 100;
-        return { x: e * 100, y: B + a * Math.pow(e, 2) };
+      return Array.from({length: 51}, (_, i) => {
+        const e = i / 50;
+        // Fórmula curva: B + a/(1-e)
+        const y = e >= 0.99 ? B + a * 50 : B + a / (1 - e);
+        return { x: e * 100, y: y };
       });
     }
 
@@ -189,18 +191,27 @@
     }
 
     function updateAll() {
-      let B = 0.4, a = 0.5;
+      let B = 0.45, a = 0.04;
       
-      if (effects.bargaining) B += 0.15;
-      if (effects.voice) a -= 0.15;
+      // Simulación de efectos sobre parámetros
+      if (effects.bargaining) B += 0.15; // Desplaza arriba
+      if (effects.voice) a -= 0.015;     // Suaviza la pendiente (reduce desutilidad)
 
       const wsData = generateWS(B, a);
-      const eStar = Math.sqrt(Math.max(0, (PS_VAL - B) / a));
       
+      // Cálculo de intersección: B + a/(1-e) = PS  => 1-e = a/(PS-B) => e = 1 - a/(PS-B)
+      const psVal = PS_VAL;
+      let eStar = 1 - a / (psVal - B);
+      eStar = Math.max(0.1, Math.min(0.98, eStar));
+
       chart.data.datasets[1].data = wsData;
       chart.data.datasets[1].hidden = !effects.bargaining && !effects.voice;
       chart.data.datasets[4].data = [{x: eStar * 100, y: PS_VAL}];
-      chart.data.datasets[4].label = effects.bargaining || effects.voice ? 'Nuevo Equilibrio' : 'Equilibrio X';
+      
+      // Auto-ajuste de ejes para visibilidad
+      const xMin = Math.max(0, (eStar * 100) - 20);
+      chart.options.scales.x.min = xMin;
+      chart.options.scales.x.max = 100;
       
       chart.update();
     }
