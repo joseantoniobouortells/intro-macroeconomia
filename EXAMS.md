@@ -36,7 +36,7 @@ Este documento cataloga las preguntas recurrentes de los exámenes finales (2024
 - **Pregunta Típica:** "Si el salario real está por debajo de la curva PS (Punto C)..."
 - **Casos Reales:** Junio 2025, Q7; Septiembre 2024, Q1.
 - **Lógica:** En el Punto C, el markup real es mayor al que maximiza beneficios -> Las empresas bajan precios para vender más -> El empleo aumenta hacia el equilibrio.
-- **Uso en Web:** Escenarios en `efecto-multiplicador.html` e `inflacion-expectativas.html`.
+- **Uso en Web:** Escenarios en `efecto-multiplicador.html`.
 
 ### 5. Desigualdad y Coeficiente de Gini
 - **Pregunta Típica:** "Calcule el Gini en una economía con $X$ trabajadores y $Y$ empresarios."
