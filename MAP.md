@@ -18,11 +18,11 @@ Este mapa permite a los agentes de IA localizar la lógica del proyecto rápidam
     - `desigualdad-gini.html`: Curva de Lorenz y reparto del ingreso entre clases.
 
 - `tema-2/`: Bancos, Crédito y Dinero (Capítulo 10 CORE).
-    - `index.html`: Menú de herramientas del tema.
+    - `index.html`: Menú de herramientas del tema (4/4 completadas ✓).
     - `eleccion-intertemporal.html`: Modelo de Julia y Marco.
-    - `balances-apalancamiento.html`: Análisis de solvencia, identidad contable y apalancamiento bancario.
-    - `bancos-dinero.html`: Banco Central, creación de dinero bancario y valor presente de activos.
-    - `racionamiento-credito.html`: (Pendiente) Desigualdad y acceso al crédito.
+    - `balances-apalancamiento.html`: Análisis de solvencia e identidad contable.
+    - `bancos-dinero.html`: Creación de dinero y Valor Presente.
+    - `racionamiento-credito.html`: Problema principal-agente y exclusión financiera.
 
 ## 🧠 Núcleo de Inteligencia (Assets)
 - `tema-1/assets/style.css`: Estilos UI Apple-style unificados (heredado por Tema 2).

@@ -60,6 +60,12 @@ Este documento centraliza la lógica económica y los estándares de construcci�
 - **Tasa Bancaria:** Tasa Oficial (fijada por BC) + Margen/Markup (fijado por bancos según riesgo).
 - **Valor Presente (VP):** El precio de un activo (ej. un bono) es el valor descontado de sus flujos futuros. Existe una relación inversa: ↑i $\rightarrow$ ↓VP.
 
+### 🚫 Racionamiento del Crédito
+- **Problema Principal-Agente:** Conflicto de intereses e información asimétrica (esfuerzo no verificable).
+- **Mecanismos de Control:** Exigencia de **Capital Propio** (equity) y **Garantías** (collateral).
+- **Exclusión Financiera:** Los hogares sin riqueza no pueden aportar avales, siendo excluidos del mercado crediticio o restringidos a peores condiciones.
+- **Impacto en Gini:** El racionamiento del crédito aumenta la desigualdad al impedir que los agentes sin riqueza inviertan en su productividad.
+
 ## 🎨 Estándares de UI (Apple Ecosystem Style)
 
 Para mantener la consistencia visual y el ahorro de tokens, **use SIEMPRE** estas clases CSS definidas en `assets/style.css`:
