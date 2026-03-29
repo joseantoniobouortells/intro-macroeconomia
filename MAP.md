@@ -17,14 +17,12 @@ Este mapa permite a los agentes de IA localizar la lógica del proyecto rápidam
     - `sindicatos.html`: Efectos de negociación y voz sindical en la curva WS.
     - `desigualdad-gini.html`: Curva de Lorenz y reparto del ingreso entre clases.
 
-- `tema-2/`: Bancos y Crédito (Capítulo 10 CORE).
-    - `index.html`: Menú de herramientas del tema (6/6 completadas ✓).
-    - `rol-del-dinero.html`: Teoría cuantitativa del dinero (MV = PY).
-    - `sistema-bancario.html`: Multiplicador bancario (m = 1/r) con cascada de crédito.
-    - `demanda-dinero.html`: Ecuación demanda L(Y, i) = kY - hi.
-    - `oferta-dinero.html`: Agregados monetarios M1, M2, M3.
-    - `equilibrio-monetario.html`: Determinación de i* (M^s = M^d).
-    - `politica-monetaria.html`: Transmisión monetaria (ΔM → Δi → ΔI → ΔY, ΔP).
+- `tema-2/`: Bancos, Crédito y Dinero (Capítulo 10 CORE).
+    - `index.html`: Menú de herramientas del tema.
+    - `eleccion-intertemporal.html`: Modelo de Julia y Marco.
+    - `balances-apalancamiento.html`: (Pendiente) Solvencia y riesgos.
+    - `bancos-dinero.html`: (Pendiente) Creación de dinero.
+    - `racionamiento-credito.html`: (Pendiente) Desigualdad y acceso al crédito.
 
 ## 🧠 Núcleo de Inteligencia (Assets)
 - `tema-1/assets/style.css`: Estilos UI Apple-style unificados (heredado por Tema 2).
