@@ -21,7 +21,7 @@ Este mapa permite a los agentes de IA localizar la lógica del proyecto rápidam
     - `index.html`: Menú de herramientas del tema.
     - `eleccion-intertemporal.html`: Modelo de Julia y Marco.
     - `balances-apalancamiento.html`: Análisis de solvencia, identidad contable y apalancamiento bancario.
-    - `bancos-dinero.html`: (Pendiente) Creación de dinero.
+    - `bancos-dinero.html`: Banco Central, creación de dinero bancario y valor presente de activos.
     - `racionamiento-credito.html`: (Pendiente) Desigualdad y acceso al crédito.
 
 ## 🧠 Núcleo de Inteligencia (Assets)

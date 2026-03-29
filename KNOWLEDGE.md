@@ -54,6 +54,12 @@ Este documento centraliza la lógica económica y los estándares de construcci�
 - **Ratio de Apalancamiento:** Activos Totales / Patrimonio Neto.
 - **Vulnerabilidad Bancaria:** El alto apalancamiento (ej. 33:1) implica que pérdidas mínimas en los activos (3%) pueden borrar todo el capital propio, provocando insolvencia.
 
+### 🏦 Bancos y Creación de Dinero
+- **Dinero Base:** Efectivo + Reservas (Pasivo del Banco Central).
+- **Dinero Bancario:** Depósitos (Pasivo de los bancos comerciales creados mediante crédito).
+- **Tasa Bancaria:** Tasa Oficial (fijada por BC) + Margen/Markup (fijado por bancos según riesgo).
+- **Valor Presente (VP):** El precio de un activo (ej. un bono) es el valor descontado de sus flujos futuros. Existe una relación inversa: ↑i $\rightarrow$ ↓VP.
+
 ## 🎨 Estándares de UI (Apple Ecosystem Style)
 
 Para mantener la consistencia visual y el ahorro de tokens, **use SIEMPRE** estas clases CSS definidas en `assets/style.css`:
