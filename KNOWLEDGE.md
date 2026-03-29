@@ -62,8 +62,9 @@ Para mantener la consistencia visual y el ahorro de tokens, **use SIEMPRE** esta
 | **Píldora Examen**| `.exam-box` | Caja dorada con icono de birrete para tips de examen. |
 
 ## 🛠️ Reglas de Implementación
-1. **Gráficos:** Use `Chart.js` con `type: 'linear'` para el eje X si usa coordenadas `{x, y}`.
-2. **Matemáticas:** Renderice siempre con `KaTeX` usando la función `CORE.kHTML` (o equivalente) para asegurar legibilidad.
-3. **Javascript:** Importe siempre `assets/economic-logic.js` para usar las fórmulas validadas.
-4. **Exámenes:** Si una herramienta tiene una pregunta relacionada en `EXAMS.md`, integre un `.exam-box` al final de la sección de explicación para guiar al estudiante.
+1. **Navegación:** Use siempre el componente `.site-nav` (sticky navbar). Debe incluir un enlace `.nav-back` con el texto "‹ Tema N" que apunte al `index.html` de la carpeta actual, un `.nav-center` con el título del grado y un `.nav-spacer` para equilibrar el layout.
+2. **Gráficos:** Use `Chart.js` con `type: 'linear'` para el eje X si usa coordenadas `{x, y}`.
+3. **Matemáticas:** Renderice siempre con `KaTeX` usando la función `CORE.kHTML` (o equivalente) para asegurar legibilidad.
+4. **Javascript:** Importe siempre `assets/economic-logic.js` para usar las fórmulas validadas.
+5. **Exámenes:** Si una herramienta tiene una pregunta relacionada en `EXAMS.md`, integre un `.exam-box` al final de la sección de explicación para guiar al estudiante.
 

@@ -61,14 +61,13 @@
 </head>
 <body>
 
+  <!-- Sticky navbar -->
   <nav class="site-nav">
-    <a href="../index.html" style="text-decoration:none; font-weight:700; color:#000;">Macroeconomía</a>
-    <div class="nav-links">
-      <a href="#" class="active">Elección Intertemporal</a>
-      <a href="#" class="disabled">Balances y Apalancamiento</a>
-      <a href="#" class="disabled">Bancos y Dinero</a>
-      <a href="#" class="disabled">Racionamiento</a>
-    </div>
+    <a href="index.html" class="nav-back">
+      <span class="chevron">‹</span> Tema 2
+    </a>
+    <span class="nav-center">Grado en Economía &nbsp;·&nbsp; Introducción a la Macroeconomía</span>
+    <span class="nav-spacer"></span>
   </nav>
 
   <div class="main-container">
@@ -228,6 +227,19 @@
       document.getElementById('math-opt').innerHTML = kHTML(`TMS = TMT \\rightarrow 1 + \\rho = 1 + r`);
 
       chart.update();
+    }
+
+    document.getElementById('paramR').addEventListener('input', (e) => { r = e.target.value / 100; updateAll(); });
+    document.getElementById('paramRho').addEventListener('input', (e) => { rho = e.target.value / 100; updateAll(); });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initChart();
+      updateAll();
+    });
+  </script>
+</body>
+</html>
+chart.update();
     }
 
     document.getElementById('paramR').addEventListener('input', (e) => { r = e.target.value / 100; updateAll(); });
