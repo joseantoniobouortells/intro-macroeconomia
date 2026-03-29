@@ -20,7 +20,7 @@ Este mapa permite a los agentes de IA localizar la lógica del proyecto rápidam
 - `tema-2/`: Bancos, Crédito y Dinero (Capítulo 10 CORE).
     - `index.html`: Menú de herramientas del tema.
     - `eleccion-intertemporal.html`: Modelo de Julia y Marco.
-    - `balances-apalancamiento.html`: (Pendiente) Solvencia y riesgos.
+    - `balances-apalancamiento.html`: Análisis de solvencia, identidad contable y apalancamiento bancario.
     - `bancos-dinero.html`: (Pendiente) Creación de dinero.
     - `racionamiento-credito.html`: (Pendiente) Desigualdad y acceso al crédito.
 

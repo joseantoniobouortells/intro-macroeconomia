@@ -48,6 +48,12 @@ Este documento centraliza la lógica económica y los estándares de construcci�
     - **Sustitución:** ↑r hace el consumo presente más caro → ↓c0.
     - **Ingreso:** Depende de si el agente es prestatario (Julia: ↓c0) o ahorrador (Marco: ↑c0).
 
+### 📊 Balances y Apalancamiento
+- **Identidad Contable:** Activos = Pasivos + Patrimonio Neto.
+- **Insolvencia:** Patrimonio Neto < 0 (Los pasivos exceden a los activos).
+- **Ratio de Apalancamiento:** Activos Totales / Patrimonio Neto.
+- **Vulnerabilidad Bancaria:** El alto apalancamiento (ej. 33:1) implica que pérdidas mínimas en los activos (3%) pueden borrar todo el capital propio, provocando insolvencia.
+
 ## 🎨 Estándares de UI (Apple Ecosystem Style)
 
 Para mantener la consistencia visual y el ahorro de tokens, **use SIEMPRE** estas clases CSS definidas en `assets/style.css`:

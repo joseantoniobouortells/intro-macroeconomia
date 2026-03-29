@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Balances y Apalancamiento — Tema 2</title>
+  <link rel="stylesheet" href="../tema-1/assets/style.css">
+  <link rel="stylesheet" href="../tema-1/assets/katex.min.css">
+  <script src="../tema-1/assets/chart.umd.min.js"></script>
+  <script src="../tema-1/assets/katex.min.js"></script>
+  <style>
+    body { padding: 0; background: #f5f5f7; color: #1d1d1f; }
+    
+    /* ── Sticky navbar ── */
+    .site-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.85); backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.08); height: 48px;
+      display: flex; align-items: center; padding: 0 24px;
+    }
+    .nav-back {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 0.8rem; font-weight: 500; color: #0071e3;
+      text-decoration: none; white-space: nowrap;
+      transition: opacity 0.2s ease; width: 120px;
+    }
+    .nav-back:hover { opacity: 0.7; }
+    .nav-back .chevron { font-size: 1rem; line-height: 1; }
+    .nav-center {
+      flex: 1; text-align: center; font-size: 0.8rem;
+      font-weight: 500; color: #1d1d1f; letter-spacing: 0.01em; pointer-events: none;
+    }
+    .nav-spacer { width: 120px; }
+
+    /* ── Layout ── */
+    .main-container {
+      max-width: 1200px; margin: 0 auto; display: grid;
+      grid-template-columns: 1fr 420px; gap: 32px; padding: 40px 24px;
+    }
+    @media (max-width: 1000px) { .main-container { grid-template-columns: 1fr; } }
+
+    /* ── Herramientas ── */
+    .tool-section { display: flex; flex-direction: column; gap: 32px; }
+    .card { background: #fff; border-radius: 24px; padding: 32px; border: 1px solid #e5e5e5; }
+    .card h3 { font-size: 1.1rem; margin-bottom: 20px; color: #1d1d1f; border-bottom: 1px solid #f5f5f7; padding-bottom: 12px; }
+
+    /* Balance Table */
+    .balance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid #d2d2d7; border-radius: 12px; overflow: hidden; }
+    .balance-col { padding: 20px; }
+    .balance-col.left { border-right: 1px solid #d2d2d7; background: #fafafa; }
+    .balance-header { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #86868b; margin-bottom: 15px; }
+    .balance-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; }
+    .balance-total { margin-top: 20px; padding-top: 10px; border-top: 2px solid #1d1d1f; font-weight: 700; display: flex; justify-content: space-between; }
+    .equity-neg { color: #ff3b30; }
+
+    .state-btns { display: flex; gap: 10px; margin-top: 20px; }
+    .state-btn { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid #d2d2d7; background: #fff; cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: all 0.2s; }
+    .state-btn.active { background: #0071e3; color: #fff; border-color: #0071e3; }
+
+    /* Leverage Chart */
+    .chart-container { position: relative; height: 300px; }
+    .insolvency-overlay { 
+      position: absolute; top: 50%; left: 25%; transform: translate(-50%, -50%);
+      background: rgba(255, 59, 48, 0.9); color: #fff; padding: 10px 20px; border-radius: 8px;
+      font-weight: 800; font-size: 1rem; z-index: 10; display: none; pointer-events: none;
+    }
+
+    .slider-card { background: #1d1d1f; color: #fff; border-radius: 20px; padding: 24px; margin-top: 20px; }
+    .slider-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; }
+    .slider-val { color: #ff3b30; font-weight: 800; }
+
+    /* ── Teoría ── */
+    .theory-card { background: #fff; border-radius: 20px; padding: 32px; border: 1px solid #e5e5e5; line-height: 1.6; }
+    .theory-card h2 { font-size: 1.4rem; margin-bottom: 16px; letter-spacing: -0.5px; }
+    .theory-card h4 { font-size: 0.85rem; text-transform: uppercase; color: #86868b; margin: 24px 0 8px; }
+    .formula-box { background: #f0f6ff; padding: 16px; border-radius: 12px; margin: 16px 0; }
+    
+    .exam-tip {
+      background: #fff9e6; border: 1.5px solid #ffcc00; border-radius: 16px; padding: 24px;
+      color: #5c4d00; margin-top: 24px;
+    }
+    .exam-tip h5 { font-size: 0.85rem; text-transform: uppercase; color: #b38f00; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="index.html" class="nav-back">
+      <span class="chevron">‹</span> Tema 2
+    </a>
+    <span class="nav-center">Grado en Economía &nbsp;·&nbsp; Introducción a la Macroeconomía</span>
+    <span class="nav-spacer"></span>
+  </nav>
+
+  <div class="main-container">
+    
+    <div class="tool-section">
+      <!-- Herramienta 1: Balance Julia -->
+      <div class="card">
+        <h3>🏠 1. La Identidad Contable (Balance de Julia)</h3>
+        <div class="balance-grid">
+          <div class="balance-col left">
+            <div class="balance-header">Activos (Lo que tengo)</div>
+            <div class="balance-item"><span>Efectivo</span> <span id="valCash">$0</span></div>
+            <div class="balance-total"><span>Total Activos</span> <span id="valTotalA">$0</span></div>
+          </div>
+          <div class="balance-col">
+            <div class="balance-header">Pasivos + PN (Lo que debo)</div>
+            <div class="balance-item"><span>Deuda (Préstamo)</span> <span id="valDebt">$0</span></div>
+            <div class="balance-item"><span>Patrimonio Neto</span> <span id="valEquity">$0</span></div>
+            <div class="balance-total"><span>Total Pasivos + PN</span> <span id="valTotalL">$0</span></div>
+          </div>
+        </div>
+        <div class="state-btns">
+          <button class="state-btn active" id="btnS1" onclick="setBalanceState(1)">1. Estado Inicial</button>
+          <button class="state-btn" id="btnS2" onclick="setBalanceState(2)">2. Pedir Préstamo</button>
+          <button class="state-btn" id="btnS3" onclick="setBalanceState(3)">3. Consumir</button>
+        </div>
+      </div>
+
+      <!-- Herramienta 2: Apalancamiento -->
+      <div class="card">
+        <h3>🏦 2. Riesgo de Apalancamiento (Banco vs Empresa)</h3>
+        <div class="chart-container">
+          <div id="insolvencyAlert" class="insolvency-overlay">⚠️ INSOLVENCIA</div>
+          <canvas id="leverageChart"></canvas>
+        </div>
+        
+        <div class="slider-card">
+          <div class="slider-header">
+            <span>Pérdida de valor de los Activos</span>
+            <span class="slider-val" id="lossLabel">0%</span>
+          </div>
+          <input type="range" id="lossSlider" min="0" max="10" value="0" step="0.5">
+          <p style="font-size: 0.75rem; color: #86868b; margin-top: 12px;">Una caída pequeña en los activos consume el capital propio de un banco debido a su alto apalancamiento.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="theory-section">
+      <div class="theory-card">
+        <h2>Balances y Apalancamiento</h2>
+        
+        <h4>Contexto Teórico</h4>
+        <p>Un <strong>balance</strong> resume la situación financiera en un punto del tiempo. Los <strong>activos</strong> representan el valor de lo que se posee, mientras que los <strong>pasivos</strong> son las deudas. La diferencia es el <strong>patrimonio neto</strong> (riqueza propia).</p>
+        <p style="margin-top:10px;">La <strong>insolvencia</strong> ocurre cuando el patrimonio neto se vuelve negativo, es decir, el valor de los activos es insuficiente para cubrir las deudas.</p>
+
+        <h4>Fórmulas Clave</h4>
+        <div class="formula-box">
+          <div id="math-identity"></div>
+        </div>
+        <div class="formula-box">
+          <div id="math-lev"></div>
+          <p style="font-size: 0.8rem; color: #6e6e73; margin-top: 8px;">Relación entre activos totales y capital propio.</p>
+        </div>
+      </div>
+
+      <div class="exam-tip">
+        <h5>🎓 ¡Atención al Test!</h5>
+        <p><strong>1) Riqueza:</strong> Pedir un préstamo <strong>NO</strong> cambia tu patrimonio neto inicial. Solo intercambias un pasivo por un activo. La riqueza cae solo al <strong>consumir</strong> el dinero.</p>
+        <p style="margin-top: 12px;"><strong>2) Bancos:</strong> Tienen un apalancamiento extremo (ej. 33 a 1). Una caída del 3% en sus activos los deja insolventes, mientras que una empresa normal resistiría caídas mucho mayores.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let levChart;
+    const BANK_DEBT = 97;
+    const BANK_EQUITY = 3;
+    const FIRM_DEBT = 62;
+    const FIRM_EQUITY = 38;
+
+    function kHTML(latex) {
+      return katex.renderToString(latex, { throwOnError: false });
+    }
+
+    function setBalanceState(state) {
+      document.querySelectorAll('.state-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('btnS' + state).classList.add('active');
+
+      const els = {
+        cash: document.getElementById('valCash'),
+        debt: document.getElementById('valDebt'),
+        equity: document.getElementById('valEquity'),
+        ta: document.getElementById('valTotalA'),
+        tl: document.getElementById('valTotalL')
+      };
+
+      if (state === 1) {
+        els.cash.textContent = "$0"; els.debt.textContent = "$0"; els.equity.textContent = "$0";
+        els.ta.textContent = "$0"; els.tl.textContent = "$0";
+        els.equity.className = "balance-item";
+      } else if (state === 2) {
+        els.cash.textContent = "$58"; els.debt.textContent = "$58"; els.equity.textContent = "$0";
+        els.ta.textContent = "$58"; els.tl.textContent = "$58";
+        els.equity.className = "balance-item";
+      } else if (state === 3) {
+        els.cash.textContent = "$0"; els.debt.textContent = "$58"; els.equity.textContent = "-$58";
+        els.ta.textContent = "$0"; els.tl.textContent = "$0";
+        els.equity.className = "balance-item equity-neg";
+      }
+    }
+
+    function initLeverageChart() {
+      const ctx = document.getElementById('leverageChart').getContext('2d');
+      levChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Banco (Barclays)', 'Empresa (Honda)'],
+          datasets: [
+            { label: 'Capital propio', data: [BANK_EQUITY, FIRM_EQUITY], backgroundColor: '#34c759' },
+            { label: 'Deuda / Pasivos', data: [BANK_DEBT, FIRM_DEBT], backgroundColor: '#86868b' }
+          ]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true, maintainAspectRatio: false,
+          scales: {
+            x: { stacked: true, max: 100, title: { display: true, text: '% Estructura de Capital' } },
+            y: { stacked: true }
+          },
+          plugins: { tooltip: { enabled: false } }
+        }
+      });
+    }
+
+    function updateLeverage(loss) {
+      const newBankEquity = BANK_EQUITY - loss;
+      const newFirmEquity = FIRM_EQUITY - loss;
+
+      levChart.data.datasets[0].data = [Math.max(0, newBankEquity), Math.max(0, newFirmEquity)];
+      
+      const alert = document.getElementById('insolvencyAlert');
+      if (newBankEquity <= 0) {
+        alert.style.display = 'block';
+        levChart.data.datasets[0].backgroundColor = (context) => context.dataIndex === 0 ? '#ff3b30' : '#34c759';
+      } else {
+        alert.style.display = 'none';
+        levChart.data.datasets[0].backgroundColor = '#34c759';
+      }
+      
+      document.getElementById('lossLabel').textContent = loss + '%';
+      levChart.update();
+    }
+
+    document.getElementById('lossSlider').addEventListener('input', (e) => {
+      updateLeverage(parseFloat(e.target.value));
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initLeverageChart();
+      document.getElementById('math-identity').innerHTML = kHTML('\\text{Activos} = \\text{Pasivos} + \\text{PN}');
+      document.getElementById('math-lev').innerHTML = kHTML('\\text{Apalancamiento} = \\frac{\\text{Activos Totales}}{\\text{Patrimonio Neto}}');
+    });
+  </script>
+</body>
+</html>
