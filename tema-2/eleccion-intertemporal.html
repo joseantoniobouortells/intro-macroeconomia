@@ -100,6 +100,15 @@
         </div>
       </div>
 
+      <!-- 📐 Panel Matemático Dinámico -->
+      <div id="dynamicMathPanel" style="background: #fff; border-radius: 20px; padding: 24px; border: 1px solid #e5e5e5; margin-top: 24px;">
+        <h3 style="font-size: 0.8rem; text-transform: uppercase; color: #86868b; margin-bottom: 16px; letter-spacing: 0.5px;">📐 Ecuación de la Frontera Factible</h3>
+        <div id="mathEquationDisplay" style="text-align: center; padding: 15px; background: #f9f9fb; border-radius: 12px; min-height: 60px; display: flex; align-items: center; justify-content: center;">
+          <!-- Se actualiza dinámicamente -->
+        </div>
+        <p style="font-size: 0.75rem; color: #86868b; margin-top: 12px; text-align: center;">Valores calculados para el punto óptimo actual.</p>
+      </div>
+
       <div class="controls-card">
         <div class="case-selector">
           <button class="case-btn active" id="btnJulia" onclick="setCase('Julia')">Caso Julia (Prestataria)</button>
@@ -246,6 +255,21 @@
       document.getElementById('math-tmt').innerHTML = kHTML(`TMT = 1 + r = ${ (1+r).toFixed(2) }`);
       document.getElementById('math-tms').innerHTML = kHTML(`TMS = 1 + \\rho = ${ (1+rho).toFixed(2) }`);
       document.getElementById('math-opt').innerHTML = kHTML(`TMS = TMT \\rightarrow 1 + \\rho = 1 + r`);
+
+      // Panel Matemático Dinámico
+      let latexEquation = '';
+      const c0_val = c0_opt.toFixed(1);
+      const c1_val = c1_opt.toFixed(1);
+      const onePlusR = (1 + r).toFixed(2);
+
+      if (currentCase === 'Julia') {
+        // c1 = 100 - c0 * (1+r)
+        latexEquation = `${c1_val} = 100 - ${c0_val} \\times ${onePlusR}`;
+      } else {
+        // c1 = (100 - c0) * (1+r)
+        latexEquation = `${c1_val} = (100 - ${c0_val}) \\times ${onePlusR}`;
+      }
+      document.getElementById('mathEquationDisplay').innerHTML = kHTML(latexEquation, true);
 
       chart.update();
     }
