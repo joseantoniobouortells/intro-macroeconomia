@@ -32,55 +32,73 @@
     }
     .nav-spacer { width: 120px; }
 
-    /* ── Sub-nav (Jerarquía de Tema 2) ── */
+    /* ── Sub-nav ── */
     .sub-nav { background: #fff; border-bottom: 1px solid #e5e5e5; padding: 12px 24px; display: flex; gap: 20px; justify-content: center; }
     .sub-nav a { text-decoration: none; font-size: 0.75rem; font-weight: 600; color: #86868b; transition: color 0.2s; }
     .sub-nav a.active { color: #0071e3; }
-    .sub-nav a:hover:not(.active) { color: #1d1d1f; }
 
-    /* ── Layout ── */
+    /* ── Layout Principal ── */
     .main-container {
-      max-width: 1200px; margin: 0 auto; display: grid;
-      grid-template-columns: 1fr 420px; gap: 32px; padding: 40px 24px;
+      max-width: 1400px; margin: 0 auto; display: grid;
+      grid-template-columns: 1fr 400px; gap: 32px; padding: 32px 24px;
+      align-items: start;
     }
-    @media (max-width: 1000px) { .main-container { grid-template-columns: 1fr; } }
+    @media (max-width: 1200px) { .main-container { grid-template-columns: 1fr; } }
 
-    .chart-card { background: #fff; border-radius: 24px; padding: 32px; border: 1px solid #e5e5e5; }
-    .chart-container { position: relative; height: 500px; }
+    /* Columna Visual Sticky */
+    .visual-section { 
+      display: flex; flex-direction: column; gap: 24px; 
+      position: sticky; top: 80px;
+    }
+    @media (max-width: 1200px) { .visual-section { position: relative; top: 0; } }
+
+    /* Dashboard Horizontal Interno */
+    .dashboard-grid {
+      display: grid; grid-template-columns: 1fr 300px; gap: 20px;
+    }
+    @media (max-width: 800px) { .dashboard-grid { grid-template-columns: 1fr; } }
+
+    .chart-card { background: #fff; border-radius: 24px; padding: 24px; border: 1px solid #e5e5e5; }
+    .chart-container { position: relative; height: 480px; }
     
-    .controls-card { background: #1d1d1f; color: #fff; border-radius: 20px; padding: 28px; margin-top: 24px; }
-    .case-selector { display: flex; gap: 10px; margin-bottom: 24px; }
+    .controls-card { 
+      background: #1d1d1f; color: #fff; border-radius: 24px; padding: 24px; 
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+
+    .case-selector { display: flex; gap: 8px; margin-bottom: 20px; }
     .case-btn { 
-      flex: 1; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);
-      background: transparent; color: #fff; cursor: pointer; font-weight: 600; transition: all 0.2s;
+      flex: 1; padding: 8px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2);
+      background: transparent; color: #fff; cursor: pointer; font-weight: 600; font-size: 0.75rem;
     }
     .case-btn.active { background: #0071e3; border-color: #0071e3; }
 
-    .slider-group { margin-bottom: 20px; }
-    .slider-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; }
+    .slider-group { margin-bottom: 16px; }
+    .slider-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.8rem; }
     .slider-value { color: #0071e3; font-weight: 800; }
     input[type=range] { width: 100%; cursor: pointer; }
 
-    /* ── Teoría ── */
-    .theory-card { background: #fff; border-radius: 20px; padding: 32px; border: 1px solid #e5e5e5; line-height: 1.6; }
-    .theory-card h2 { font-size: 1.4rem; margin-bottom: 16px; letter-spacing: -0.5px; }
-    .theory-card h3 { font-size: 0.85rem; text-transform: uppercase; color: #86868b; margin: 24px 0 8px; }
-    .formula-box { background: #f0f6ff; padding: 16px; border-radius: 12px; margin: 16px 0; }
-    
-    .exam-tip {
-      background: #fff9e6; border: 1.5px solid #ffcc00; border-radius: 16px; padding: 24px;
-      color: #5c4d00; margin-top: 24px;
+    /* Panel Matemático */
+    .math-card { background: #fff; border-radius: 24px; padding: 28px; border: 1px solid #e5e5e5; }
+    .math-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media (max-width: 700px) { .math-grid { grid-template-columns: 1fr; } }
+
+    .formula-display { 
+      text-align: center; padding: 20px; background: #f9f9fb; border-radius: 16px; 
+      border: 1px solid #f0f0f0; margin-top: 12px;
     }
-    .exam-tip h4 { font-size: 0.85rem; text-transform: uppercase; color: #b38f00; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+
+    /* Teoría */
+    .theory-card { background: #fff; border-radius: 20px; padding: 32px; border: 1px solid #e5e5e5; line-height: 1.6; }
+    .theory-card h2 { font-size: 1.4rem; margin-bottom: 16px; }
+    .theory-card h3 { font-size: 0.85rem; text-transform: uppercase; color: #86868b; margin: 24px 0 12px; }
   </style>
 </head>
 <body>
 
   <nav class="site-nav">
-    <a href="index.html" class="nav-back">
-      <span class="chevron">‹</span> Tema 2
-    </a>
-    <span class="nav-center">Grado en Economía &nbsp;·&nbsp; Introducción a la Macroeconomía</span>
+    <a href="index.html" class="nav-back"><span class="chevron">‹</span> Tema 2</a>
+    <span class="nav-center">Elección Intertemporal · Capítulo 10</span>
     <span class="nav-spacer"></span>
   </nav>
 
@@ -93,90 +111,93 @@
 
   <div class="main-container">
     
+    <!-- COLUMNA VISUAL (STIKCY) -->
     <div class="visual-section">
-      <div class="chart-card">
-        <div class="chart-container">
-          <canvas id="intertemporalChart"></canvas>
+      
+      <div class="dashboard-grid">
+        <!-- Gráfico -->
+        <div class="chart-card">
+          <div class="chart-container">
+            <canvas id="intertemporalChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Controles -->
+        <div class="controls-card">
+          <div>
+            <h3 style="font-size: 0.7rem; text-transform: uppercase; color: #86868b; margin-bottom: 16px;">⚙️ Ajustes</h3>
+            <div class="case-selector">
+              <button class="case-btn active" id="btnJulia" onclick="setCase('Julia')">Julia</button>
+              <button class="case-btn" id="btnMarco" onclick="setCase('Marco')">Marco</button>
+            </div>
+
+            <div class="slider-group">
+              <div class="slider-header"><span>Interés (r)</span> <span id="valR" class="slider-value">10%</span></div>
+              <input type="range" id="paramR" min="0" max="100" value="10" step="1">
+            </div>
+
+            <div class="slider-group">
+              <div class="slider-header"><span>Impaciencia (ρ)</span> <span id="valRho" class="slider-value">10%</span></div>
+              <input type="range" id="paramRho" min="0" max="100" value="10" step="1">
+            </div>
+          </div>
+
+          <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+            <div class="slider-header">
+              <span style="color: #34c759; font-weight: 700;">Elección c₀</span>
+              <span id="valUserC0" class="slider-value" style="color: #34c759;">50</span>
+            </div>
+            <input type="range" id="paramUserC0" min="5" max="100" value="50" step="1">
+          </div>
         </div>
       </div>
 
-      <!-- 📐 Panel Matemático Dinámico -->
-      <div id="dynamicMathPanel" style="background: #fff; border-radius: 20px; padding: 24px; border: 1px solid #e5e5e5; margin-top: 24px;">
-        <h3 style="font-size: 0.8rem; text-transform: uppercase; color: #86868b; margin-bottom: 16px; letter-spacing: 0.5px;">📐 Derivación de la Restricción</h3>
-        
-        <div style="font-size: 0.85rem; color: #3a3a3c; margin-bottom: 20px; border-bottom: 1px solid #f0f0f0; padding-bottom: 15px;">
-          <p><strong>Ecuación Universal:</strong> El consumo futuro es el ingreso futuro más el ahorro (o menos la deuda) capitalizado:</p>
-          <div id="math-universal" style="margin: 10px 0;"></div>
+      <!-- Panel Matemático -->
+      <div class="math-card">
+        <div class="math-grid">
+          <div>
+            <h3 style="font-size: 0.75rem; text-transform: uppercase; color: #86868b; margin-bottom: 12px;">📐 Restricción Presupuestaria</h3>
+            <div id="math-universal"></div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.7rem; color: #6e6e73; margin-top: 12px; background: #fafafa; padding: 10px; border-radius: 10px;">
+              <div><strong>c₀, c₁:</strong> Consumo hoy/mañana</div>
+              <div><strong>y₀, y₁:</strong> Ingresos hoy/mañana</div>
+              <div><strong>r:</strong> Tasa de interés</div>
+              <div><strong>(y₀-c₀):</strong> Ahorro neto / Deuda</div>
+            </div>
+          </div>
+          <div>
+            <h3 style="font-size: 0.75rem; text-transform: uppercase; color: #86868b; margin-bottom: 12px;">📝 Derivación del Caso</h3>
+            <div id="derivationSteps" style="font-size: 0.8rem; color: #3a3a3c;"></div>
+          </div>
         </div>
-
-        <div id="derivationSteps" style="font-size: 0.85rem; color: #3a3a3c; margin-bottom: 20px;">
-          <!-- Se rellena dinámicamente -->
-        </div>
-
-        <div id="mathEquationDisplay" style="text-align: center; padding: 15px; background: #f9f9fb; border-radius: 12px; min-height: 60px; display: flex; align-items: center; justify-content: center; font-family: monospace; color: #86868b;">
-          Cargando ecuación...
-        </div>
+        <div class="formula-display" id="mathEquationDisplay">Cargando...</div>
       </div>
 
-      <div class="controls-card">
-        <div class="case-selector">
-          <button class="case-btn active" id="btnJulia" onclick="setCase('Julia')">Caso Julia (Prestataria)</button>
-          <button class="case-btn" id="btnMarco" onclick="setCase('Marco')">Caso Marco (Ahorradora)</button>
-        </div>
-
-        <div class="slider-group">
-          <div class="slider-header">
-            <span>Tasa de Interés (r)</span>
-            <span id="valR" class="slider-value">10%</span>
-          </div>
-          <input type="range" id="paramR" min="0" max="100" value="10" step="1">
-        </div>
-
-        <div class="slider-group">
-          <div class="slider-header">
-            <span>Impaciencia pura (ρ)</span>
-            <span id="valRho" class="slider-value">10%</span>
-          </div>
-          <input type="range" id="paramRho" min="0" max="100" value="10" step="1">
-        </div>
-
-        <div class="slider-group" style="margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
-          <div class="slider-header">
-            <span style="color: #34c759;">Tu elección de consumo hoy (c₀)</span>
-            <span id="valUserC0" class="slider-value" style="color: #34c759;">50</span>
-          </div>
-          <input type="range" id="paramUserC0" min="5" max="100" value="50" step="1">
-          <p style="font-size: 0.75rem; color: #86868b; margin-top: 8px;">Mueve este slider para explorar puntos no óptimos en la frontera y ver cómo cambia tu curva de indiferencia.</p>
-        </div>
-      </div>
     </div>
 
+    <!-- COLUMNA TEORÍA -->
     <div class="theory-section">
       <div class="theory-card">
-        <h2>Modelo de Elección Intertemporal</h2>
+        <h2>Elección Intertemporal</h2>
+        <p>Los individuos deciden cómo distribuir su consumo en el tiempo basándose en su dotación inicial y la tasa de interés.</p>
         
-        <h3>Contexto Teórico</h3>
-        <p>Los individuos deciden cómo distribuir su consumo entre hoy y mañana. Esta decisión depende de la <strong>frontera factible</strong> (determinada por la tasa de interés y dotación) y de sus <strong>curvas de indiferencia</strong> (preferencias sobre cuándo consumir).</p>
+        <h3>Suavización del Consumo</h3>
+        <p>Debido a la <strong>utilidad marginal decreciente</strong>, preferimos un consumo estable en lugar de periodos de abundancia extrema seguidos de escasez.</p>
 
-        <h3>Fórmulas Clave</h3>
-        <div class="formula-box">
-          <div id="math-tmt"></div>
-          <p style="font-size: 0.8rem; color: #6e6e73; margin-top: 8px;">Costo de oportunidad del consumo presente.</p>
-        </div>
-        <div class="formula-box">
-          <div id="math-tms"></div>
-          <p style="font-size: 0.8rem; color: #6e6e73; margin-top: 8px;">Valoración subjetiva basada en la impaciencia.</p>
-        </div>
-        <div class="formula-box" style="background: #e8f5e9; border: 1px solid #c8e6c9;">
-          <div id="math-opt"></div>
-          <p style="font-size: 0.8rem; color: #2e7d32; margin-top: 8px;">Equilibrio óptimo (Tangencia).</p>
+        <h3>Impaciencia Pura</h3>
+        <p>La valoración subjetiva del consumo presente frente al futuro se mide mediante la tasa de descuento <strong>ρ</strong>.</p>
+
+        <h3>Equilibrio Óptimo</h3>
+        <p>Se alcanza cuando la tasa a la que estás <em>dispuesto</em> a intercambiar consumo (TMS) iguala la tasa a la que el mercado te <em>permite</em> intercambiarlo (TMT).</p>
+        
+        <div style="background:#f0f6ff; padding:15px; border-radius:12px; margin-top:20px; text-align:center;">
+          <div id="math-opt-final"></div>
         </div>
       </div>
 
-      <div class="exam-tip">
-        <h4>🎓 ¡Atención al Test!</h4>
-        <p><strong>Efecto Sustitución:</strong> Si <em>r</em> sube, el consumo hoy es más caro. Siempre empuja a consumir <strong>menos hoy</strong>.</p>
-        <p style="margin-top: 10px;"><strong>Efecto Ingreso:</strong> Si eres prestatario (Julia), eres más pobre (↓ c0). Si eres ahorrador (Marco), eres más rico (↑ c0).</p>
+      <div class="exam-tip" style="background:#fff9e6; border:1.5px solid #ffcc00; border-radius:16px; padding:24px; margin-top:24px; color:#5c4d00;">
+        <h4 style="font-size:0.85rem; text-transform:uppercase; color:#b38f00; margin-bottom:10px;">🎓 Tips de Examen</h4>
+        <p>Si la tasa de interés sube, pedir prestado es más caro (Efecto Sustitución). Julia consumirá menos hoy. Pero para Marco (ahorrador), el efecto ingreso es positivo y podría consumir más hoy.</p>
       </div>
     </div>
 
@@ -184,10 +205,7 @@
 
   <script>
     let chart;
-    let currentCase = 'Julia';
-    let r = 0.10;
-    let rho = 0.10;
-    let userC0 = 50;
+    let currentCase = 'Julia', r = 0.10, rho = 0.10, userC0 = 50;
 
     function kHTML(latex, display = false) {
       return katex.renderToString(latex, { throwOnError: false, displayMode: display });
@@ -200,85 +218,49 @@
         data: {
           datasets: [
             { label: 'Frontera Factible', data: [], borderColor: '#1d1d1f', borderWidth: 3, pointRadius: 0, fill: false },
-            { label: 'Curva de Indiferencia (Tus preferencias)', data: [], borderColor: '#34c759', borderWidth: 2, pointRadius: 0, fill: false, borderDash: [2, 2] },
-            { label: 'Tu Punto Seleccionado', data: [], type: 'scatter', pointRadius: 10, backgroundColor: '#34c759', z: 10 },
-            { label: 'Equilibrio Óptimo (TMS=TMT)', data: [], type: 'scatter', pointRadius: 6, backgroundColor: '#0071e3', z: 5 },
-            { label: 'Dotación Inicial', data: [], type: 'scatter', pointRadius: 6, backgroundColor: '#86868b', pointStyle: 'rectRot' },
-            { label: 'Almacenar (-20%)', data: [], borderColor: '#ff9500', borderDash: [5, 5], borderWidth: 1.5, pointRadius: 0, hidden: true },
-            { label: 'Inversión (50%)', data: [], borderColor: '#af52de', borderDash: [5, 5], borderWidth: 1.5, pointRadius: 0, hidden: true }
+            { label: 'Indiferencia', data: [], borderColor: '#34c759', borderWidth: 2, pointRadius: 0, fill: false, borderDash: [2, 2] },
+            { label: 'Tu Elección', data: [], type: 'scatter', pointRadius: 10, backgroundColor: '#34c759', z: 10 },
+            { label: 'Óptimo Teórico', data: [], type: 'scatter', pointRadius: 6, backgroundColor: '#0071e3', z: 5 },
+            { label: 'Dotación', data: [], type: 'scatter', pointRadius: 6, backgroundColor: '#86868b', pointStyle: 'rectRot' }
           ]
         },
         options: {
           responsive: true, maintainAspectRatio: false, animation: false,
           scales: {
-            x: { type: 'linear', min: 0, max: 160, title: { display: true, text: 'Consumo ahora (c₀)', font: { weight: 'bold' } } },
-            y: { type: 'linear', min: 0, max: 160, title: { display: true, text: 'Consumo mañana (c₁)', font: { weight: 'bold' } } }
+            x: { type: 'linear', min: 0, max: 160, title: { display: true, text: 'Consumo ahora (c₀)' } },
+            y: { type: 'linear', min: 0, max: 160, title: { display: true, text: 'Consumo mañana (c₁)' } }
           }
         }
       });
     }
 
-    function setCase(c) {
-      currentCase = c;
-      document.getElementById('btnJulia').classList.toggle('active', c === 'Julia');
-      document.getElementById('btnMarco').classList.toggle('active', c === 'Marco');
-      
-      // Reset user consumption to something sensible
-      userC0 = (c === 'Julia') ? 30 : 70;
-      document.getElementById('paramUserC0').value = userC0;
-      
-      updateAll();
-    }
-
     function updateAll() {
-      let c0_opt, c1_opt, frontier, storage = [], investment = [];
-      const endowment_julia = {x: 0, y: 100};
-      const endowment_marco = {x: 100, y: 0};
+      let c0_opt, c1_opt, frontier;
+      const yJulia = {x: 0, y: 100}, yMarco = {x: 100, y: 0};
 
-      // 1. Cálculos de Frontera y Óptimo Teórico
       if (currentCase === 'Julia') {
         const c0_max = 100 / (1 + r);
         document.getElementById('paramUserC0').max = c0_max.toFixed(0);
         userC0 = Math.min(userC0, c0_max);
-        
         frontier = [{x: 0, y: 100}, {x: c0_max, y: 0}];
         c0_opt = (100 * (1 + rho)) / ((1 + r) * (2 + rho));
         c1_opt = 100 / (2 + rho);
-        
-        chart.data.datasets[4].data = [endowment_julia];
-        chart.data.datasets[5].hidden = true;
-        chart.data.datasets[6].hidden = true;
+        chart.data.datasets[4].data = [yJulia];
       } else {
         document.getElementById('paramUserC0').max = 100;
         userC0 = Math.min(userC0, 100);
-        
         frontier = [{x: 0, y: 100 * (1 + r)}, {x: 100, y: 0}];
         c0_opt = (100 * (1 + rho)) / (2 + rho);
         c1_opt = (100 * (1 + r)) / (2 + rho);
-        
-        storage = [{x: 0, y: 80}, {x: 100, y: 0}]; 
-        investment = [{x: 0, y: 150}, {x: 100, y: 0}]; 
-        
-        chart.data.datasets[4].data = [endowment_marco];
-        chart.data.datasets[5].data = storage;
-        chart.data.datasets[6].data = investment;
-        chart.data.datasets[5].hidden = false;
-        chart.data.datasets[6].hidden = false;
+        chart.data.datasets[4].data = [yMarco];
       }
 
-      // 2. Punto Seleccionado por el Usuario
-      let c1_user;
-      if (currentCase === 'Julia') {
-        c1_user = 100 - userC0 * (1 + r);
-      } else {
-        c1_user = (100 - userC0) * (1 + r);
-      }
-
-      // 3. Generar Curva de Indiferencia que pase por el punto del USUARIO
+      const c1_user = (currentCase === 'Julia') ? 100 - userC0 * (1 + r) : (100 - userC0) * (1 + r);
+      
       const IC = [];
-      const utilityUser = Math.log(userC0) + Math.log(c1_user) / (1 + rho);
-      for (let x = 2; x <= 160; x += 2) {
-        const y = Math.exp((utilityUser - Math.log(x)) * (1 + rho));
+      const utility = Math.log(userC0) + Math.log(c1_user) / (1 + rho);
+      for (let x = 2; x <= 160; x += 4) {
+        const y = Math.exp((utility - Math.log(x)) * (1 + rho));
         if (y <= 160) IC.push({x, y});
       }
 
@@ -287,54 +269,37 @@
       chart.data.datasets[2].data = [{x: userC0, y: c1_user}];
       chart.data.datasets[3].data = [{x: c0_opt, y: c1_opt}];
       
-      // UI Updates
       document.getElementById('valR').textContent = Math.round(r * 100) + '%';
       document.getElementById('valRho').textContent = Math.round(rho * 100) + '%';
       document.getElementById('valUserC0').textContent = userC0.toFixed(1);
       
-      document.getElementById('math-tmt').innerHTML = kHTML(`TMT = 1 + r = ${ (1+r).toFixed(2) }`);
-      document.getElementById('math-tms').innerHTML = kHTML(`TMS = 1 + \\rho = ${ (1+rho).toFixed(2) }`);
-      document.getElementById('math-opt').innerHTML = kHTML(`TMS = TMT \\rightarrow 1 + \\rho = 1 + r`);
+      document.getElementById('math-universal').innerHTML = kHTML('c_1 = y_1 + (y_0 - c_0)(1 + r)');
+      document.getElementById('math-opt-final').innerHTML = kHTML('TMS = TMT \\rightarrow 1+\\rho = 1+r');
 
-      // 4. Panel Matemático Dinámico y Derivación
-      document.getElementById('math-universal').innerHTML = kHTML('c_1 = y_1 + (y_0 - c_0)(1 + r)', true);
-      
-      let derivation = '';
-      if (currentCase === 'Julia') {
-        derivation = `
-          <p>Para Julia (prestataria):</p>
-          <p>1. Sustituimos dotación: $y_0 = 0, y_1 = 100$</p>
-          <p>2. $c_1 = 100 + (0 - c_0)(1 + r)$</p>
-          <p>3. Simplificamos: $c_1 = 100 - c_0(1 + r)$</p>
-        `;
-      } else {
-        derivation = `
-          <p>Para Marco (ahorradora):</p>
-          <p>1. Sustituimos dotación: $y_0 = 100, y_1 = 0$</p>
-          <p>2. $c_1 = 0 + (100 - c_0)(1 + r)$</p>
-          <p>3. Simplificamos: $c_1 = (100 - c_0)(1 + r)$</p>
-        `;
-      }
-      document.getElementById('derivationSteps').innerHTML = derivation.replace(/\$/g, ''); // Limpiar para que parezca texto académico
+      let d1 = (currentCase === 'Julia') ? kHTML('y_0=0, y_1=100') : kHTML('y_0=100, y_1=0');
+      let d2 = (currentCase === 'Julia') ? kHTML('c_1 = 100 + (0-c_0)(1+r)') : kHTML('c_1 = 0 + (100-c_0)(1+r)');
+      document.getElementById('derivationSteps').innerHTML = `1. Dotación: ${d1}<br>2. Sustitución: ${d2}`;
 
-      const onePlusR = (1 + r).toFixed(2);
-      let latexFinal = (currentCase === 'Julia') 
-        ? `${c1_user.toFixed(1)} = 100 - ${userC0.toFixed(1)} \\times ${onePlusR}`
-        : `${c1_user.toFixed(1)} = (100 - ${userC0.toFixed(1)}) \\times ${onePlusR}`;
-      
-      document.getElementById('mathEquationDisplay').innerHTML = kHTML(latexFinal, true);
+      const eqFinal = (currentCase === 'Julia') ? `${c1_user.toFixed(1)} = 100 - ${userC0.toFixed(1)} \\times ${(1+r).toFixed(2)}` : `${c1_user.toFixed(1)} = (100 - ${userC0.toFixed(1)}) \\times ${(1+r).toFixed(2)}`;
+      document.getElementById('mathEquationDisplay').innerHTML = kHTML(eqFinal, true);
 
       chart.update();
+    }
+
+    function setCase(c) {
+      currentCase = c;
+      document.getElementById('btnJulia').classList.toggle('active', c === 'Julia');
+      document.getElementById('btnMarco').classList.toggle('active', c === 'Marco');
+      userC0 = (c === 'Julia') ? 30 : 70;
+      document.getElementById('paramUserC0').value = userC0;
+      updateAll();
     }
 
     document.getElementById('paramR').addEventListener('input', (e) => { r = e.target.value / 100; updateAll(); });
     document.getElementById('paramRho').addEventListener('input', (e) => { rho = e.target.value / 100; updateAll(); });
     document.getElementById('paramUserC0').addEventListener('input', (e) => { userC0 = parseFloat(e.target.value); updateAll(); });
 
-    document.addEventListener('DOMContentLoaded', () => {
-      initChart();
-      updateAll();
-    });
+    document.addEventListener('DOMContentLoaded', () => { initChart(); updateAll(); });
   </script>
 </body>
 </html>
