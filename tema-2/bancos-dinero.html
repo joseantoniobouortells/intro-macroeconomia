@@ -158,6 +158,22 @@
           </div>
         </div>
       </div>
+
+      <!-- Herramienta 3: Gasto en Consumo y Tasa de Interés -->
+      <div class="card">
+        <h3>🛍️ 3. Tasa de Interés y Gasto en Consumo</h3>
+        <div class="chart-container" style="height: 340px;">
+          <canvas id="consumptionChart"></canvas>
+        </div>
+        
+        <div class="slider-panel">
+          <div class="slider-group">
+            <div class="slider-header"><span>Tasa de Interés del Mercado (i)</span> <span id="valICons" class="slider-label-val">10%</span></div>
+            <input type="range" id="paramICons" min="5" max="80" value="10" step="1">
+          </div>
+          <p style="font-size: 0.75rem; color: #86868b; margin-top: 12px;">Desplaza el punto para ver cómo los hogares aumentan su gasto hoy cuando el crédito es más barato.</p>
+        </div>
+      </div>
     </div>
 
     <!-- Columna Derecha -->
@@ -168,6 +184,7 @@
         <h4>Contexto Teórico</h4>
         <p>El <strong>Dinero Base</strong> (moneda de curso legal) es creado exclusivamente por el Banco Central. Sin embargo, la mayor parte del dinero en la economía es <strong>Dinero Bancario</strong>, creado por los bancos comerciales cuando conceden préstamos.</p>
         <p style="margin-top:10px;">El Banco Central influye en la economía fijando la <strong>tasa oficial</strong>. Los bancos comerciales añaden un margen para cubrir sus costes y el riesgo, determinando la tasa final que paga el público.</p>
+        <p style="margin-top:10px;">Los hogares y las empresas se endeudan con objeto de gastar: cuanto menos les cueste endeudarse (tasas de interés más bajas), más gastarán hoy. De esta forma, el banco central puede influir en el gasto total de la economía modificando la tasa oficial.</p>
 
         <h4>Fórmulas Clave</h4>
         <div class="formula-box">
@@ -187,6 +204,8 @@
   </div>
 
   <script>
+    let consumptionChart;
+
     function kHTML(latex) {
       return katex.renderToString(latex, { throwOnError: false });
     }
@@ -223,14 +242,57 @@
       }
     }
 
+    function initConsumptionChart() {
+      const ctx = document.getElementById('consumptionChart').getContext('2d');
+      consumptionChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          datasets: [
+            {
+              label: 'Demanda de Préstamos',
+              data: [{x: 30, y: 100}, {x: 70, y: 0}], // Línea con pendiente negativa
+              borderColor: '#0071e3', borderWidth: 3, pointRadius: 0, fill: false
+            },
+            {
+              label: 'Punto Actual',
+              data: [{x: 58, y: 10}],
+              type: 'scatter', pointRadius: 10, backgroundColor: '#ff3b30'
+            }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false, animation: false,
+          scales: {
+            x: { type: 'linear', min: 0, max: 100, title: { display: true, text: 'Consumo ahora (USD)', font: { weight: 'bold' } } },
+            y: { type: 'linear', min: 0, max: 100, title: { display: true, text: 'Tasa de interés (%)', font: { weight: 'bold' } } }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+
+    function updateConsumptionTool() {
+      const i = parseFloat(document.getElementById('paramICons').value);
+      // Ecuación demanda: p = 100 - 1.42 * q  => q = (100 - p) / 1.42
+      // Para p=78, q≈15. Para p=10, q≈63. (Ajustado para el ejemplo solicitado)
+      const q = (100 - i) / 1.5 + 5; 
+
+      document.getElementById('valICons').textContent = i + '%';
+      consumptionChart.data.datasets[1].data = [{x: q, y: i}];
+      consumptionChart.update();
+    }
+
     document.getElementById('paramOfficial').addEventListener('input', updateMoneyTool);
     document.getElementById('paramMargin').addEventListener('input', updateMoneyTool);
     document.getElementById('paramX').addEventListener('input', updateVPTool);
     document.getElementById('paramI').addEventListener('input', updateVPTool);
+    document.getElementById('paramICons').addEventListener('input', updateConsumptionTool);
 
     document.addEventListener('DOMContentLoaded', () => {
       updateMoneyTool();
       updateVPTool();
+      initConsumptionChart();
+      updateConsumptionTool();
       document.getElementById('math-vp').innerHTML = kHTML('VP = \\frac{X}{(1+i)^t}');
     });
   </script>
