@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Curva de Lorenz y Coeficiente de Gini — Tema 1</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/katex.min.css">
+  <script src="assets/chart.umd.min.js"></script>
+  <script src="assets/katex.min.js"></script>
+  <style>
+    body { padding: 0; background: #f5f5f7; color: #1d1d1f; }
+    
+    /* ── Navegación ── */
+    .site-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.08); height: 48px;
+      display: flex; align-items: center; padding: 0 24px; gap: 20px;
+    }
+    .nav-links { display: flex; gap: 16px; font-size: 0.8rem; font-weight: 500; }
+    .nav-links a { color: #1d1d1f; text-decoration: none; opacity: 0.6; transition: opacity 0.2s; }
+    .nav-links a:hover { opacity: 1; }
+    .nav-links a.active { opacity: 1; color: #0071e3; border-bottom: 2px solid #0071e3; padding-bottom: 2px; }
+
+    /* ── Layout ── */
+    .main-container {
+      max-width: 1200px; margin: 0 auto; display: grid;
+      grid-template-columns: 1fr 420px; gap: 32px; padding: 48px 24px;
+    }
+    @media (max-width: 1000px) { .main-container { grid-template-columns: 1fr; } }
+
+    /* ── Gráfico y Controles ── */
+    .visual-section { display: flex; flex-direction: column; gap: 24px; }
+    .chart-card { background: #fff; border-radius: 24px; padding: 32px; border: 1px solid #e5e5e5; }
+    .chart-container { position: relative; height: 480px; }
+    
+    .controls-card { background: #1d1d1f; color: #fff; border-radius: 20px; padding: 28px; }
+    .slider-group { margin-bottom: 20px; }
+    .slider-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; font-weight: 600; }
+    .slider-value { color: #0071e3; font-weight: 800; }
+    input[type=range] { width: 100%; cursor: pointer; }
+
+    .btn-row { display: flex; gap: 12px; margin-top: 10px; }
+    .action-btn { 
+      flex: 1; padding: 12px; border-radius: 12px; border: none; 
+      font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-comp { background: #34c759; color: #fff; }
+    .btn-comp:hover { background: #28a745; transform: translateY(-2px); }
+    .btn-reset { background: #3a3a3c; color: #fff; }
+
+    /* ── Teoría ── */
+    .theory-section { display: flex; flex-direction: column; gap: 24px; }
+    .theory-card { background: #fff; border-radius: 20px; padding: 32px; border: 1px solid #e5e5e5; line-height: 1.6; }
+    .theory-card h2 { font-size: 1.4rem; margin-bottom: 16px; letter-spacing: -0.5px; }
+    .theory-card h3 { font-size: 0.85rem; text-transform: uppercase; color: #86868b; margin: 24px 0 12px; letter-spacing: 0.5px; }
+    
+    .gini-display { 
+      background: #f0f6ff; padding: 20px; border-radius: 16px; text-align: center; margin: 20px 0;
+      border: 1px solid #d0e3ff;
+    }
+    .gini-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #0071e3; }
+    .gini-value { font-size: 3rem; font-weight: 800; color: #1d1d1f; letter-spacing: -2px; }
+
+    .formula-block { font-family: "KaTeX_Main", serif; background: #fafafa; padding: 16px; border-radius: 12px; margin: 12px 0; }
+
+    .exam-alert {
+      background: #fff9e6; border: 1.5px solid #ffcc00; border-radius: 16px; padding: 24px;
+      color: #5c4d00;
+    }
+    .exam-alert h4 { font-size: 0.85rem; text-transform: uppercase; color: #b38f00; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="index.html" style="text-decoration:none; font-weight:700; color:#000;">Tema 1</a>
+    <div class="nav-links">
+      <a href="equilibrio-general.html">Mercado de Trabajo</a>
+      <a href="demanda-y-desempleo-ciclico.html">Demanda y Empleo</a>
+      <a href="sindicatos.html">Sindicatos</a>
+      <a href="#" class="active">Gini y Lorenz</a>
+    </div>
+  </nav>
+
+  <div class="main-container">
+    
+    <!-- COLUMNA IZQUIERDA: GRÁFICO -->
+    <div class="visual-section">
+      <div class="chart-card">
+        <div class="chart-container">
+          <canvas id="lorenzChart"></canvas>
+        </div>
+      </div>
+
+      <div class="controls-card">
+        <div class="slider-group">
+          <div class="slider-header">
+            <span>Tasa de Desempleo (u)</span>
+            <span id="valU" class="slider-value">10%</span>
+          </div>
+          <input type="range" id="paramU" min="0" max="40" value="10" step="1">
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-header">
+            <span>Salario Real (w)</span>
+            <span id="valW" class="slider-value">0.60</span>
+          </div>
+          <input type="range" id="paramW" min="0.1" max="0.9" value="0.6" step="0.05">
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-header">
+            <span>Productividad (λ)</span>
+            <span id="valLambda" class="slider-value">1.0</span>
+          </div>
+          <input type="range" id="paramLambda" min="0.8" max="2.0" value="1.0" step="0.1">
+        </div>
+
+        <div class="btn-row">
+          <button class="action-btn btn-comp" onclick="applyCompetition()">⚡ Aumento de Competencia</button>
+          <button class="action-btn btn-reset" onclick="resetParams()">🔄 Restablecer</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLUMNA DERECHA: TEORÍA -->
+    <div class="theory-section">
+      <div class="theory-card">
+        <div class="gini-display">
+          <div class="gini-label">Coeficiente de Gini</div>
+          <div id="giniValue" class="gini-value">0.36</div>
+        </div>
+
+        <h2>Curva de Lorenz y Gini</h2>
+        <p>En el modelo del mercado de trabajo, el ingreso se distribuye entre tres grupos: los <strong>desempleados</strong> (que no reciben ingresos), los <strong>empleados</strong> (que reciben salarios) y los <strong>propietarios</strong> (que reciben beneficios).</p>
+
+        <h3>Fórmulas Clave</h3>
+        <div class="formula-block" id="math-s"></div>
+        <p style="font-size: 0.85rem; color: #6e6e73;">Representa la parte del producto que va a los trabajadores.</p>
+        
+        <div class="formula-block" id="math-g"></div>
+        <p style="font-size: 0.85rem; color: #6e6e73;">Calcula la desigualdad total en este modelo simplificado de clases.</p>
+
+        <h3>Dinámica Visual</h3>
+        <p>La <strong>Curva de Lorenz</strong> muestra la relación entre el porcentaje acumulado de la población y el porcentaje acumulado de ingresos. Cuanto más se aleje de la línea de 45°, mayor es el coeficiente de Gini.</p>
+      </div>
+
+      <div class="exam-alert">
+        <h4>🎓 ¡Atención al Test!</h4>
+        <p>El coeficiente de Gini <strong>AUMENTA</strong> (mayor desigualdad) si:
+          <br>1. Sube el desempleo (u↑).
+          <br>2. Cae el salario real (w↓).
+          <br>3. Sube el markup empresarial (μ↑).
+          <br>4. Sube la productividad (λ↑) sin que aumenten los salarios.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let chart;
+    let u = 0.10; // desempleo
+    let w = 0.60; // salario real
+    let lambda = 1.0; // productividad
+
+    function kHTML(latex) {
+      return katex.renderToString(latex, { throwOnError: false });
+    }
+
+    function calculateGini() {
+      const s = w / lambda; // wage share
+      const n = 0.85; // fracción de trabajadores en la población (empleados + desempleados)
+      // Usando la fórmula pedida: g = u + n - s (donde n es empleo, u desempleo)
+      // Ajuste para el modelo de la curva de Lorenz:
+      const n_emp = (1 - u) * 0.9; // trabajadores empleados
+      const wage_share = (w * n_emp) / lambda;
+      
+      // Coeficiente de Gini para el modelo de 3 grupos
+      // Área entre 45º y Lorenz / Área total (0.5)
+      // Aproximación pedagógica solicitada
+      return (u + (1-u)*(1 - (w/lambda))).toFixed(2);
+    }
+
+    function initChart() {
+      const ctx = document.getElementById('lorenzChart').getContext('2d');
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          datasets: [
+            {
+              label: 'Igualdad Perfecta',
+              data: [{x: 0, y: 0}, {x: 100, y: 100}],
+              borderColor: '#d2d2d7', borderDash: [5, 5], pointRadius: 0, fill: false
+            },
+            {
+              label: 'Curva de Lorenz',
+              data: [],
+              borderColor: '#0071e3', borderWidth: 4, pointRadius: 5, pointBackgroundColor: '#0071e3',
+              fill: true, backgroundColor: 'rgba(0, 113, 227, 0.1)', tension: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          scales: {
+            x: { type: 'linear', min: 0, max: 100, title: { display: true, text: 'Población acumulada (%)' } },
+            y: { type: 'linear', min: 0, max: 100, title: { display: true, text: 'Ingresos acumulados (%)' } }
+          },
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: (ctx) => `Pop: ${ctx.parsed.x}%, Ingreso: ${ctx.parsed.y}%`
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function updateAll() {
+      const n_total_workers = 90; // 90% son trabajadores, 10% propietarios
+      const u_pop = u * n_total_workers; // % poblacion desempleada
+      const e_pop = (1 - u) * n_total_workers; // % poblacion empleada
+      const wage_share = (w / lambda) * 100;
+
+      // Puntos de la curva de Lorenz
+      const lorenzData = [
+        {x: 0, y: 0},
+        {x: u_pop, y: 0}, // Fin de desempleados (0 ingresos)
+        {x: u_pop + e_pop, y: wage_share}, // Fin de empleados (suman salarios)
+        {x: 100, y: 100} // Fin de propietarios (suman beneficios)
+      ];
+
+      chart.data.datasets[1].data = lorenzData;
+      chart.update();
+
+      // Valores UI
+      document.getElementById('giniValue').textContent = calculateGini();
+      document.getElementById('valU').textContent = (u * 100).toFixed(0) + '%';
+      document.getElementById('valW').textContent = w.toFixed(2);
+      document.getElementById('valLambda').textContent = lambda.toFixed(1);
+
+      // Formulas KaTeX
+      document.getElementById('math-s').innerHTML = kHTML('s = \\frac{w}{\\lambda} = \\frac{' + w.toFixed(2) + '}{' + lambda.toFixed(1) + '} = ' + (w/lambda).toFixed(2));
+      document.getElementById('math-g').innerHTML = kHTML('g = u + n - s');
+    }
+
+    function applyCompetition() {
+      u = 0.05;
+      w = 0.80;
+      lambda = 1.0;
+      updateAll();
+    }
+
+    function resetParams() {
+      u = 0.10; w = 0.60; lambda = 1.0;
+      updateAll();
+    }
+
+    document.getElementById('paramU').addEventListener('input', (e) => { u = e.target.value / 100; updateAll(); });
+    document.getElementById('paramW').addEventListener('input', (e) => { w = parseFloat(e.target.value); updateAll(); });
+    document.getElementById('paramLambda').addEventListener('input', (e) => { lambda = parseFloat(e.target.value); updateAll(); });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initChart();
+      updateAll();
+    });
+  </script>
+</body>
+</html>
