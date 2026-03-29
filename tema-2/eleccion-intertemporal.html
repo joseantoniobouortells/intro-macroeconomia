@@ -4,24 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Modelo de Elección Intertemporal — Tema 2</title>
-  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="../tema-1/assets/style.css">
   <link rel="stylesheet" href="../tema-1/assets/katex.min.css">
   <script src="../tema-1/assets/chart.umd.min.js"></script>
   <script src="../tema-1/assets/katex.min.js"></script>
   <style>
     body { padding: 0; background: #f5f5f7; color: #1d1d1f; }
     
-    /* ── Navegación ── */
+    /* ── Sticky navbar ── */
     .site-nav {
       position: sticky; top: 0; z-index: 100;
-      background: rgba(255,255,255,0.85); backdrop-filter: blur(20px);
+      background: rgba(255,255,255,0.85); backdrop-filter: saturate(180%) blur(20px);
       border-bottom: 1px solid rgba(0,0,0,0.08); height: 48px;
-      display: flex; align-items: center; padding: 0 24px; gap: 20px;
+      display: flex; align-items: center; padding: 0 24px;
     }
-    .nav-links { display: flex; gap: 16px; font-size: 0.8rem; font-weight: 500; }
-    .nav-links a { color: #1d1d1f; text-decoration: none; opacity: 0.6; transition: opacity 0.2s; }
-    .nav-links a.active { opacity: 1; color: #0071e3; font-weight: 700; }
-    .nav-links a.disabled { opacity: 0.3; cursor: default; }
+    .nav-back {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 0.8rem; font-weight: 500; color: #0071e3;
+      text-decoration: none; white-space: nowrap;
+      transition: opacity 0.2s ease; width: 120px;
+    }
+    .nav-back:hover { opacity: 0.7; }
+    .nav-back .chevron { font-size: 1rem; line-height: 1; }
+    .nav-center {
+      flex: 1; text-align: center; font-size: 0.8rem;
+      font-weight: 500; color: #1d1d1f; letter-spacing: 0.01em; pointer-events: none;
+    }
+    .nav-spacer { width: 120px; }
+
+    /* ── Sub-nav (Jerarquía de Tema 2) ── */
+    .sub-nav { background: #fff; border-bottom: 1px solid #e5e5e5; padding: 12px 24px; display: flex; gap: 20px; justify-content: center; }
+    .sub-nav a { text-decoration: none; font-size: 0.75rem; font-weight: 600; color: #86868b; transition: color 0.2s; }
+    .sub-nav a.active { color: #0071e3; }
+    .sub-nav a:hover:not(.active) { color: #1d1d1f; }
 
     /* ── Layout ── */
     .main-container {
@@ -61,7 +76,6 @@
 </head>
 <body>
 
-  <!-- Sticky navbar -->
   <nav class="site-nav">
     <a href="index.html" class="nav-back">
       <span class="chevron">‹</span> Tema 2
@@ -70,9 +84,15 @@
     <span class="nav-spacer"></span>
   </nav>
 
+  <nav class="sub-nav">
+    <a href="#" class="active">Elección Intertemporal</a>
+    <a href="balances-apalancamiento.html">Balances y Apalancamiento</a>
+    <a href="bancos-dinero.html">Bancos y Dinero</a>
+    <a href="racionamiento-credito.html">Racionamiento del Crédito</a>
+  </nav>
+
   <div class="main-container">
     
-    <!-- COLUMNA IZQUIERDA: GRÁFICO -->
     <div class="visual-section">
       <div class="chart-card">
         <div class="chart-container">
@@ -83,7 +103,7 @@
       <div class="controls-card">
         <div class="case-selector">
           <button class="case-btn active" id="btnJulia" onclick="setCase('Julia')">Caso Julia (Prestataria)</button>
-          <button class="case-btn" id="btnMarco" onclick="setCase('Marco')">Caso Marco (Ahorrador)</button>
+          <button class="case-btn" id="btnMarco" onclick="setCase('Marco')">Caso Marco (Ahorradora)</button>
         </div>
 
         <div class="slider-group">
@@ -96,7 +116,7 @@
 
         <div class="slider-group">
           <div class="slider-header">
-            <span>Impaciencia / Tasa Descuento (ρ)</span>
+            <span>Impaciencia pura (ρ)</span>
             <span id="valRho" class="slider-value">10%</span>
           </div>
           <input type="range" id="paramRho" min="0" max="100" value="10" step="1">
@@ -104,13 +124,12 @@
       </div>
     </div>
 
-    <!-- COLUMNA DERECHA: TEORÍA -->
     <div class="theory-section">
       <div class="theory-card">
         <h2>Modelo de Elección Intertemporal</h2>
         
         <h3>Contexto Teórico</h3>
-        <p>Pedir prestado, ahorrar e invertir son mecanismos para desplazar el consumo en el tiempo. La decisión depende de la necesidad de <strong>suavizar el consumo</strong> (distribuir el gasto para evitar periodos de escasez) y de la <strong>impaciencia pura</strong> del individuo.</p>
+        <p>Los individuos deciden cómo distribuir su consumo entre hoy y mañana. Esta decisión depende de la <strong>frontera factible</strong> (determinada por la tasa de interés y dotación) y de sus <strong>curvas de indiferencia</strong> (preferencias sobre cuándo consumir).</p>
 
         <h3>Fórmulas Clave</h3>
         <div class="formula-box">
@@ -119,18 +138,18 @@
         </div>
         <div class="formula-box">
           <div id="math-tms"></div>
-          <p style="font-size: 0.8rem; color: #6e6e73; margin-top: 8px;">Valoración subjetiva del consumo hoy vs mañana.</p>
+          <p style="font-size: 0.8rem; color: #6e6e73; margin-top: 8px;">Valoración subjetiva basada en la impaciencia.</p>
         </div>
         <div class="formula-box" style="background: #e8f5e9; border: 1px solid #c8e6c9;">
           <div id="math-opt"></div>
-          <p style="font-size: 0.8rem; color: #2e7d32; margin-top: 8px;">Punto de tangencia (Equilibrio).</p>
+          <p style="font-size: 0.8rem; color: #2e7d32; margin-top: 8px;">Equilibrio óptimo (Tangencia).</p>
         </div>
       </div>
 
       <div class="exam-tip">
         <h4>🎓 ¡Atención al Test!</h4>
         <p><strong>Efecto Sustitución:</strong> Si <em>r</em> sube, el consumo hoy es más caro. Siempre empuja a consumir <strong>menos hoy</strong>.</p>
-        <p style="margin-top: 10px;"><strong>Efecto Ingreso:</strong> Si eres prestatario (Julia), te vuelves más pobre (↓ consumo hoy). Si eres ahorrador (Marco), te vuelves más rico (↑ consumo hoy).</p>
+        <p style="margin-top: 10px;"><strong>Efecto Ingreso:</strong> Si eres prestatario (Julia), eres más pobre (↓ c0). Si eres ahorrador (Marco), eres más rico (↑ c0).</p>
       </div>
     </div>
 
@@ -154,7 +173,7 @@
           datasets: [
             { label: 'Frontera Factible', data: [], borderColor: '#1d1d1f', borderWidth: 3, pointRadius: 0, fill: false },
             { label: 'Curva de Indiferencia', data: [], borderColor: '#0071e3', borderWidth: 2, pointRadius: 0, fill: false, borderDash: [2, 2] },
-            { label: 'Punto Óptimo', data: [], type: 'scatter', pointRadius: 8, backgroundColor: '#34c759' },
+            { label: 'Punto Óptimo', data: [], type: 'scatter', pointRadius: 8, backgroundColor: '#34c759', z: 5 },
             { label: 'Dotación Inicial', data: [], type: 'scatter', pointRadius: 6, backgroundColor: '#86868b', pointStyle: 'rectRot' },
             { label: 'Almacenar (-20%)', data: [], borderColor: '#ff9500', borderDash: [5, 5], borderWidth: 1.5, pointRadius: 0, hidden: true },
             { label: 'Inversión (50%)', data: [], borderColor: '#af52de', borderDash: [5, 5], borderWidth: 1.5, pointRadius: 0, hidden: true }
@@ -163,8 +182,8 @@
         options: {
           responsive: true, maintainAspectRatio: false, animation: false,
           scales: {
-            x: { type: 'linear', min: 0, max: 150, title: { display: true, text: 'Consumo ahora (USD)', font: { weight: 'bold' } } },
-            y: { type: 'linear', min: 0, max: 150, title: { display: true, text: 'Consumo más adelante (USD)', font: { weight: 'bold' } } }
+            x: { type: 'linear', min: 0, max: 160, title: { display: true, text: 'Consumo ahora (c0)', font: { weight: 'bold' } } },
+            y: { type: 'linear', min: 0, max: 160, title: { display: true, text: 'Consumo más adelante (c1)', font: { weight: 'bold' } } }
           }
         }
       });
@@ -178,13 +197,14 @@
     }
 
     function updateAll() {
-      let c0_opt, c1_opt, frontier, IC = [], storage = [], investment = [];
+      let c0_opt, c1_opt, frontier, storage = [], investment = [];
       const endowment_julia = {x: 0, y: 100};
       const endowment_marco = {x: 100, y: 0};
 
       if (currentCase === 'Julia') {
-        // Julia: y1=100, y0=0. Budget: c1 + (1+r)c0 = 100
+        // Julia: c1 = 100 - (1+r)c0
         frontier = [{x: 0, y: 100}, {x: 100 / (1 + r), y: 0}];
+        // Óptimo Julia: TMS = TMT -> (1+rho)c1/c0 = (1+r)
         c0_opt = (100 * (1 + rho)) / ((1 + r) * (2 + rho));
         c1_opt = 100 / (2 + rho);
         
@@ -192,13 +212,14 @@
         chart.data.datasets[4].hidden = true;
         chart.data.datasets[5].hidden = true;
       } else {
-        // Marco: y0=100, y1=0. Budget: c1 = (100-c0)(1+r)
+        // Marco: c1 = (100 - c0)(1+r)
         frontier = [{x: 0, y: 100 * (1 + r)}, {x: 100, y: 0}];
+        // Óptimo Marco:
         c0_opt = (100 * (1 + rho)) / (2 + rho);
         c1_opt = (100 * (1 + r)) / (2 + rho);
         
-        storage = [{x: 0, y: 80}, {x: 100, y: 0}]; // 20% depreciation
-        investment = [{x: 0, y: 150}, {x: 100, y: 0}]; // 50% return
+        storage = [{x: 0, y: 80}, {x: 100, y: 0}]; 
+        investment = [{x: 0, y: 150}, {x: 100, y: 0}]; 
         
         chart.data.datasets[3].data = [endowment_marco];
         chart.data.datasets[4].data = storage;
@@ -207,39 +228,26 @@
         chart.data.datasets[5].hidden = false;
       }
 
-      // Generate IC Curve through optimal point
+      // Generar Curva de Indiferencia (U = ln(c0) + ln(c1)/(1+rho))
+      const IC = [];
       const utility = Math.log(c0_opt) + Math.log(c1_opt) / (1 + rho);
-      for (let x = 5; x <= 140; x += 2) {
+      for (let x = 2; x <= 160; x += 2) {
         const y = Math.exp((utility - Math.log(x)) * (1 + rho));
-        if (y < 150) IC.push({x, y});
+        if (y <= 160) IC.push({x, y});
       }
 
       chart.data.datasets[0].data = frontier;
       chart.data.datasets[1].data = IC;
       chart.data.datasets[2].data = [{x: c0_opt, y: c1_opt}];
       
-      // UI Updates
+      // UI
       document.getElementById('valR').textContent = Math.round(r * 100) + '%';
       document.getElementById('valRho').textContent = Math.round(rho * 100) + '%';
-      
       document.getElementById('math-tmt').innerHTML = kHTML(`TMT = 1 + r = ${ (1+r).toFixed(2) }`);
       document.getElementById('math-tms').innerHTML = kHTML(`TMS = 1 + \\rho = ${ (1+rho).toFixed(2) }`);
       document.getElementById('math-opt').innerHTML = kHTML(`TMS = TMT \\rightarrow 1 + \\rho = 1 + r`);
 
       chart.update();
-    }
-
-    document.getElementById('paramR').addEventListener('input', (e) => { r = e.target.value / 100; updateAll(); });
-    document.getElementById('paramRho').addEventListener('input', (e) => { rho = e.target.value / 100; updateAll(); });
-
-    document.addEventListener('DOMContentLoaded', () => {
-      initChart();
-      updateAll();
-    });
-  </script>
-</body>
-</html>
-chart.update();
     }
 
     document.getElementById('paramR').addEventListener('input', (e) => { r = e.target.value / 100; updateAll(); });
