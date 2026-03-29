@@ -172,17 +172,14 @@
     }
 
     function calculateGini() {
-      const s = w / lambda; // wage share
-      const n = 0.85; // fracción de trabajadores en la población (empleados + desempleados)
-      // Usando la fórmula pedida: g = u + n - s (donde n es empleo, u desempleo)
-      // Ajuste para el modelo de la curva de Lorenz:
-      const n_emp = (1 - u) * 0.9; // trabajadores empleados
-      const wage_share = (w * n_emp) / lambda;
+      const s = w / lambda; // wage share (participación salarial)
+      const n_emp = (1 - u) * 0.9; // Fracción de empleados (asumiendo 90% trabajadores totales)
+      const u_frac = u * 0.9; // Fracción de desempleados
       
-      // Coeficiente de Gini para el modelo de 3 grupos
-      // Área entre 45º y Lorenz / Área total (0.5)
-      // Aproximación pedagógica solicitada
-      return (u + (1-u)*(1 - (w/lambda))).toFixed(2);
+      // Fórmula: g = u + n - s(1 - u)
+      // Ajustada a las fracciones del total de la población
+      const gini = u_frac + n_emp - s * (1 - u_frac);
+      return Math.max(0, gini).toFixed(2);
     }
 
     function initChart() {
@@ -246,7 +243,7 @@
 
       // Formulas KaTeX
       document.getElementById('math-s').innerHTML = kHTML('s = \\frac{w}{\\lambda} = \\frac{' + w.toFixed(2) + '}{' + lambda.toFixed(1) + '} = ' + (w/lambda).toFixed(2));
-      document.getElementById('math-g').innerHTML = kHTML('g = u + n - s');
+      document.getElementById('math-g').innerHTML = kHTML('g = u + n - s(1 - u)');
     }
 
     function applyCompetition() {

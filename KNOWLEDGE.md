@@ -27,6 +27,14 @@ Este documento centraliza la lógica económica y los estándares de construcci�
 - **Efecto Voz (Voice):** La participación y reconocimiento reducen la desutilidad del trabajo. **Resultado:** WS se desplaza hacia abajo $\rightarrow$ el empleo puede aumentar, contrarrestando el efecto negociación.
 - **Salario Real:** Si la curva PS es horizontal, el salario real de equilibrio no cambia con la negociación sindical pura; solo varía el nivel de empleo.
 
+### 📊 Desigualdad (Lorenz y Gini)
+- **Grupos del Modelo:** El producto se reparte entre Desempleados (0 ingresos), Empleados (salarios) y Propietarios (beneficios).
+- **Participación Salarial (s):** $s = w / \lambda$ (proporción del producto que va a los trabajadores).
+- **Coeficiente de Gini (g):** $g = u + n - s(1 - u)$.
+- **Determinantes de Desigualdad:**
+    - **Aumenta Gini:** ↑ Desempleo ($u$), ↓ Salario real ($w$), ↑ Markup ($\mu$), ↑ Productividad ($\lambda$) sin subida de salarios.
+    - **Disminuye Gini:** ↑ Competencia (↓ $\mu$, ↑ $w$), ↑ Empleo.
+
 ---
 
 ## 📘 Lógica Económica (Capítulo 10 CORE) — TEMA 2
