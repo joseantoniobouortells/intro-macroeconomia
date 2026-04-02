@@ -32,80 +32,60 @@
     }
     .nav-spacer { width: 120px; }
 
-    /* ── Sub-menu ── */
+    /* ── Sub-nav ── */
     .sub-nav { background: #fff; border-bottom: 1px solid #e5e5e5; padding: 12px 24px; display: flex; gap: 20px; justify-content: center; }
     .sub-nav a { text-decoration: none; font-size: 0.75rem; font-weight: 600; color: #86868b; transition: color 0.2s; }
     .sub-nav a.active { color: #0071e3; }
-    .sub-nav a:hover:not(.active) { color: #1d1d1f; }
 
     /* ── Layout ── */
     .main-container {
-      max-width: 1200px; margin: 0 auto; display: grid;
-      grid-template-columns: 1fr 420px; gap: 32px; padding: 40px 24px;
+      max-width: 1400px; margin: 0 auto; display: grid;
+      grid-template-columns: 1fr 400px; gap: 32px; padding: 32px 24px;
+      align-items: start;
     }
-    @media (max-width: 1000px) { .main-container { grid-template-columns: 1fr; } }
+    @media (max-width: 1200px) { .main-container { grid-template-columns: 1fr; } }
 
-    .card { background: #fff; border-radius: 24px; padding: 32px; border: 1px solid #e5e5e5; margin-bottom: 32px; }
-    .card h3 { font-size: 1.1rem; margin-bottom: 24px; color: #1d1d1f; border-bottom: 1px solid #f5f5f7; padding-bottom: 12px; }
+    .visual-section { display: flex; flex-direction: column; gap: 24px; position: sticky; top: 80px; }
+    @media (max-width: 1200px) { .visual-section { position: relative; top: 0; } }
 
-    /* Principal-Agent Viz */
-    .pa-viz { display: flex; justify-content: space-around; align-items: center; padding: 40px 0; background: #fafafa; border-radius: 16px; margin-bottom: 24px; position: relative; }
-    .pa-node { padding: 15px; border-radius: 12px; text-align: center; font-weight: 700; font-size: 0.85rem; width: 140px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-    .node-principal { background: #1d1d1f; color: #fff; }
-    .node-agent { background: #0071e3; color: #fff; }
-    .node-conflict { 
-      background: #ff3b30; color: #fff; font-size: 0.7rem; width: 100px; height: 100px; 
-      border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-      animation: pulse 2s infinite; 
-    }
-    .node-align { background: #34c759; display: none; }
+    .dashboard-grid { display: grid; grid-template-columns: 1fr 320px; gap: 24px; }
+    @media (max-width: 900px) { .dashboard-grid { grid-template-columns: 1fr; } }
+
+    .card { background: #fff; border-radius: 24px; padding: 24px; border: 1px solid #e5e5e5; }
+    .chart-container { position: relative; height: 420px; }
     
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.05); opacity: 0.8; }
-      100% { transform: scale(1); opacity: 1; }
+    .controls-card { 
+      background: #1d1d1f; color: #fff; border-radius: 24px; padding: 24px; 
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    .slider-group { margin-bottom: 5px; }
+    .slider-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.8rem; }
+    .slider-value { color: #0071e3; font-weight: 800; }
+    input[type=range] { width: 100%; cursor: pointer; }
+
+    /* Panel Matemático */
+    .math-card { background: #fff; border-radius: 24px; padding: 28px; border: 1px solid #e5e5e5; }
+    .formula-display { 
+      text-align: center; padding: 20px; background: #f9f9fb; border-radius: 16px; 
+      border: 1px solid #f0f0f0; margin-top: 15px;
     }
 
-    .btn-panel { display: flex; gap: 10px; margin-bottom: 20px; }
-    .btn-pa { 
-      flex: 1; padding: 12px; border-radius: 12px; border: 1px solid #d2d2d7; 
-      background: #fff; cursor: pointer; font-size: 0.75rem; font-weight: 600; transition: all 0.2s;
-    }
-    .btn-pa.active { background: #0071e3; color: #fff; border-color: #0071e3; }
-    .btn-pa.denied { background: #ff3b30 !important; color: #fff !important; border-color: #ff3b30 !important; }
+    .metrics-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 15px; }
+    .metric-item { background: #fafafa; padding: 12px; border-radius: 12px; text-align: center; border: 1px solid #f0f0f0; }
+    .metric-item .label { font-size: 0.65rem; text-transform: uppercase; color: #86868b; display: block; margin-bottom: 4px; }
+    .metric-item .value { font-size: 1.2rem; font-weight: 800; color: #1d1d1f; }
 
-    .status-msg { text-align: center; font-weight: 700; padding: 15px; border-radius: 12px; font-size: 0.9rem; }
-    .status-warning { background: #fff2f2; color: #ff3b30; border: 1px solid #ff3b30; }
-    .status-success { background: #e8f5e9; color: #34c759; border: 1px solid #34c759; }
-
-    /* Lorenz Chart */
-    .chart-container { position: relative; height: 350px; }
-    .gini-badge { background: #f0f6ff; padding: 15px; border-radius: 12px; text-align: center; margin-top: 20px; border: 1px solid #d0e3ff; }
-    .gini-val { font-size: 2rem; font-weight: 800; color: #0071e3; }
-
-    .slider-card { background: #1d1d1f; color: #fff; border-radius: 20px; padding: 24px; margin-top: 20px; }
-    .slider-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.85rem; }
-    .slider-val { color: #0071e3; font-weight: 800; }
-
-    /* ── Teoría ── */
+    /* Teoría */
     .theory-card { background: #fff; border-radius: 20px; padding: 32px; border: 1px solid #e5e5e5; line-height: 1.6; }
-    .theory-card h2 { font-size: 1.4rem; margin-bottom: 16px; letter-spacing: -0.5px; }
-    .theory-card h4 { font-size: 0.85rem; text-transform: uppercase; color: #86868b; margin: 24px 0 8px; }
-    
-    .exam-tip {
-      background: #fff2f2; border: 1.5px solid #ff3b30; border-radius: 16px; padding: 24px;
-      color: #1d1d1f; margin-top: 24px;
-    }
-    .exam-tip h5 { font-size: 0.85rem; text-transform: uppercase; color: #ff3b30; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+    .theory-card h2 { font-size: 1.4rem; margin-bottom: 16px; }
+    .theory-card h3 { font-size: 0.85rem; text-transform: uppercase; color: #86868b; margin: 24px 0 12px; }
   </style>
 </head>
 <body>
 
   <nav class="site-nav">
-    <a href="index.html" class="nav-back">
-      <span class="chevron">‹</span> Tema 2
-    </a>
-    <span class="nav-center">Racionamiento del Crédito &nbsp;·&nbsp; Capítulo 10</span>
+    <a href="index.html" class="nav-back"><span class="chevron">‹</span> Tema 2</a>
+    <span class="nav-center">Racionamiento del Crédito · Capítulo 10</span>
     <span class="nav-spacer"></span>
   </nav>
 
@@ -118,91 +98,109 @@
 
   <div class="main-container">
     
-    <div class="tool-section">
-      <!-- Herramienta 1: Principal-Agente -->
-      <div class="card">
-        <h3>🤝 1. El Problema Principal-Agente</h3>
-        <div class="pa-viz" id="paContainer">
-          <div class="pa-node node-principal">PRESTAMISTA<br><small>(Principal)</small></div>
-          <div id="paMiddle" class="node-conflict">CONFLICTO DE<br>INTERESES</div>
-          <div class="pa-node node-agent">PRESTATARIO<br><small>(Agente)</small></div>
+    <div class="visual-section">
+      <div class="dashboard-grid">
+        <!-- Gráfico de Lorenz -->
+        <div class="card">
+          <div class="chart-container">
+            <canvas id="lorenzChart"></canvas>
+          </div>
+          <div class="metrics-summary">
+            <div class="metric-item"><span class="label">Prestatarios (n)</span><span class="value" id="mBorrowers">50%</span></div>
+            <div class="metric-item"><span class="label">Fracción s (i/R)</span><span class="value" id="mS">0.20</span></div>
+            <div class="metric-item" style="border-color: #0071e3; background: #f0f6ff;"><span class="label" style="color:#0071e3">Índice de Gini</span><span class="value" id="mGini" style="color:#0071e3">0.57</span></div>
+          </div>
         </div>
 
-        <div class="btn-panel">
-          <button class="btn-pa" id="btnCollateral" onclick="togglePA('collateral')">Aportar Garantía (Aval)</button>
-          <button class="btn-pa" id="btnEquity" onclick="togglePA('equity')">Aportar Capital Propio</button>
-          <button class="btn-pa" id="btnNoWealth" onclick="setNoWealth()">Sin Riqueza Inicial</button>
-        </div>
+        <!-- Controles -->
+        <div class="controls-card">
+          <div>
+            <h3 style="font-size: 0.7rem; text-transform: uppercase; color: #86868b; margin-bottom: 16px; letter-spacing: 1px;">⚙️ Población</h3>
+            <div class="slider-group">
+              <div class="slider-header"><span>Excluidos (u)</span> <span id="valU" class="slider-value">40%</span></div>
+              <input type="range" id="paramU" min="0" max="80" value="40" step="1">
+            </div>
+            <div class="slider-group">
+              <div class="slider-header"><span>Prestamistas (p)</span> <span id="valP" class="slider-value">10%</span></div>
+              <input type="range" id="paramP" min="1" max="20" value="10" step="1">
+            </div>
+          </div>
 
-        <div id="paStatus" class="status-msg status-warning">Racionamiento de Crédito: Préstamo Denegado</div>
+          <div style="margin-top: 10px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);">
+            <h3 style="font-size: 0.7rem; text-transform: uppercase; color: #86868b; margin-bottom: 16px; letter-spacing: 1px;">💰 Mercado</h3>
+            <div class="slider-group">
+              <div class="slider-header"><span>Interés (i)</span> <span id="valI" class="slider-value">10</span></div>
+              <input type="range" id="paramI" min="5" max="50" value="10" step="1">
+            </div>
+            <div class="slider-group">
+              <div class="slider-header"><span>Rendimiento (R)</span> <span id="valR" class="slider-value">50</span></div>
+              <input type="range" id="paramR" min="51" max="150" value="50" step="1">
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Herramienta 2: Lorenz y Desigualdad -->
-      <div class="card">
-        <h3>📊 2. Curva de Lorenz y Exclusión Financiera</h3>
-        <div class="chart-container">
-          <canvas id="lorenzChart"></canvas>
-        </div>
-        
-        <div class="gini-badge">
-          <div style="font-size: 0.7rem; font-weight: 700; color: #6e6e73; text-transform: uppercase;">Coeficiente de Gini</div>
-          <div id="giniVal" class="gini-val">0.57</div>
-        </div>
-
-        <div class="slider-card">
-          <div class="slider-header">
-            <span>Prestatarios Excluidos (Sin Riqueza)</span>
-            <span class="slider-val" id="valExcluded">10%</span>
+      <!-- Panel Matemático -->
+      <div class="math-card">
+        <h3 style="font-size: 0.8rem; text-transform: uppercase; color: #86868b; margin-bottom: 16px; letter-spacing: 0.5px;">📐 Cálculo de Desigualdad (Gini)</h3>
+        <div class="math-grid">
+          <div style="font-size: 0.85rem;">
+            <p><strong>Relación de Reparto (s):</strong> Fracción del rendimiento que el prestatario paga al prestamista:</p>
+            <div id="formula-s" style="margin: 15px 0;"></div>
           </div>
-          <input type="range" id="paramExcluded" min="0" max="40" value="10" step="1">
-          <p style="font-size: 0.75rem; color: #86868b; margin-top: 12px;">Al aumentar la exclusión, la curva de Lorenz se desplaza a la derecha y la desigualdad (Gini) aumenta.</p>
+          <div style="font-size: 0.85rem;">
+            <p><strong>Ecuación de Gini:</strong> Basada en los tres tramos de la curva de Lorenz:</p>
+            <div id="formula-gini" style="margin: 15px 0;"></div>
+          </div>
         </div>
+        <div class="formula-display" id="giniResultDisplay"></div>
       </div>
     </div>
 
-    <!-- Columna Derecha -->
+    <!-- COLUMNA TEORÍA -->
     <div class="theory-section">
       <div class="theory-card">
         <h2>Racionamiento y Desigualdad</h2>
+        <p>El mercado de crédito no es como el mercado del pan. El <strong>problema principal-agente</strong> impide que los contratos sean completos.</p>
         
-        <h4>Contexto Teórico</h4>
-        <p>El mercado de crédito sufre un <strong>problema principal-agente</strong>: el prestamista (principal) no puede verificar si el prestatario (agente) utilizará el dinero de forma diligente o si se esforzará al máximo para que el proyecto tenga éxito.</p>
-        
-        <h4>Soluciones del Mercado</h4>
-        <p style="margin-top:10px;">Para alinear intereses, los bancos exigen que el deudor "se juegue algo":</p>
-        <ul style="margin-left: 20px; margin-top: 10px; font-size: 0.9rem; color: #3a3a3c;">
-          <li><strong>Capital Propio:</strong> El prestatario invierte parte de su propio dinero.</li>
-          <li><strong>Garantía (Aval):</strong> El prestatario cede un activo si no paga el préstamo.</li>
-        </ul>
+        <h3>¿Por qué hay exclusión?</h3>
+        <p>Los prestamistas exigen riqueza (avales o capital propio) para asegurar que el prestatario se esfuerce. Los agentes sin riqueza son <strong>excluidos</strong>.</p>
 
-        <h4>Consecuencias Sociales</h4>
-        <p style="margin-top:10px;">Aquellos sin riqueza sufren <strong>racionamiento de crédito</strong>. Pueden estar <strong>restringidos</strong> (condiciones peores) o directamente <strong>excluidos</strong>, lo que perpetúa la desigualdad heredada.</p>
+        <h3>Estructura de la Curva de Lorenz</h3>
+        <p>En este modelo la población se divide en:</p>
+        <ul style="margin-left: 20px; font-size: 0.9rem; color: #3a3a3c;">
+          <li><strong>Excluidos (u):</strong> Tienen ingreso 0. La curva es plana.</li>
+          <li><strong>Prestatarios (n):</strong> Reciben el rendimiento neto $(R - i)$.</li>
+          <li><strong>Prestamistas (p):</strong> Reciben el interés $i$ de los préstamos.</li>
+        </ul>
       </div>
 
-      <div class="exam-tip">
-        <h5>🎓 ¡Atención al Test!</h5>
-        <p><strong>1) Contratos:</strong> El problema no se soluciona con contratos legales sobre el "esfuerzo", porque el esfuerzo es <strong>no verificable</strong>.</p>
-        <p style="margin-top: 12px;"><strong>2) Racionamiento:</strong> Es el resultado directo de la información asimétrica. El mercado no se vacía simplemente bajando el precio.</p>
-        <p style="margin-top: 12px;"><strong>3) Gini:</strong> Matemáticamente, si aumenta el número de personas con ingreso cero (excluidos), la curva de Lorenz se mantiene plana más tiempo sobre el eje X, aumentando el Coeficiente de Gini.</p>
+      <div class="exam-tip" style="background:#fff9e6; border:1.5px solid #ffcc00; border-radius:16px; padding:24px; color:#5c4d00;">
+        <h4 style="font-size:0.85rem; text-transform:uppercase; color:#b38f00; margin-bottom:10px;">🎓 Tip de Examen</h4>
+        <p>El Coeficiente de Gini aumenta si sube el número de excluidos, si sube la tasa de interés o si baja el rendimiento del proyecto. Cualquiera de estos factores aleja la curva de Lorenz de la línea de igualdad.</p>
       </div>
     </div>
 
   </div>
 
   <script>
-    let lorenzChart;
-    let paState = { collateral: false, equity: false };
+    let chart;
+    let u = 0.40, p = 0.10, i_rate = 10, R_yield = 50;
 
-    function initLorenz() {
+    function kHTML(latex, display = false) {
+      return katex.renderToString(latex, { throwOnError: false, displayMode: display });
+    }
+
+    function initChart() {
       const ctx = document.getElementById('lorenzChart').getContext('2d');
-      lorenzChart = new Chart(ctx, {
+      chart = new Chart(ctx, {
         type: 'line',
         data: {
           datasets: [
             { label: 'Igualdad Perfecta', data: [{x:0,y:0}, {x:100,y:100}], borderColor: '#d2d2d7', borderDash: [5,5], pointRadius: 0, fill: false },
             { 
-              label: 'Curva de Lorenz', data: [], borderColor: '#0071e3', borderWidth: 3, 
-              fill: true, backgroundColor: 'rgba(0, 113, 227, 0.05)', tension: 0, pointRadius: 4 
+              label: 'Curva de Lorenz', data: [], borderColor: '#0071e3', borderWidth: 4, 
+              fill: true, backgroundColor: 'rgba(0, 113, 227, 0.05)', tension: 0, pointRadius: 6, pointBackgroundColor: '#0071e3'
             }
           ]
         },
@@ -216,79 +214,67 @@
       });
     }
 
-    function togglePA(type) {
-      paState[type] = !paState[type];
-      document.getElementById('btn' + type.charAt(0).toUpperCase() + type.slice(1)).classList.toggle('active');
-      updatePA();
-    }
-
-    function setNoWealth() {
-      paState = { collateral: false, equity: false };
-      document.getElementById('btnCollateral').classList.remove('active');
-      document.getElementById('btnEquity').classList.remove('active');
-      updatePA();
-    }
-
-    function updatePA() {
-      const middle = document.getElementById('paMiddle');
-      const status = document.getElementById('paStatus');
+    function updateAll() {
+      const n = 1 - u - p; // Fracción de prestatarios
+      const s = i_rate / R_yield; // Participación del prestamista
       
-      if (paState.collateral || paState.equity) {
-        middle.innerHTML = "ALINEACIÓN DE<br>INTERESES";
-        middle.className = "node-conflict node-align";
-        middle.style.display = "flex";
-        status.innerHTML = "✅ Préstamo Concedido: Riesgo mitigado";
-        status.className = "status-msg status-success";
-      } else {
-        middle.innerHTML = "CONFLICTO DE<br>INTERESES";
-        middle.className = "node-conflict";
-        middle.style.display = "flex";
-        status.innerHTML = "🚫 Racionamiento de Crédito: Préstamo Denegado";
-        status.className = "status-msg status-warning";
-      }
-    }
+      // Coeficiente de Gini: g = u + n - s(1-u)
+      const gini = u + n - s * (1 - u);
 
-    function updateLorenz(excluded) {
-      // 3 grupos: Excluidos (0 income), Prestatarios (income share s), Prestamistas (rest)
-      // Supuestos: 10% son Prestamistas, el resto se divide entre Excluidos y Prestatarios
-      const lendersPop = 10;
-      const totalIncome = 100;
-      const borrowerShare = 40; // Los prestatarios se quedan con el 40% del ingreso tras pagar intereses
-      
-      const popExcluded = excluded;
-      const popBorrowers = 100 - lendersPop - popExcluded;
-      
+      // Puntos Lorenz
       const lorenzData = [
         { x: 0, y: 0 },
-        { x: popExcluded, y: 0 },
-        { x: popExcluded + popBorrowers, y: borrowerShare },
+        { x: u * 100, y: 0 },
+        { x: (u + n) * 100, y: n * (1 - s) * 100 },
         { x: 100, y: 100 }
       ];
 
-      // Cálculo Gini (Simplificado para el modelo de 3 tramos)
-      // G = 1 - 2 * Area under Lorenz
-      // Area = Sum of trapezoids
-      const a1 = 0; // excluded tramo
-      const a2 = 0.5 * (borrowerShare/100) * (popBorrowers/100);
-      const a3 = 0.5 * (borrowerShare/100 + 1) * (lendersPop/100);
-      const area = a1 + a2 + a3;
-      const gini = (1 - 2 * area).toFixed(2);
+      chart.data.datasets[1].data = lorenzData;
+      chart.update();
 
-      lorenzChart.data.datasets[1].data = lorenzData;
-      lorenzChart.update();
+      // UI
+      document.getElementById('valU').textContent = Math.round(u * 100) + '%';
+      document.getElementById('valP').textContent = Math.round(p * 100) + '%';
+      document.getElementById('valI').textContent = i_rate;
+      document.getElementById('valR').textContent = R_yield;
       
-      document.getElementById('giniVal').textContent = gini;
-      document.getElementById('valExcluded').textContent = excluded + '%';
+      document.getElementById('mBorrowers').textContent = Math.round(n * 100) + '%';
+      document.getElementById('mS').textContent = s.toFixed(2);
+      document.getElementById('mGini').textContent = gini.toFixed(2);
+
+      // Fórmulas
+      document.getElementById('formula-s').innerHTML = kHTML(`s = \\frac{i}{R} = \\frac{${i_rate}}{${R_yield}} = ${s.toFixed(2)}`);
+      document.getElementById('formula-gini').innerHTML = kHTML('g = u + n - s(1 - u)');
+      
+      const giniLatex = `g = ${u.toFixed(2)} + ${n.toFixed(2)} - ${s.toFixed(2)}(1 - ${u.toFixed(2)}) = ${gini.toFixed(2)}`;
+      document.getElementById('giniResultDisplay').innerHTML = kHTML(giniLatex, true);
     }
 
-    document.getElementById('paramExcluded').addEventListener('input', (e) => {
-      updateLorenz(parseInt(e.target.value));
+    // Listeners
+    document.getElementById('paramU').addEventListener('input', (e) => { 
+      u = e.target.value / 100; 
+      if (u + p > 0.95) p = 0.95 - u;
+      updateAll(); 
+    });
+    document.getElementById('paramP').addEventListener('input', (e) => { 
+      p = e.target.value / 100; 
+      if (u + p > 0.95) u = 0.95 - p;
+      updateAll(); 
+    });
+    document.getElementById('paramI').addEventListener('input', (e) => { 
+      i_rate = parseInt(e.target.value); 
+      if (i_rate >= R_yield) R_yield = i_rate + 1;
+      updateAll(); 
+    });
+    document.getElementById('paramR').addEventListener('input', (e) => { 
+      R_yield = parseInt(e.target.value); 
+      if (R_yield <= i_rate) i_rate = R_yield - 1;
+      updateAll(); 
     });
 
     document.addEventListener('DOMContentLoaded', () => {
-      initLorenz();
-      updateLorenz(10);
-      updatePA();
+      initChart();
+      updateAll();
     });
   </script>
 </body>
