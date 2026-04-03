@@ -129,11 +129,11 @@
         <div class="slider-panel">
           <div class="slider-group">
             <div class="slider-header"><span>Tasa de Interés Oficial (BC)</span> <span id="valOfficial" class="slider-label-val">1.0%</span></div>
-            <input type="range" id="paramOfficial" min="0" max="10" value="1" step="0.25">
+            <input type="range" id="paramOfficial" min="0" max="100" value="10" step="1">
           </div>
           <div class="slider-group">
             <div class="slider-header"><span>Margen Bancario (Riesgo)</span> <span id="valMargin" class="slider-label-val">1.5%</span></div>
-            <input type="range" id="paramMargin" min="0" max="10" value="1.5" step="0.25">
+            <input type="range" id="paramMargin" min="0" max="100" value="15" step="1">
           </div>
         </div>
       </div>
@@ -150,11 +150,11 @@
         <div class="slider-panel">
           <div class="slider-group">
             <div class="slider-header"><span>Pago Futuro (X)</span> <span id="valX" class="slider-label-val">$100</span></div>
-            <input type="range" id="paramX" min="50" max="200" value="100" step="5">
+            <input type="range" id="paramX" min="0" max="100" value="50" step="1">
           </div>
           <div class="slider-group">
             <div class="slider-header"><span>Tasa de Interés del Mercado (i)</span> <span id="valI" class="slider-label-val">10%</span></div>
-            <input type="range" id="paramI" min="1" max="50" value="10" step="1">
+            <input type="range" id="paramI" min="0" max="100" value="10" step="1">
           </div>
         </div>
       </div>
@@ -169,7 +169,7 @@
         <div class="slider-panel">
           <div class="slider-group">
             <div class="slider-header"><span>Tasa de Interés del Mercado (i)</span> <span id="valICons" class="slider-label-val">10%</span></div>
-            <input type="range" id="paramICons" min="5" max="80" value="10" step="1">
+            <input type="range" id="paramICons" min="0" max="100" value="10" step="1">
           </div>
           <p style="font-size: 0.75rem; color: #86868b; margin-top: 12px;">Desplaza el punto para ver cómo los hogares aumentan su gasto hoy cuando el crédito es más barato.</p>
         </div>
@@ -211,8 +211,8 @@
     }
 
     function updateMoneyTool() {
-      const off = parseFloat(document.getElementById('paramOfficial').value);
-      const mar = parseFloat(document.getElementById('paramMargin').value);
+      const off = parseFloat(document.getElementById('paramOfficial').value) / 10;
+      const mar = parseFloat(document.getElementById('paramMargin').value) / 10;
       const final = off + mar;
 
       document.getElementById('valOfficial').textContent = off.toFixed(2) + '%';
@@ -224,7 +224,7 @@
     }
 
     function updateVPTool() {
-      const x = parseFloat(document.getElementById('paramX').value);
+      const x = (parseFloat(document.getElementById('paramX').value) * 2); // 0-100 -> $0-$200
       const i = parseFloat(document.getElementById('paramI').value) / 100;
       const vp = x / (1 + i);
 
@@ -250,12 +250,12 @@
           datasets: [
             {
               label: 'Demanda de Préstamos',
-              data: [{x: 30, y: 100}, {x: 70, y: 0}], // Línea con pendiente negativa
+              data: [{x: 0, y: 100}, {x: 100, y: 0}], // Línea completa
               borderColor: '#0071e3', borderWidth: 3, pointRadius: 0, fill: false
             },
             {
               label: 'Punto Actual',
-              data: [{x: 58, y: 10}],
+              data: [{x: 90, y: 10}],
               type: 'scatter', pointRadius: 10, backgroundColor: '#ff3b30'
             }
           ]
@@ -273,9 +273,7 @@
 
     function updateConsumptionTool() {
       const i = parseFloat(document.getElementById('paramICons').value);
-      // Ecuación demanda: p = 100 - 1.42 * q  => q = (100 - p) / 1.42
-      // Para p=78, q≈15. Para p=10, q≈63. (Ajustado para el ejemplo solicitado)
-      const q = (100 - i) / 1.5 + 5; 
+      const q = 100 - i; // Relación lineal simple 1 a 1 para el ejemplo
 
       document.getElementById('valICons').textContent = i + '%';
       consumptionChart.data.datasets[1].data = [{x: q, y: i}];

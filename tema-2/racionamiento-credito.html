@@ -118,23 +118,23 @@
             <h3 style="font-size: 0.7rem; text-transform: uppercase; color: #86868b; margin-bottom: 16px; letter-spacing: 1px;">⚙️ Población</h3>
             <div class="slider-group">
               <div class="slider-header"><span>Excluidos (u)</span> <span id="valU" class="slider-value">40%</span></div>
-              <input type="range" id="paramU" min="0" max="80" value="40" step="1">
+              <input type="range" id="paramU" min="0" max="100" value="40" step="1">
             </div>
             <div class="slider-group">
               <div class="slider-header"><span>Prestamistas (p)</span> <span id="valP" class="slider-value">10%</span></div>
-              <input type="range" id="paramP" min="1" max="20" value="10" step="1">
+              <input type="range" id="paramP" min="0" max="100" value="10" step="1">
             </div>
           </div>
 
           <div style="margin-top: 10px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);">
             <h3 style="font-size: 0.7rem; text-transform: uppercase; color: #86868b; margin-bottom: 16px; letter-spacing: 1px;">💰 Mercado</h3>
             <div class="slider-group">
-              <div class="slider-header"><span>Interés (i)</span> <span id="valI" class="slider-value">10</span></div>
-              <input type="range" id="paramI" min="5" max="50" value="10" step="1">
+              <div class="slider-header"><span>Interés (i)</span> <span id="valI" class="slider-value">10%</span></div>
+              <input type="range" id="paramI" min="0" max="100" value="10" step="1">
             </div>
             <div class="slider-group">
-              <div class="slider-header"><span>Rendimiento (R)</span> <span id="valR" class="slider-value">50</span></div>
-              <input type="range" id="paramR" min="51" max="150" value="50" step="1">
+              <div class="slider-header"><span>Rendimiento (R)</span> <span id="valR" class="slider-value">50%</span></div>
+              <input type="range" id="paramR" min="0" max="100" value="50" step="1">
             </div>
           </div>
         </div>
@@ -253,22 +253,28 @@
     // Listeners
     document.getElementById('paramU').addEventListener('input', (e) => { 
       u = e.target.value / 100; 
-      if (u + p > 0.95) p = 0.95 - u;
+      if (u + p > 0.98) p = 0.98 - u; // Margen para prestatarios
       updateAll(); 
     });
     document.getElementById('paramP').addEventListener('input', (e) => { 
       p = e.target.value / 100; 
-      if (u + p > 0.95) u = 0.95 - p;
+      if (u + p > 0.98) u = 0.98 - p;
       updateAll(); 
     });
     document.getElementById('paramI').addEventListener('input', (e) => { 
       i_rate = parseInt(e.target.value); 
-      if (i_rate >= R_yield) R_yield = i_rate + 1;
+      if (i_rate >= R_yield) {
+        R_yield = i_rate + 5; // Mantener R > i
+        document.getElementById('paramR').value = R_yield;
+      }
       updateAll(); 
     });
     document.getElementById('paramR').addEventListener('input', (e) => { 
       R_yield = parseInt(e.target.value); 
-      if (R_yield <= i_rate) i_rate = R_yield - 1;
+      if (R_yield <= i_rate) {
+        i_rate = Math.max(0, R_yield - 5);
+        document.getElementById('paramI').value = i_rate;
+      }
       updateAll(); 
     });
 
