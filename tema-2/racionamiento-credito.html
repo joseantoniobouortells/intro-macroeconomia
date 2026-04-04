@@ -216,7 +216,7 @@
 
     function updateAll() {
       const n = 1 - u - p; // Fracción de prestatarios
-      const s = i_rate / R_yield; // Participación del prestamista
+      const s = 1 - (i_rate / R_yield); // Participación del prestatario (R-i)/R
       
       // Coeficiente de Gini: g = u + n - s(1-u)
       const gini = u + n - s * (1 - u);
@@ -225,7 +225,7 @@
       const lorenzData = [
         { x: 0, y: 0 },
         { x: u * 100, y: 0 },
-        { x: (u + n) * 100, y: n * (1 - s) * 100 },
+        { x: (u + n) * 100, y: n * s * 100 },
         { x: 100, y: 100 }
       ];
 
@@ -235,15 +235,15 @@
       // UI
       document.getElementById('valU').textContent = Math.round(u * 100) + '%';
       document.getElementById('valP').textContent = Math.round(p * 100) + '%';
-      document.getElementById('valI').textContent = i_rate;
-      document.getElementById('valR').textContent = R_yield;
+      document.getElementById('valI').textContent = i_rate + '%';
+      document.getElementById('valR').textContent = R_yield + '%';
       
       document.getElementById('mBorrowers').textContent = Math.round(n * 100) + '%';
       document.getElementById('mS').textContent = s.toFixed(2);
       document.getElementById('mGini').textContent = gini.toFixed(2);
 
       // Fórmulas
-      document.getElementById('formula-s').innerHTML = kHTML(`s = \\frac{i}{R} = \\frac{${i_rate}}{${R_yield}} = ${s.toFixed(2)}`);
+      document.getElementById('formula-s').innerHTML = kHTML(`s = 1 - \\frac{i}{R} = 1 - \\frac{${i_rate}}{${R_yield}} = ${s.toFixed(2)}`);
       document.getElementById('formula-gini').innerHTML = kHTML('g = u + n - s(1 - u)');
       
       const giniLatex = `g = ${u.toFixed(2)} + ${n.toFixed(2)} - ${s.toFixed(2)}(1 - ${u.toFixed(2)}) = ${gini.toFixed(2)}`;
