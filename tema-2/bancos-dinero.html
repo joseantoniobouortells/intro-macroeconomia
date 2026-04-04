@@ -125,7 +125,7 @@
           </div>
           <div class="slider-group">
             <div class="slider-header"><span>Cupón Anual (C)</span> <span id="valC" class="slider-label-val">$50</span></div>
-            <input type="range" id="paramC" min="0" max="100" value="25" step="1">
+            <input type="range" id="paramC" min="0" max="200" value="50" step="1">
           </div>
           <div class="slider-group">
             <div class="slider-header"><span>Vencimiento (años)</span> <span id="valT" class="slider-label-val">5</span></div>
@@ -189,7 +189,7 @@
 
     function updateBondTool() {
       const X = parseFloat(document.getElementById('paramX').value) * 20; // 0-100 -> 0-2000
-      const C = (parseFloat(document.getElementById('paramC').value) / 100) * (X * 0.2); // Cupón hasta 20% de X
+      const C = parseFloat(document.getElementById('paramC').value); // Valor nominal directo
       const t = Math.max(1, Math.round((parseFloat(document.getElementById('paramT').value) / 100) * 30)); // 1-30 años
       const i = parseFloat(document.getElementById('paramI').value) / 400; // 0-100 -> 0-25%
 
@@ -211,11 +211,11 @@
 
       // UI Updates
       document.getElementById('valX').textContent = '$' + Math.round(X);
-      document.getElementById('valC').textContent = '$' + Math.round(C);
+      document.getElementById('valC').textContent = '$' + C.toFixed(2);
       document.getElementById('valT').textContent = t;
       document.getElementById('valI').textContent = (i * 100).toFixed(1) + '%';
       document.getElementById('vpValue').textContent = '$' + totalVP.toFixed(2);
-      document.getElementById('vpBreakdown').textContent = `Cupones: $${couponVP.toFixed(0)} + Principal: $${principalVP.toFixed(0)}`;
+      document.getElementById('vpBreakdown').textContent = `Cupones: $${couponVP.toFixed(2)} + Principal: $${principalVP.toFixed(2)}`;
 
       // Chart Update
       flowsChart.data.labels = chartLabels;
