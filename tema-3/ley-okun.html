@@ -84,7 +84,7 @@
 
   <nav class="site-nav">
     <a href="index.html" class="nav-back"><span class="chevron">‹</span> Tema 3</a>
-    <span class="nav-center">Fluctuaciones e Inflación · Capítulo 13</span>
+    <span class="nav-center">Fluctuaciones Económicas · Capítulo 13</span>
     <span class="nav-spacer"></span>
   </nav>
 
@@ -149,7 +149,7 @@
         </ul>
 
         <h3>Umbral de Crecimiento</h3>
-        <p style="margin-top: 10px;">Para que el desempleo se mantenga constante ($\Delta u = 0$), el PIB debe crecer a una tasa igual a $-\alpha / \beta$. Si el crecimiento es menor, el desempleo sube.</p>
+        <p style="margin-top: 10px;">Para que el desempleo se mantenga constante (<span id="math-u-zero"></span>), el PIB debe crecer a una tasa igual a <span id="math-threshold-val"></span>. Si el crecimiento es menor, el desempleo sube.</p>
       </div>
 
       <div class="exam-tip">
@@ -221,6 +221,9 @@
 
       // 4. Fórmulas
       document.getElementById('math-eq').innerHTML = kHTML('\\Delta u = \\alpha + \\beta \\times \\text{Crecimiento PIB}');
+      document.getElementById('math-u-zero').innerHTML = kHTML('\\Delta u = 0');
+      document.getElementById('math-threshold-val').innerHTML = kHTML('-\\alpha / \\beta');
+      
       const calculation = `\\Delta u = ${alpha.toFixed(1)} + (${beta.toFixed(2)}) \\times ${gdp.toFixed(1)} = ${deltaU.toFixed(2)}`;
       document.getElementById('math-formula-display').innerHTML = kHTML(calculation, true);
     }
