@@ -66,6 +66,14 @@ Este documento centraliza la lógica económica y los estándares de construcci�
 - **Exclusión Financiera:** Los hogares sin riqueza no pueden aportar avales, siendo excluidos del mercado crediticio o restringidos a peores condiciones.
 - **Impacto en Gini:** El racionamiento del crédito aumenta la desigualdad al impedir que los agentes sin riqueza inviertan en su productividad.
 
+## 📘 Lógica Económica (Capítulos 13-15 CORE) — TEMA 3
+
+### 📉 Ley de Okun
+- **Definición:** Relación empírica negativa entre el crecimiento del PIB y el cambio en el desempleo.
+- **Ecuación:** $\Delta u = \alpha + \beta \times \text{Crecimiento PIB}$.
+- **Coeficiente β:** Indica la sensibilidad del mercado laboral (típicamente entre -0.3 y -0.5).
+- **Auge vs Recesión:** En auges (PIB > umbral), Δu es negativo. En recesiones, Δu es positivo.
+
 ## 🎨 Estándares de UI (Apple Ecosystem Style)
 
 Para mantener la consistencia visual y el ahorro de tokens, **use SIEMPRE** estas clases CSS definidas en `assets/style.css`:

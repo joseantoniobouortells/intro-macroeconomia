@@ -24,6 +24,10 @@ Este mapa permite a los agentes de IA localizar la lógica del proyecto rápidam
     - `bancos-dinero.html`: Creación de dinero y Valor Presente.
     - `racionamiento-credito.html`: Problema principal-agente y exclusión financiera.
 
+- `tema-3/`: Fluctuaciones e Inflación (Capítulos 13-15 CORE).
+    - `index.html`: Menú de herramientas del tema.
+    - `ley-okun.html`: Correlación PIB vs Desempleo.
+
 ## 🧠 Núcleo de Inteligencia (Assets)
 - `tema-1/assets/style.css`: Estilos UI Apple-style unificados (heredado por Tema 2).
 - `tema-1/assets/economic-logic.js`: **Tema 1** — Contiene las fórmulas de WS, PS y Equilibrio de Nash.
