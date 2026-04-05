@@ -91,38 +91,31 @@
   <div class="main-container">
     
     <div class="visual-section">
+      <!-- 1. Simulador Teórico -->
       <div class="dashboard-grid">
-        <!-- Gráfico de Okun -->
         <div class="card">
           <div class="chart-container">
             <canvas id="okunChart"></canvas>
           </div>
         </div>
 
-        <!-- Controles -->
         <div class="controls-card">
           <h3 style="font-size: 0.7rem; text-transform: uppercase; color: #86868b; margin-bottom: 10px; letter-spacing: 1px;">⚙️ Variables del Modelo</h3>
-          
           <div class="slider-group">
             <div class="slider-header"><span>Crecimiento PIB Actual</span> <span id="valGDP" class="slider-value">2.0%</span></div>
             <input type="range" id="paramGDP" min="0" max="100" value="46" step="1">
           </div>
-
           <div class="slider-group">
             <div class="slider-header"><span>Intersección (α)</span> <span id="valAlpha" class="slider-value">1.5%</span></div>
             <input type="range" id="paramAlpha" min="0" max="100" value="30" step="1">
           </div>
-
           <div class="slider-group">
             <div class="slider-header"><span>Coeficiente (β)</span> <span id="valBeta" class="slider-value">-0.4</span></div>
             <input type="range" id="paramBeta" min="0" max="100" value="40" step="1">
           </div>
-
-          <p style="font-size: 0.75rem; color: #86868b; margin-top: 10px;">Ajusta los parámetros para ver cómo cambia la sensibilidad del mercado laboral ante el crecimiento.</p>
         </div>
       </div>
 
-      <!-- Panel Matemático -->
       <div class="math-card">
         <h3 style="font-size: 0.8rem; text-transform: uppercase; color: #86868b; margin-bottom: 16px; letter-spacing: 0.5px;">📐 Cálculo en Tiempo Real</h3>
         <div id="math-formula-display" style="text-align: center; margin-bottom: 15px;"></div>
@@ -132,24 +125,18 @@
         </div>
       </div>
 
-      <!-- 📊 Herramienta 2: Datos Históricos (Dispersión) -->
+      <!-- 2. Evidencia Empírica -->
       <div class="card" style="padding: 0; overflow: hidden;">
         <div style="padding: 24px 24px 0;">
           <h3 style="font-size: 0.9rem; text-transform: uppercase; color: #1d1d1f; margin-bottom: 16px; letter-spacing: 0.5px;">📊 Evidencia Empírica (2000-2023)</h3>
         </div>
-        
         <div style="display: grid; grid-template-columns: 1fr 320px; border-top: 1px solid #f0f0f0;">
-          <!-- Gráfico -->
           <div style="padding: 24px; border-right: 1px solid #f0f0f0;">
             <div class="chart-container" style="height: 380px;">
               <canvas id="historicalChart"></canvas>
             </div>
-            <p style="font-size: 0.75rem; color: #86868b; margin-top: 15px; text-align: center;">Cada punto representa un año. La línea roja muestra la regresión de los datos.</p>
           </div>
-
-          <!-- Datos y Estadísticas -->
           <div style="background: #fafafa; display: flex; flex-direction: column;">
-            <!-- Mini Card Estadísticas -->
             <div style="padding: 20px; background: #fff; border-bottom: 1px solid #f0f0f0;">
               <h4 style="font-size: 0.65rem; text-transform: uppercase; color: #86868b; margin-bottom: 12px;">Parámetros de Regresión</h4>
               <div style="display: flex; gap: 15px; justify-content: center;">
@@ -157,8 +144,6 @@
                 <div id="math-beta-emp" style="font-size: 0.9rem;"></div>
               </div>
             </div>
-
-            <!-- Tabla -->
             <div style="flex: 1; overflow-y: auto; height: 350px;">
               <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem;">
                 <thead style="position: sticky; top: 0; background: #f5f5f7; z-index: 5;">
@@ -168,9 +153,7 @@
                     <th style="padding: 10px; text-align: right; border-bottom: 1px solid #e5e5e5;">Δu</th>
                   </tr>
                 </thead>
-                <tbody id="historicalTableBody">
-                  <!-- Inyectado por JS -->
-                </tbody>
+                <tbody id="historicalTableBody"></tbody>
               </table>
             </div>
           </div>
@@ -182,27 +165,21 @@
     <div class="theory-section">
       <div class="theory-card">
         <h2>La Ley de Okun</h2>
-        <p>La Ley de Okun describe la relación empírica entre el crecimiento del producto (PIB) y los cambios en el desempleo.</p>
-        
+        <p>Describe la relación empírica negativa entre el crecimiento del producto y los cambios en el desempleo.</p>
         <h3>La Ecuación</h3>
-        <p>Se suele expresar como una regresión lineal:</p>
         <div style="background: #f0f6ff; padding: 12px; border-radius: 8px; margin: 10px 0; text-align: center;" id="math-eq"></div>
-        
         <ul style="margin-left: 20px; font-size: 0.9rem; color: #3a3a3c; margin-top: 15px;">
-          <li><strong>α (Alfa):</strong> Cambio en desempleo si el PIB creciera al 0%.</li>
-          <li><strong>β (Beta):</strong> El "coeficiente de Okun". Indica cuánto baja el desempleo por cada 1% adicional de crecimiento.</li>
+          <li><strong>α (Alfa):</strong> Intersección en el eje Y.</li>
+          <li><strong>β (Beta):</strong> Sensibilidad del mercado laboral.</li>
         </ul>
-
         <h3>Umbral de Crecimiento</h3>
-        <p style="margin-top: 10px;">Para que el desempleo se mantenga constante (<span id="math-u-zero"></span>), el PIB debe crecer a una tasa igual a <span id="math-threshold-val"></span>. Si el crecimiento es menor, el desempleo sube.</p>
+        <p style="margin-top: 10px;">Para mantener el desempleo constante (<span id="math-u-zero"></span>), el PIB debe crecer a una tasa de <span id="math-threshold-val"></span>.</p>
       </div>
-
       <div class="exam-tip">
         <h4>🎓 Tip de Examen</h4>
-        <p>La Ley de Okun implica que el cambio en el desempleo es <strong>negativo</strong> en los auges económicos (alto crecimiento) y <strong>positivo</strong> en las recesiones (bajo o nulo crecimiento).</p>
+        <p>El cambio en el desempleo es negativo en auges y positivo en recesiones.</p>
       </div>
     </div>
-
   </div>
 
   <script>
@@ -212,96 +189,6 @@
     function kHTML(latex, display = false) {
       return katex.renderToString(latex, { throwOnError: false, displayMode: display });
     }
-function initHistoricalChart() {
-  const ctx = document.getElementById('historicalChart').getContext('2d');
-
-  // Parámetros estructurales de la simulación
-  const alpha_emp = 1.6;
-  const beta_emp = -0.38;
-
-  // Generar datos inventados 2000-2023 con tendencia negativa
-  const points = [];
-  const years = Array.from({length: 24}, (_, i) => 2000 + i);
-  let tableHtml = '';
-
-  years.forEach(year => {
-    const x_val = -1.5 + Math.random() * 7.5; // PIB entre -1.5% y 6%
-    const noise = (Math.random() - 0.5) * 1.2;
-    const y_val = alpha_emp + beta_emp * x_val + noise;
-    points.push({ x: x_val, y: y_val, year: year });
-
-    // Crear fila de tabla
-    const pibColor = x_val > 0 ? '#2e7d32' : '#ff3b30';
-    const duColor = y_val > 0 ? '#ff3b30' : '#2e7d32';
-    tableHtml += `
-      <tr style="border-bottom: 1px solid #f5f5f7;">
-        <td style="padding: 10px; font-weight: 600;">${year}</td>
-        <td style="padding: 10px; text-align: right; color: ${pibColor}; font-weight: 500;">${x_val > 0 ? '+' : ''}${x_val.toFixed(1)}%</td>
-        <td style="padding: 10px; text-align: right; color: ${duColor}; font-weight: 500;">${y_val > 0 ? '+' : ''}${y_val.toFixed(1)}%</td>
-      </tr>
-    `;
-  });
-
-  // Inyectar Tabla
-  document.getElementById('historicalTableBody').innerHTML = tableHtml;
-
-  // Inyectar Estadísticas
-  document.getElementById('math-alpha-emp').innerHTML = kHTML(`\\alpha = ${alpha_emp.toFixed(2)}`);
-  document.getElementById('math-beta-emp').innerHTML = kHTML(`\\beta = ${beta_emp.toFixed(2)}`);
-
-  // Calcular línea de tendencia
-  const trendLine = [
-    { x: -3, y: alpha_emp + beta_emp * (-3) },
-    { x: 8, y: alpha_emp + beta_emp * 8 }
-  ];
-
-  historicalChart = new Chart(ctx, {
-...
-        type: 'scatter',
-        data: {
-          datasets: [
-            {
-              label: 'Datos Anuales',
-              data: points,
-              backgroundColor: 'rgba(0, 113, 227, 0.6)',
-              pointRadius: 6,
-              pointHoverRadius: 8
-            },
-            {
-              label: 'Línea de Ajuste',
-              data: trendLine,
-              type: 'line',
-              borderColor: '#ff3b30',
-              borderWidth: 2,
-              borderDash: [5, 5],
-              pointRadius: 0,
-              fill: false
-            }
-          ]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false, animation: false,
-          scales: {
-            x: { type: 'linear', min: -3, max: 8, title: { display: true, text: 'Crecimiento PIB (%)', font: { weight: 'bold' } } },
-            y: { type: 'linear', min: -3, max: 5, title: { display: true, text: 'Cambio en Desempleo Δu (%)', font: { weight: 'bold' } } }
-          },
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label: (ctx) => {
-                  if (ctx.datasetIndex === 0) {
-                    const d = ctx.raw;
-                    return `Año ${d.year}: PIB ${d.x.toFixed(1)}%, Δu ${d.y.toFixed(1)}%`;
-                  }
-                  return 'Línea de Tendencia';
-                }
-              }
-            }
-          }
-        }
-      });
-    }
 
     function initChart() {
       const ctx = document.getElementById('okunChart').getContext('2d');
@@ -309,84 +196,75 @@ function initHistoricalChart() {
         type: 'scatter',
         data: {
           datasets: [
-            {
-              label: 'Línea de Okun',
-              data: [],
-              showLine: true, borderColor: '#1d1d1f', borderWidth: 2, pointRadius: 0
-            },
-            {
-              label: 'Situación Actual',
-              data: [],
-              pointRadius: 10, backgroundColor: '#ff3b30', z: 10
-            }
+            { label: 'Línea de Okun', data: [], showLine: true, borderColor: '#1d1d1f', borderWidth: 2, pointRadius: 0 },
+            { label: 'Situación Actual', data: [], pointRadius: 10, backgroundColor: '#ff3b30', z: 10 }
           ]
         },
         options: {
           responsive: true, maintainAspectRatio: false, animation: false,
           scales: {
-            x: { type: 'linear', min: -5, max: 10, title: { display: true, text: 'Crecimiento PIB real (%)', font: { weight: 'bold' } } },
-            y: { type: 'linear', min: -3, max: 5, title: { display: true, text: 'Cambio en Desempleo Δu (%)', font: { weight: 'bold' } } }
-          },
-          plugins: {
-            tooltip: { enabled: true }
+            x: { type: 'linear', min: -5, max: 10, title: { display: true, text: 'Crecimiento PIB (%)' } },
+            y: { type: 'linear', min: -3, max: 5, title: { display: true, text: 'Δ Desempleo (%)' } }
           }
         }
       });
     }
 
-    function updateAll() {
-      // 1. Cálculos
-      const deltaU = alpha + (beta * gdp);
+    function initHistoricalChart() {
+      const ctx = document.getElementById('historicalChart').getContext('2d');
+      const a_emp = 1.6, b_emp = -0.38;
+      const points = [];
+      let tableHtml = '';
       
-      // 2. Datos gráfica
-      const lineData = [];
-      for (let x = -5; x <= 10; x += 1) {
-        lineData.push({ x: x, y: alpha + (beta * x) });
+      for (let year = 2000; year <= 2023; year++) {
+        const x = -1.5 + Math.random() * 7.5;
+        const noise = (Math.random() - 0.5) * 1.2;
+        const y = a_emp + b_emp * x + noise;
+        points.push({ x, y });
+        tableHtml += `<tr><td style="padding:10px;">${year}</td><td style="padding:10px;text-align:right;">${x.toFixed(1)}%</td><td style="padding:10px;text-align:right;">${y.toFixed(1)}%</td></tr>`;
       }
+
+      document.getElementById('historicalTableBody').innerHTML = tableHtml;
+      document.getElementById('math-alpha-emp').innerHTML = kHTML(`\\alpha = ${a_emp}`);
+      document.getElementById('math-beta-emp').innerHTML = kHTML(`\\beta = ${b_emp}`);
+
+      historicalChart = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+          datasets: [
+            { label: 'Datos', data: points, backgroundColor: 'rgba(0, 113, 227, 0.6)', pointRadius: 5 },
+            { label: 'Tendencia', data: [{x:-3, y:a_emp+b_emp*-3}, {x:8, y:a_emp+b_emp*8}], type: 'line', borderColor: '#ff3b30', borderDash: [5,5], pointRadius: 0, fill: false }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false, scales: { x: { min: -3, max: 8 }, y: { min: -3, max: 5 } }, plugins: { legend: { display: false } } }
+      });
+    }
+
+    function updateAll() {
+      const deltaU = alpha + (beta * gdp);
+      const lineData = [];
+      for (let x = -5; x <= 10; x++) lineData.push({ x, y: alpha + (beta * x) });
 
       chart.data.datasets[0].data = lineData;
       chart.data.datasets[1].data = [{ x: gdp, y: deltaU }];
       chart.update();
 
-      // 3. UI
       document.getElementById('valGDP').textContent = gdp.toFixed(1) + '%';
       document.getElementById('valAlpha').textContent = alpha.toFixed(1) + '%';
       document.getElementById('valBeta').textContent = beta.toFixed(2);
       document.getElementById('resDeltaU').textContent = (deltaU > 0 ? '+' : '') + deltaU.toFixed(2);
 
-      // 4. Fórmulas
       document.getElementById('math-eq').innerHTML = kHTML('\\Delta u = \\alpha + \\beta \\times \\text{Crecimiento PIB}');
       document.getElementById('math-u-zero').innerHTML = kHTML('\\Delta u = 0');
       document.getElementById('math-threshold-val').innerHTML = kHTML('-\\alpha / \\beta');
-      
-      const calculation = `\\Delta u = ${alpha.toFixed(1)} + (${beta.toFixed(2)}) \\times ${gdp.toFixed(1)} = ${deltaU.toFixed(2)}`;
-      document.getElementById('math-formula-display').innerHTML = kHTML(calculation, true);
+      document.getElementById('math-formula-display').innerHTML = kHTML(`\\Delta u = ${alpha.toFixed(1)} + (${beta.toFixed(2)}) \\times ${gdp.toFixed(1)} = ${deltaU.toFixed(2)}`, true);
     }
 
-    // Sliders 0-100%
-    document.getElementById('paramGDP').addEventListener('input', (e) => {
-      // 0-100 -> -5% a 10%
-      gdp = -5 + (e.target.value / 100) * 15;
-      updateAll();
-    });
+    document.getElementById('paramGDP').addEventListener('input', (e) => { gdp = -5 + (e.target.value / 100) * 15; updateAll(); });
+    document.getElementById('paramAlpha').addEventListener('input', (e) => { alpha = (e.target.value / 100) * 5; updateAll(); });
+    document.getElementById('paramBeta').addEventListener('input', (e) => { beta = -1.0 + (e.target.value / 100) * 0.9; updateAll(); });
 
-    document.getElementById('paramAlpha').addEventListener('input', (e) => {
-      // 0-100 -> 0% a 5%
-      alpha = (e.target.value / 100) * 5;
-      updateAll();
-    });
-
-    document.getElementById('paramBeta').addEventListener('input', (e) => {
-      // 0-100 -> -1.0 a -0.1
-      beta = -1.0 + (e.target.value / 100) * 0.9;
-      updateAll();
-    });
-
-    document.addEventListener('DOMContentLoaded', () => {
-      initChart();
-      initHistoricalChart();
-      updateAll();
-    });
+    document.addEventListener('DOMContentLoaded', () => { initChart(); initHistoricalChart(); updateAll(); });
   </script>
 </body>
 </html>
