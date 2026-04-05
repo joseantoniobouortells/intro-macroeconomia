@@ -133,12 +133,48 @@
       </div>
 
       <!-- 📊 Herramienta 2: Datos Históricos (Dispersión) -->
-      <div class="card">
-        <h3 style="font-size: 0.9rem; text-transform: uppercase; color: #1d1d1f; margin-bottom: 16px; letter-spacing: 0.5px;">📊 Evidencia Empírica (2000-2023)</h3>
-        <div class="chart-container" style="height: 380px;">
-          <canvas id="historicalChart"></canvas>
+      <div class="card" style="padding: 0; overflow: hidden;">
+        <div style="padding: 24px 24px 0;">
+          <h3 style="font-size: 0.9rem; text-transform: uppercase; color: #1d1d1f; margin-bottom: 16px; letter-spacing: 0.5px;">📊 Evidencia Empírica (2000-2023)</h3>
         </div>
-        <p style="font-size: 0.75rem; color: #86868b; margin-top: 15px; text-align: center;">Cada punto representa un año. La línea de tendencia muestra la correlación negativa estructural de la economía.</p>
+        
+        <div style="display: grid; grid-template-columns: 1fr 320px; border-top: 1px solid #f0f0f0;">
+          <!-- Gráfico -->
+          <div style="padding: 24px; border-right: 1px solid #f0f0f0;">
+            <div class="chart-container" style="height: 380px;">
+              <canvas id="historicalChart"></canvas>
+            </div>
+            <p style="font-size: 0.75rem; color: #86868b; margin-top: 15px; text-align: center;">Cada punto representa un año. La línea roja muestra la regresión de los datos.</p>
+          </div>
+
+          <!-- Datos y Estadísticas -->
+          <div style="background: #fafafa; display: flex; flex-direction: column;">
+            <!-- Mini Card Estadísticas -->
+            <div style="padding: 20px; background: #fff; border-bottom: 1px solid #f0f0f0;">
+              <h4 style="font-size: 0.65rem; text-transform: uppercase; color: #86868b; margin-bottom: 12px;">Parámetros de Regresión</h4>
+              <div style="display: flex; gap: 15px; justify-content: center;">
+                <div id="math-alpha-emp" style="font-size: 0.9rem;"></div>
+                <div id="math-beta-emp" style="font-size: 0.9rem;"></div>
+              </div>
+            </div>
+
+            <!-- Tabla -->
+            <div style="flex: 1; overflow-y: auto; height: 350px;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem;">
+                <thead style="position: sticky; top: 0; background: #f5f5f7; z-index: 5;">
+                  <tr>
+                    <th style="padding: 10px; text-align: left; border-bottom: 1px solid #e5e5e5;">Año</th>
+                    <th style="padding: 10px; text-align: right; border-bottom: 1px solid #e5e5e5;">PIB</th>
+                    <th style="padding: 10px; text-align: right; border-bottom: 1px solid #e5e5e5;">Δu</th>
+                  </tr>
+                </thead>
+                <tbody id="historicalTableBody">
+                  <!-- Inyectado por JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -176,28 +212,51 @@
     function kHTML(latex, display = false) {
       return katex.renderToString(latex, { throwOnError: false, displayMode: display });
     }
+function initHistoricalChart() {
+  const ctx = document.getElementById('historicalChart').getContext('2d');
 
-    function initHistoricalChart() {
-      const ctx = document.getElementById('historicalChart').getContext('2d');
-      
-      // Generar datos inventados 2000-2023 con tendencia negativa
-      const points = [];
-      const years = Array.from({length: 24}, (_, i) => 2000 + i);
-      
-      years.forEach(year => {
-        const x_val = -2 + Math.random() * 8; // PIB entre -2% y 6%
-        const noise = (Math.random() - 0.5) * 1.5;
-        const y_val = 1.5 - 0.4 * x_val + noise;
-        points.push({ x: x_val, y: y_val, year: year });
-      });
+  // Parámetros estructurales de la simulación
+  const alpha_emp = 1.6;
+  const beta_emp = -0.38;
 
-      // Calcular línea de tendencia simple (regresión visual)
-      const trendLine = [
-        { x: -3, y: 1.5 - 0.4 * (-3) },
-        { x: 8, y: 1.5 - 0.4 * 8 }
-      ];
+  // Generar datos inventados 2000-2023 con tendencia negativa
+  const points = [];
+  const years = Array.from({length: 24}, (_, i) => 2000 + i);
+  let tableHtml = '';
 
-      historicalChart = new Chart(ctx, {
+  years.forEach(year => {
+    const x_val = -1.5 + Math.random() * 7.5; // PIB entre -1.5% y 6%
+    const noise = (Math.random() - 0.5) * 1.2;
+    const y_val = alpha_emp + beta_emp * x_val + noise;
+    points.push({ x: x_val, y: y_val, year: year });
+
+    // Crear fila de tabla
+    const pibColor = x_val > 0 ? '#2e7d32' : '#ff3b30';
+    const duColor = y_val > 0 ? '#ff3b30' : '#2e7d32';
+    tableHtml += `
+      <tr style="border-bottom: 1px solid #f5f5f7;">
+        <td style="padding: 10px; font-weight: 600;">${year}</td>
+        <td style="padding: 10px; text-align: right; color: ${pibColor}; font-weight: 500;">${x_val > 0 ? '+' : ''}${x_val.toFixed(1)}%</td>
+        <td style="padding: 10px; text-align: right; color: ${duColor}; font-weight: 500;">${y_val > 0 ? '+' : ''}${y_val.toFixed(1)}%</td>
+      </tr>
+    `;
+  });
+
+  // Inyectar Tabla
+  document.getElementById('historicalTableBody').innerHTML = tableHtml;
+
+  // Inyectar Estadísticas
+  document.getElementById('math-alpha-emp').innerHTML = kHTML(`\\alpha = ${alpha_emp.toFixed(2)}`);
+  document.getElementById('math-beta-emp').innerHTML = kHTML(`\\beta = ${beta_emp.toFixed(2)}`);
+
+  // Calcular línea de tendencia
+  const trendLine = [
+    { x: -3, y: alpha_emp + beta_emp * (-3) },
+    { x: 8, y: alpha_emp + beta_emp * 8 }
+  ];
+
+  historicalChart = new Chart(ctx, {
+...
         type: 'scatter',
         data: {
           datasets: [
