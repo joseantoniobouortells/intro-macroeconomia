@@ -155,7 +155,7 @@
         </ul>
 
         <h3>El punto óptimo</h3>
-        <p>El individuo consume donde su <strong>Tasa Marginal de Sustitución</strong> (preferencia temporal) es igual a la <strong>Tasa Marginal de Transformación</strong> ($1+r$).</p>
+        <p>El individuo consume donde su <strong>Tasa Marginal de Sustitución</strong> (preferencia temporal) es igual a la <strong>Tasa Marginal de Transformación</strong> (<span id="math-tmt-text"></span>).</p>
       </div>
 
       <div class="exam-tip" style="background:#fff9e6; border:1.5px solid #ffcc00; border-radius:16px; padding:24px; color:#5c4d00;">
@@ -248,13 +248,14 @@
       // Maths
       document.getElementById('math-restriction').innerHTML = kHTML('c_1 = y_1 + (y_0 - c_0)(1+r)');
       document.getElementById('math-slope').innerHTML = kHTML('-(1+r) = -' + (1+r).toFixed(2));
+      document.getElementById('math-tmt-text').innerHTML = kHTML('1+r');
       
       const flowsHtml = diff >= 0 
-        ? `Recibirás mañana: ${kHTML(`(y_0 - c_0)(1+r) = ${diff.toFixed(0)} \\times ${(1+r).toFixed(2)} = $${(diff*(1+r)).toFixed(0)}`)}`
-        : `Pagarás mañana: ${kHTML(`(c_0 - y_0)(1+r) = ${Math.abs(diff).toFixed(0)} \\times ${(1+r).toFixed(2)} = $${(Math.abs(diff)*(1+r)).toFixed(0)}`)}`;
+        ? `Recibirás mañana: ${kHTML(`(y_0 - c_0)(1+r) = ${diff.toFixed(0)} \\times ${(1+r).toFixed(2)}`)} = $${(diff*(1+r)).toFixed(0)}`
+        : `Pagarás mañana: ${kHTML(`(c_0 - y_0)(1+r) = ${Math.abs(diff).toFixed(0)} \\times ${(1+r).toFixed(2)}`)} = $${(Math.abs(diff)*(1+r)).toFixed(0)}`;
       document.getElementById('math-flows').innerHTML = flowsHtml;
 
-      document.getElementById('mathCalculation').innerHTML = kHTML(`c_1 = ${y1.toFixed(0)} + (${y0.toFixed(0)} - c_0)${(1+r).toFixed(2)}`, true);
+      document.getElementById('mathCalculation').innerHTML = kHTML(`c_1 = ${y1.toFixed(0)} + (${y0.toFixed(0)} - c_0) \\times ${(1+r).toFixed(2)}`, true);
     }
 
     // Sliders 0-100%
