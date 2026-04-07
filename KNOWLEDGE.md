@@ -74,6 +74,12 @@ Este documento centraliza la lógica económica y los estándares de construcci�
 - **Coeficiente β:** Indica la sensibilidad del mercado laboral (típicamente entre -0.3 y -0.5).
 - **Auge vs Recesión:** En auges (PIB > umbral), Δu es negativo. En recesiones, Δu es positivo.
 
+### ⚖️ Suavización del Consumo (Modelo 2 periodos)
+- **Concepto:** Estrategia de los hogares para mantener un nivel de consumo constante a pesar de shocks temporales en el ingreso.
+- **Restricción Presupuestaria:** $c_1 = y_1 + (y_0 - c_0)(1 + r)$.
+- **Pendiente:** $-(1 + r)$ representa el coste de oportunidad del consumo presente.
+- **Flujos:** El término $(y_0 - c_0)$ indica el ahorro hoy (si es > 0) o el endeudamiento (si es < 0).
+
 ## 🎨 Estándares de UI (Apple Ecosystem Style)
 
 Para mantener la consistencia visual y el ahorro de tokens, **use SIEMPRE** estas clases CSS definidas en `assets/style.css`:
