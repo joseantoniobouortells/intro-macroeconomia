@@ -24,7 +24,7 @@ Este mapa permite a los agentes de IA localizar la lógica del proyecto rápidam
     - `bancos-dinero.html`: Creación de dinero y Valor Presente.
     - `racionamiento-credito.html`: Problema principal-agente y exclusión financiera.
 
-- `tema-3/`: Fluctuaciones e Inflación (Capítulos 13-15 CORE).
+- `tema-3/`: Fluctuaciones Económicas (Capítulo 13 CORE).
     - `index.html`: Menú de herramientas del tema.
     - `ley-okun.html`: Correlación PIB vs Desempleo.
 

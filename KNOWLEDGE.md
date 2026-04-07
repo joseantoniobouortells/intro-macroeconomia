@@ -66,7 +66,7 @@ Este documento centraliza la lógica económica y los estándares de construcci�
 - **Exclusión Financiera:** Los hogares sin riqueza no pueden aportar avales, siendo excluidos del mercado crediticio o restringidos a peores condiciones.
 - **Impacto en Gini:** El racionamiento del crédito aumenta la desigualdad al impedir que los agentes sin riqueza inviertan en su productividad.
 
-## 📘 Lógica Económica (Capítulos 13-15 CORE) — TEMA 3
+## 📘 Lógica Económica (Capítulo 13 CORE) — TEMA 3
 
 ### 📉 Ley de Okun
 - **Definición:** Relación empírica negativa entre el crecimiento del PIB y el cambio en el desempleo.
