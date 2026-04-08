@@ -43,3 +43,17 @@ Este documento cataloga las preguntas recurrentes de los exámenes finales (2024
 - **Casos Reales:** Junio 2024, Q10; Septiembre 2025, Q10.
 - **Lógica:** Basado en la curva de Lorenz (Pág. 31-35 del libro). 
 - **Fórmula simplificada:** Relación entre la participación de los salarios ($s = w/\lambda$) y el número de desempleados.
+
+## 📈 Tema 3: Fluctuaciones Económicas (Capítulo 13)
+
+### 1. Interpretación de la Ley de Okun
+- **Pregunta Típica:** "¿Qué significa un coeficiente de Okun de -0.4?"
+- **Lógica:** Por cada 1% de aumento en el crecimiento del PIB por encima del umbral, la tasa de desempleo cae un 0.4%.
+- **Resultado:** Relación inversa. Δu es negativo en auges y positivo en recesiones.
+- **Uso en Web:** `ley-okun.html`.
+
+### 2. Suavización del Consumo (Shocks Temporales vs Permanentes)
+- **Pregunta Típica:** "Si un hogar sufre una caída temporal de ingresos, ¿cómo reacciona según el modelo de dos periodos?"
+- **Lógica:** El hogar prefiere mantener un consumo estable ($c_0 \approx c_1$). Pedirá prestado hoy para compensar la caída, confiando en el ingreso futuro.
+- **Caso Crítico:** Si el shock es **permanente**, la suavización no es posible y el consumo debe bajar en ambos periodos.
+- **Uso en Web:** `suavizacion-consumo.html`.
