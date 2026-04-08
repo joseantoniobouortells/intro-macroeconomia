@@ -10,7 +10,6 @@
   <script src="../tema-1/assets/katex.min.js"></script>
   <style>
     body { padding: 0; background: #f5f5f7; color: #1d1d1f; }
-    
     .site-nav {
       position: sticky; top: 0; z-index: 100;
       background: rgba(255,255,255,0.85); backdrop-filter: saturate(180%) blur(20px);
@@ -87,7 +86,7 @@
         </div>
 
         <div class="controls-card">
-          <h3 style="font-size: 0.7rem; text-transform: uppercase; color: #86868b; margin-bottom: 10px; letter-spacing: 1px;">⚙️ Parámetros</h3>
+          <h3 style="font-size: 0.7rem; text-transform: uppercase; color: #86868b; margin-bottom: 10px; letter-spacing: 1px;">⚙️ Escenario de Renta</h3>
           
           <div class="slider-group">
             <div class="slider-header"><span>Ingreso Hoy (y₀)</span> <span id="valY0" class="slider-value">$500</span></div>
@@ -121,7 +120,8 @@
           <div>
             <h3 style="font-size: 0.75rem; text-transform: uppercase; color: #86868b; margin-bottom: 12px;">📐 Restricción Presupuestaria</h3>
             <div id="math-restriction" style="margin-bottom: 15px;"></div>
-            <p style="font-size: 0.8rem; color: #3a3a3c;">La pendiente <span id="math-slope"></span> es el costo de oportunidad del consumo hoy.</p>
+            <p style="font-size: 0.8rem; color: #3a3a3c;">Pendiente <span id="math-slope"></span>: coste de oportunidad hoy.</p>
+            <div id="math-utility-formula" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #f0f0f0;"></div>
           </div>
           <div>
             <h3 style="font-size: 0.75rem; text-transform: uppercase; color: #86868b; margin-bottom: 12px;">📊 Flujo de Fondos</h3>
@@ -141,7 +141,7 @@
         <p>Ante un shock de renta, el individuo se desplaza a lo largo de su frontera factible buscando la curva de indiferencia más alta posible.</p>
 
         <h3>El punto óptimo</h3>
-        <p>Ocurre cuando la <strong>TMS</strong> iguala a la <strong>TMT</strong> (<span id="math-tmt-text"></span>). En este modelo simplificado, esto implica un consumo constante entre periodos.</p>
+        <p>Ocurre cuando la <strong>TMS</strong> iguala a la <strong>TMT</strong> (<span id="math-tmt-text"></span>). Esto implica un consumo constante entre periodos.</p>
       </div>
 
       <div class="exam-tip" style="background:#fff9e6; border:1.5px solid #ffcc00; border-radius:16px; padding:24px; color:#5c4d00;">
@@ -190,17 +190,18 @@
       document.getElementById('paramUserC0').max = c0_max.toFixed(0);
       userC0 = Math.min(userC0, c0_max);
 
-      // Óptimo teórico (Perfect Smoothing)
+      // Óptimo teórico (referencia azul)
       const c0_opt = (y1 + y0 * (1 + r)) / (2 + r);
       const c1_opt = c0_opt;
 
-      // Elección del usuario
+      // Elección del usuario (punto verde)
       const c1_user = y1 + (y0 - userC0) * (1 + r);
 
+      // Generar Curva de Indiferencia ÚNICA (pasa por el punto del usuario)
       const IC = [];
-      const utilityUser = Math.log(userC0) + Math.log(c1_user);
-      for (let x = 50; x <= 1150; x += 50) {
-        const y = Math.exp(utilityUser - Math.log(x));
+      const utilityLevel = Math.log(Math.max(1, userC0)) + Math.log(Math.max(1, c1_user));
+      for (let x = 10; x <= 1150; x += 30) {
+        const y = Math.exp(utilityLevel - Math.log(x));
         if (y <= 1200) IC.push({x, y});
       }
 
@@ -231,8 +232,11 @@
       }
 
       document.getElementById('math-restriction').innerHTML = kHTML('c_1 = y_1 + (y_0 - c_0)(1+r)');
-      document.getElementById('math-slope').innerHTML = kHTML('-(1+r) = -' + (1+r).toFixed(2));
+      document.getElementById('math-slope').innerHTML = kHTML('-(1+r)');
       document.getElementById('math-tmt-text').innerHTML = kHTML('1+r');
+      document.getElementById('math-utility-formula').innerHTML = 
+        `<p style="font-weight:700; font-size:0.7rem; color:#86868b; text-transform:uppercase; margin-bottom:5px;">Función de Utilidad</p>` +
+        kHTML('U = \\ln(c_0) + \\ln(c_1)');
       
       const flowsHtml = diff >= 0 
         ? `Ahorras hoy $${diff.toFixed(1)}.<br>Recibirás mañana: ${kHTML(`(${diff.toFixed(1)}) \\times ${(1+r).toFixed(2)} = ${ (diff*(1+r)).toFixed(1) }`)}`
