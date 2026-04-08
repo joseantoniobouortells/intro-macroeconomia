@@ -80,6 +80,10 @@ Este documento centraliza la lógica económica y los estándares de construcci�
 - **Pendiente:** $-(1 + r)$ representa el coste de oportunidad del consumo presente.
 - **Flujos:** El término $(y_0 - c_0)$ indica el ahorro hoy (si es > 0) o el endeudamiento (si es < 0).
 
+### 🛡️ Fallos en la Suavización
+- **Restricción de Crédito:** Imposibilidad de pedir prestado. El consumo está limitado al ingreso actual ($c = y$). Ante una noticia de ingresos futuros altos, el consumo no sube hoy.
+- **Falta de Voluntad:** Incapacidad psicológica de ahorrar hoy ante una caída futura de ingresos. El consumo cae bruscamente solo cuando el ingreso baja realmente.
+
 ## 🎨 Estándares de UI (Apple Ecosystem Style)
 
 Para mantener la consistencia visual y el ahorro de tokens, **use SIEMPRE** estas clases CSS definidas en `assets/style.css`:

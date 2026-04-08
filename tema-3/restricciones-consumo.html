@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restricciones y Falta de Voluntad — Tema 3</title>
+  <link rel="stylesheet" href="../tema-1/assets/style.css">
+  <link rel="stylesheet" href="../tema-1/assets/katex.min.css">
+  <script src="../tema-1/assets/chart.umd.min.js"></script>
+  <script src="../tema-1/assets/katex.min.js"></script>
+  <style>
+    body { padding: 0; background: #f5f5f7; color: #1d1d1f; }
+    
+    /* ── Sticky navbar ── */
+    .site-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.85); backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.08); height: 48px;
+      display: flex; align-items: center; padding: 0 24px;
+    }
+    .nav-back {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 0.8rem; font-weight: 500; color: #0071e3;
+      text-decoration: none; white-space: nowrap;
+      transition: opacity 0.2s ease; width: 120px;
+    }
+    .nav-back:hover { opacity: 0.7; }
+    .nav-back .chevron { font-size: 1rem; line-height: 1; }
+    .nav-center {
+      flex: 1; text-align: center; font-size: 0.8rem;
+      font-weight: 500; color: #1d1d1f; letter-spacing: 0.01em; pointer-events: none;
+    }
+    .nav-spacer { width: 120px; }
+
+    /* ── Layout ── */
+    .main-container {
+      max-width: 1400px; margin: 0 auto; display: grid;
+      grid-template-columns: 1fr 420px; gap: 32px; padding: 40px 24px;
+      align-items: start;
+    }
+    @media (max-width: 1000px) { .main-container { grid-template-columns: 1fr; } }
+
+    .card { background: #fff; border-radius: 24px; padding: 32px; border: 1px solid #e5e5e5; margin-bottom: 32px; }
+    .card h3 { font-size: 1.1rem; margin-bottom: 24px; color: #1d1d1f; border-bottom: 1px solid #f5f5f7; padding-bottom: 12px; }
+
+    .chart-container { position: relative; height: 300px; margin-bottom: 20px; }
+    
+    /* Botones de acción */
+    .action-row { display: flex; gap: 12px; margin-bottom: 20px; }
+    .action-btn { 
+      flex: 1; padding: 12px; border-radius: 12px; border: 1px solid #d2d2d7; 
+      background: #fff; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s;
+    }
+    .action-btn:hover { background: #f5f5f7; border-color: #86868b; }
+    .action-btn.active { background: #0071e3; color: #fff; border-color: #0071e3; }
+
+    /* ── Teoría ── */
+    .theory-card { background: #fff; border-radius: 20px; padding: 32px; border: 1px solid #e5e5e5; line-height: 1.6; }
+    .theory-card h2 { font-size: 1.4rem; margin-bottom: 16px; letter-spacing: -0.5px; }
+    .theory-card h4 { font-size: 0.85rem; text-transform: uppercase; color: #86868b; margin: 24px 0 8px; }
+    .formula-box { background: #f0f6ff; padding: 16px; border-radius: 12px; margin: 16px 0; text-align: center; }
+    
+    .exam-tip {
+      background: #fff9e6; border: 1.5px solid #ffcc00; border-radius: 16px; padding: 24px;
+      color: #5c4d00; margin-top: 24px;
+    }
+    .exam-tip h5 { font-size: 0.85rem; text-transform: uppercase; color: #b38f00; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="index.html" class="nav-back">
+      <span class="chevron">‹</span> Tema 3
+    </a>
+    <span class="nav-center">Restricciones y Voluntad · Capítulo 13</span>
+    <span class="nav-spacer"></span>
+  </nav>
+
+  <div class="main-container">
+    
+    <div class="visual-section">
+      <!-- Simulador 1: Restricción de Crédito -->
+      <div class="card">
+        <h3>🛡️ 1. Restricción de Crédito (Acceso al préstamo)</h3>
+        <div class="action-row">
+          <button class="action-btn" id="btnGoodNews" onclick="toggleNews('good')">📰 Noticia: Aumento de ingresos futuros</button>
+        </div>
+        <div class="chart-container">
+          <canvas id="creditChart"></canvas>
+        </div>
+        <p style="font-size: 0.8rem; color: #6e6e73;">Un hogar restringido no puede suavizar su consumo pidiendo prestado, aunque sepa que ganará más mañana.</p>
+      </div>
+
+      <!-- Simulador 2: Falta de Voluntad -->
+      <div class="card">
+        <h3>🧠 2. Falta de Voluntad (Debilidad psicológica)</h3>
+        <div class="action-row">
+          <button class="action-btn" id="btnBadNews" onclick="toggleNews('bad')">📰 Noticia: Caída de ingresos futuros</button>
+        </div>
+        <div class="chart-container">
+          <canvas id="willChart"></canvas>
+        </div>
+        <p style="font-size: 0.8rem; color: #6e6e73;">Un hogar sin voluntad no ahorra hoy aunque sepa que mañana sus ingresos caerán drásticamente.</p>
+      </div>
+    </div>
+
+    <!-- Columna Derecha -->
+    <div class="theory-section">
+      <div class="theory-card">
+        <h2>Fallos en la Suavización</h2>
+        
+        <h4>Restricción de Crédito</h4>
+        <p>Incapacidad de un hogar para pedir prestado con el fin de mantener su nivel de vida ante una subida esperada de ingresos o una caída temporal actual.</p>
+        
+        <h4>Falta de Voluntad</h4>
+        <p>Incapacidad psicológica de ahorrar para el futuro sabiendo que los ingresos van a caer. Los individuos prefieren el placer inmediato a la seguridad futura.</p>
+
+        <h4>Fórmulas del Modelo</h4>
+        <div class="formula-box">
+          <div id="math-slope"></div>
+          <p style="font-size: 0.75rem; color: #6e6e73; margin-top: 8px;">Pendiente de la restricción presupuestaria.</p>
+        </div>
+        <div class="formula-box">
+          <div id="math-debt"></div>
+          <p style="font-size: 0.75rem; color: #6e6e73; margin-top: 8px;">Pago de la deuda en el periodo futuro.</p>
+        </div>
+      </div>
+
+      <div class="exam-tip">
+        <h5>🎓 Tips para el Examen</h5>
+        <p><strong>Ojo al test:</strong> Un cambio temporal en el ingreso afecta el consumo actual de los hogares con restricciones porque su gasto está limitado estrictamente por su renta del momento.</p>
+        <p style="margin-top: 12px;"><strong>Reconocimiento:</strong> Si ves una trayectoria donde el consumo imita exactamente los saltos de la línea de ingresos, el hogar sufre simultáneamente de restricciones de crédito y falta de voluntad.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let creditChart, willChart;
+    let state = { goodNews: false, badNews: false };
+
+    function kHTML(latex) {
+      return katex.renderToString(latex, { throwOnError: false });
+    }
+
+    function initCharts() {
+      const time = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      
+      // Chart 1: Credit Restriction
+      const ctx1 = document.getElementById('creditChart').getContext('2d');
+      creditChart = new Chart(ctx1, {
+        type: 'line',
+        data: {
+          labels: time,
+          datasets: [
+            { label: 'Ingresos', data: [50, 50, 50, 50, 50, 100, 100, 100, 100, 100], borderColor: '#86868b', borderDash: [5,5], pointRadius: 0, fill: false },
+            { label: 'Consumo (Óptimo)', data: [50, 50, 50, 50, 50, 50, 50, 50, 50, 50], borderColor: '#0071e3', borderWidth: 3, pointRadius: 0, fill: false },
+            { label: 'Consumo (Restringido)', data: [50, 50, 50, 50, 50, 50, 50, 50, 50, 50], borderColor: '#ff3b30', borderWidth: 2, pointRadius: 0, fill: false }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 120 } }, plugins: { legend: { position: 'bottom' } } }
+      });
+
+      // Chart 2: Weakness of Will
+      const ctx2 = document.getElementById('willChart').getContext('2d');
+      willChart = new Chart(ctx2, {
+        type: 'line',
+        data: {
+          labels: time,
+          datasets: [
+            { label: 'Ingresos', data: [100, 100, 100, 100, 100, 50, 50, 50, 50, 50], borderColor: '#86868b', borderDash: [5,5], pointRadius: 0, fill: false },
+            { label: 'Consumo (Previsor)', data: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100], borderColor: '#34c759', borderWidth: 3, pointRadius: 0, fill: false },
+            { label: 'Consumo (Sin Voluntad)', data: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100], borderColor: '#ff9500', borderWidth: 2, pointRadius: 0, fill: false }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 120 } }, plugins: { legend: { position: 'bottom' } } }
+      });
+    }
+
+    function toggleNews(type) {
+      if (type === 'good') {
+        state.goodNews = !state.goodNews;
+        document.getElementById('btnGoodNews').classList.toggle('active');
+        updateCreditChart();
+      } else {
+        state.badNews = !state.badNews;
+        document.getElementById('btnBadNews').classList.toggle('active');
+        updateWillChart();
+      }
+    }
+
+    function updateCreditChart() {
+      if (state.goodNews) {
+        // Al saber la noticia en t=3, el optimo sube consumo. El restringido no puede.
+        creditChart.data.datasets[1].data = [50, 50, 75, 75, 75, 75, 75, 75, 75, 75];
+        creditChart.data.datasets[2].data = [50, 50, 50, 50, 50, 100, 100, 100, 100, 100];
+      } else {
+        creditChart.data.datasets[1].data = Array(10).fill(50);
+        creditChart.data.datasets[2].data = Array(10).fill(50);
+      }
+      creditChart.update();
+    }
+
+    function updateWillChart() {
+      if (state.badNews) {
+        // Al saber la mala noticia en t=3, el previsor baja consumo. El sin voluntad no.
+        willChart.data.datasets[1].data = [100, 100, 75, 75, 75, 75, 75, 75, 75, 75];
+        willChart.data.datasets[2].data = [100, 100, 100, 100, 100, 50, 50, 50, 50, 50];
+      } else {
+        willChart.data.datasets[1].data = Array(10).fill(100);
+        willChart.data.datasets[2].data = Array(10).fill(100);
+      }
+      willChart.update();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initCharts();
+      updateCreditChart();
+      updateWillChart();
+      document.getElementById('math-slope').innerHTML = kHTML('-(1+r)');
+      document.getElementById('math-debt').innerHTML = kHTML('(1+r)(c\' - y\')');
+    });
+  </script>
+</body>
+</html>
