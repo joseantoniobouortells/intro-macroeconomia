@@ -209,9 +209,7 @@
       creditChart.update();
 
       const debtC = (cNormal[2] - 60) * (1 + c.r);
-      document.getElementById('math-debt-c').innerHTML = c.time >= 2 
-        ? `Pago de deuda futuro: ${kHTML(`(1+${c.r.toFixed(2)})(${cNormal[2].toFixed(1)} - 60) = `)} $${debtC.toFixed(1)}`
-        : "Esperando noticia...";
+      document.getElementById('math-debt-c').innerHTML = `Deuda acumulada: ${kHTML(`(1+${c.r.toFixed(2)})(${cNormal[2].toFixed(1)} - 60) = `)} $${debtC.toFixed(1)}`;
 
       // Panel 2: Will
       const w = states.will;
@@ -234,9 +232,7 @@
       willChart.update();
 
       const savingW = (100 - cWise[2]) * (1 + w.r);
-      document.getElementById('math-debt-w').innerHTML = w.time >= 2 
-        ? `Ahorro capitalizado: ${kHTML(`(100 - ${cWise[2].toFixed(1)})(1+${w.r.toFixed(2)}) = `)} $${savingW.toFixed(1)}`
-        : "Esperando noticia...";
+      document.getElementById('math-debt-w').innerHTML = `Ahorro capitalizado: ${kHTML(`(100 - ${cWise[2].toFixed(1)})(1+${w.r.toFixed(2)}) = `)} $${savingW.toFixed(1)}`;
 
       // Labels
       document.getElementById('valImpactC').textContent = '$' + c.impact;
