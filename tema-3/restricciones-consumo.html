@@ -160,7 +160,15 @@
             { label: 'Hogar Restringido', data: [], borderColor: '#ff3b30', borderWidth: 2, fill: false, pointRadius: 0 }
           ]
         },
-        options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 160 } }, animation: false }
+        options: { 
+          responsive: true, 
+          maintainAspectRatio: false, 
+          scales: { 
+            x: { title: { display: true, text: 'Tiempo (periodos)', font: { weight: 'bold', size: 11 } } },
+            y: { min: 0, max: 160, title: { display: true, text: 'Valor (USD $)', font: { weight: 'bold', size: 11 } } } 
+          }, 
+          animation: false 
+        }
       });
 
       const ctx2 = document.getElementById('willChart').getContext('2d');
@@ -174,7 +182,15 @@
             { label: 'Hogar sin Voluntad', data: [], borderColor: '#ff9500', borderWidth: 2, fill: false, pointRadius: 0 }
           ]
         },
-        options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 160 } }, animation: false }
+        options: { 
+          responsive: true, 
+          maintainAspectRatio: false, 
+          scales: { 
+            x: { title: { display: true, text: 'Tiempo (periodos)', font: { weight: 'bold', size: 11 } } },
+            y: { min: 0, max: 160, title: { display: true, text: 'Valor (USD $)', font: { weight: 'bold', size: 11 } } } 
+          }, 
+          animation: false 
+        }
       });
     }
 
