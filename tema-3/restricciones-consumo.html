@@ -103,7 +103,8 @@
         </div>
 
         <div class="chart-container"><canvas id="creditChart"></canvas></div>
-        <div id="math-debt-c" style="font-size: 0.85rem; text-align: center; padding: 10px; background: #fafafa; border-radius: 10px;"></div>
+        <div id="math-debt-c" style="font-size: 0.85rem; text-align: center; padding: 10px; background: #fafafa; border-radius: 10px; margin-bottom: 10px;"></div>
+        <div id="explanation-c" style="font-size: 0.75rem; color: #1d1d1f; padding: 15px; background: #f0f6ff; border-radius: 12px; line-height: 1.4; border: 1px solid #d0e3ff;"></div>
       </div>
 
       <!-- PANEL 2: FALTA DE VOLUNTAD -->
@@ -144,7 +145,8 @@
         </div>
 
         <div class="chart-container"><canvas id="willChart"></canvas></div>
-        <div id="math-debt-w" style="font-size: 0.85rem; text-align: center; padding: 10px; background: #fafafa; border-radius: 10px;"></div>
+        <div id="math-debt-w" style="font-size: 0.85rem; text-align: center; padding: 10px; background: #fafafa; border-radius: 10px; margin-bottom: 10px;"></div>
+        <div id="explanation-w" style="font-size: 0.75rem; color: #1d1d1f; padding: 15px; background: #fff9e6; border-radius: 12px; line-height: 1.4; border: 1px solid #ffeeba;"></div>
       </div>
     </div>
 
@@ -258,7 +260,20 @@
       creditChart.update();
 
       const debtC = (cNormal[2] - c.yBase) * (1 + c.r);
-      document.getElementById('math-debt-c').innerHTML = `Deuda generada: ${kHTML(`(1+${c.r.toFixed(2)})(${cNormal[2].toFixed(1)} - ${c.yBase.toFixed(1)}) = `)} $${debtC.toFixed(1)}`;
+      const formulaDebtC = `(1+${c.r.toFixed(2)})(${cNormal[2].toFixed(1)} - ${c.yBase.toFixed(1)}) = ${debtC.toFixed(1)}`;
+      document.getElementById('math-debt-c').innerHTML = `Deuda generada: ${kHTML(formulaDebtC)} USD`;
+
+      // Explicación dinámica Crédito
+      const totalFutureImpact = c.impact * 5;
+      const discountedWealth = totalFutureImpact / (1 + c.r);
+      const increasePerPeriod = (discountedWealth / 8).toFixed(1);
+      document.getElementById('explanation-c').innerHTML = `
+        <strong>¿Por qué sube el consumo?</strong><br>
+        1. Ganarás <strong>$${c.impact}</strong> extra durante 5 años = <strong>$${totalFutureImpact}</strong> totales.<br>
+        2. Esa riqueza futura vale hoy <strong>$${discountedWealth.toFixed(1)}</strong> (aplicando r).<br>
+        3. El hogar normal reparte esos $${discountedWealth.toFixed(1)} entre los 8 años restantes.<br>
+        4. Resultado: sube su consumo <strong>+$${increasePerPeriod}</strong> cada día desde hoy.
+      `;
 
       // 2. Panel Voluntad
       const w = states.will;
@@ -285,7 +300,20 @@
       willChart.update();
 
       const savingW = (w.yBase - cWise[2]) * (1 + w.r);
-      document.getElementById('math-debt-w').innerHTML = `Ahorro generado: ${kHTML(`(${w.yBase.toFixed(1)} - ${cWise[2].toFixed(1)})(1+${w.r.toFixed(2)}) = `)} $${savingW.toFixed(1)}`;
+      const formulaSavingW = `(${w.yBase.toFixed(1)} - ${cWise[2].toFixed(1)})(1+${w.r.toFixed(2)}) = ${savingW.toFixed(1)}`;
+      document.getElementById('math-debt-w').innerHTML = `Ahorro generado: ${kHTML(formulaSavingW)} USD`;
+
+      // Explicación dinámica Voluntad
+      const totalFutureLoss = w.impact * 5;
+      const discountedLoss = totalFutureLoss / (1 + w.r);
+      const reductionPerPeriod = (discountedLoss / 8).toFixed(1);
+      document.getElementById('explanation-w').innerHTML = `
+        <strong>¿Por qué baja el consumo?</strong><br>
+        1. Perderás <strong>$${w.impact}</strong> durante 5 años = <strong>$${totalFutureLoss}</strong> de pérdida total.<br>
+        2. Esa pérdida futura equivale hoy a <strong>$${discountedLoss.toFixed(1)}</strong>.<br>
+        3. El previsor reduce su gasto <strong>-$${reductionPerPeriod}</strong> hoy para ahorrar.<br>
+        4. El hogar sin voluntad ignora esto y sufre la caída de golpe al final.
+      `;
 
       // Labels UI
       document.getElementById('valY0C').textContent = '$' + c.yBase.toFixed(0);
