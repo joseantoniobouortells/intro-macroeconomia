@@ -57,3 +57,9 @@ Este documento cataloga las preguntas recurrentes de los exámenes finales (2024
 - **Lógica:** El hogar prefiere mantener un consumo estable ($c_0 \approx c_1$). Pedirá prestado hoy para compensar la caída, confiando en el ingreso futuro.
 - **Caso Crítico:** Si el shock es **permanente**, la suavización no es posible y el consumo debe bajar en ambos periodos.
 - **Uso en Web:** `suavizacion-consumo.html`.
+
+### 3. Volatilidad de la Inversión y Coordinación
+- **Pregunta Típica:** "¿Por qué la inversión fluctúa más que el consumo?"
+- **Respuesta:** Porque el consumo depende de la renta (suavizada), mientras que la inversión depende de las expectativas de demanda futura de otras empresas.
+- **Lógica de Juego:** Existe un fallo de coordinación si las empresas eligen (NI, NI) por falta de confianza, aun siendo (I, I) mejor para ambas.
+- **Uso en Web:** `volatilidad-inversion.html`.

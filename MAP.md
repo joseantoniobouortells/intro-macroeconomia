@@ -29,6 +29,7 @@ Este mapa permite a los agentes de IA localizar la lógica del proyecto rápidam
     - `ley-okun.html`: Correlación PIB vs Desempleo.
     - `suavizacion-consumo.html`: Modelo intertemporal de dos periodos.
     - `restricciones-consumo.html`: Fallos en la suavización (crédito y voluntad).
+    - `volatilidad-inversion.html`: Juego de coordinación y círculos virtuosos/viciosos.
 
 ## 🧠 Núcleo de Inteligencia (Assets)
 - `tema-1/assets/style.css`: Estilos UI Apple-style unificados (heredado por Tema 2).

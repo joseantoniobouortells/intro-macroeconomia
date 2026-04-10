@@ -84,6 +84,12 @@ Este documento centraliza la lógica económica y los estándares de construcci�
 - **Restricción de Crédito:** Imposibilidad de pedir prestado. El consumo está limitado al ingreso actual ($c = y$). Ante una noticia de ingresos futuros altos, el consumo no sube hoy.
 - **Falta de Voluntad:** Incapacidad psicológica de ahorrar hoy ante una caída futura de ingresos. El consumo cae bruscamente solo cuando el ingreso baja realmente.
 
+### 🏗️ Volatilidad de la Inversión (Coordinación)
+- **Concepto:** La inversión fluctúa más que el consumo porque las empresas coordinan sus decisiones basadas en expectativas de demanda futura.
+- **Juego de Coordinación:** Matriz 2x2 donde existen dos equilibrios de Nash: uno eficiente (ambas invierten) y uno ineficiente (ninguna invierte).
+- **Círculo Virtuoso:** Alta confianza → Inversión → Alta demanda → Beneficios.
+- **Círculo Vicioso:** Baja confianza → Desinversión → Baja demanda → Estancamiento.
+
 ## 🎨 Estándares de UI (Apple Ecosystem Style)
 
 Para mantener la consistencia visual y el ahorro de tokens, **use SIEMPRE** estas clases CSS definidas en `assets/style.css`:
