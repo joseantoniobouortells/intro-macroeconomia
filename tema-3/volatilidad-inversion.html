@@ -131,7 +131,7 @@
         <h2>Coordinación y Volatilidad</h2>
         
         <h4>¿Por qué falla la coordinación?</h4>
-        <p>A diferencia del Dilema del Prisionero, aquí hay **dos equilibrios de Nash**. Las empresas quieren hacer lo mismo que la otra, pero no saben qué decidirá la otra.</p>
+        <p>A diferencia del Dilema del Prisionero, aquí hay <strong>dos equilibrios de Nash</strong>. Las empresas quieren hacer lo mismo que la otra, pero no saben qué decidirá la otra.</p>
         
         <div class="formula-box" id="math-nash"></div>
 
@@ -157,18 +157,26 @@
     let bestB = false;
 
     function showBestResponse(player) {
-      if (player === 'A') {
+      if (player === 'A' && !bestA) {
         bestA = true;
         // Si B invierte, A prefiere Invertir (100 > 80)
         document.getElementById('dots-II').innerHTML += '<span class="dot dot-a"></span>';
         // Si B no invierte, A prefiere No Invertir (10 > -40)
         document.getElementById('dots-NN').innerHTML += '<span class="dot dot-a"></span>';
-      } else {
+        // Desactivar visualmente el botón
+        const btn = document.querySelector(`button[onclick*="'A'"]`);
+        btn.style.opacity = '0.5';
+        btn.style.pointerEvents = 'none';
+      } else if (player === 'B' && !bestB) {
         bestB = true;
         // Si A invierte, B prefiere Invertir (100 > 80)
         document.getElementById('dots-II').innerHTML += '<span class="dot dot-b"></span>';
         // Si A no invierte, B prefiere No Invertir (10 > -40)
         document.getElementById('dots-NN').innerHTML += '<span class="dot dot-b"></span>';
+        // Desactivar visualmente el botón
+        const btn = document.querySelector(`button[onclick*="'B'"]`);
+        btn.style.opacity = '0.5';
+        btn.style.pointerEvents = 'none';
       }
       checkNash();
     }
@@ -191,6 +199,12 @@
       document.getElementById('cycle-virtuous').classList.remove('active');
       document.getElementById('cycle-vicious').classList.remove('active');
       document.getElementById('confidenceText').style.display = 'none';
+      
+      // Restaurar botones
+      document.querySelectorAll('.time-btn').forEach(btn => {
+        btn.style.opacity = '1';
+        btn.style.pointerEvents = 'auto';
+      });
     }
 
     function explainConfidence() {
