@@ -285,13 +285,13 @@
 
       const debtC = (cNorm[c.news-1] - c.y0) * (1 + c.r);
       document.getElementById('math-debt-c').innerHTML = `Deuda generada: ${kHTML(`(1+${c.r.toFixed(2)})(${cNorm[c.news-1].toFixed(1)} - ${c.y0.toFixed(1)}) = ${debtC.toFixed(1)}`)} USD`;
+      // EXPLICACIÓN DETALLADA CRÉDITO
       document.getElementById('explanation-c').innerHTML = `
         <strong>Desglose del aumento:</strong><br>
-        1. <strong>Riqueza Futura:</strong> ${kHTML(`${c.impact}\\$ \\times ${futureYearsCount} \\text{ años} = ${totalFutureImpact.toFixed(1)}\\$`)}<br>
+        1. <strong>Riqueza Futura:</strong> ${kHTML(`${c.impact}\\$ \\times (${c.horizon} - ${c.shock} + 1) \\text{ años} = ${totalFutureImpact.toFixed(1)}\\$`)}<br>
         2. <strong>Valor Actual:</strong> ${kHTML(`\\frac{${totalFutureImpact.toFixed(1)}\\$}{1 + ${c.r.toFixed(2)}} = ${discountedWealth.toFixed(1)}\\$`)}<br>
         3. <strong>Reparto Anual:</strong> ${kHTML(`\\frac{${discountedWealth.toFixed(1)}\\$}{${yearsLeft} \\text{ años restantes}} = +${incPerPeriod.toFixed(1)}\\$ / \\text{año}`)}
       `;
-
       // 2. Panel VOLUNTAD
       const w = states.will;
       const labelsW = Array.from({length: w.horizon}, (_, i) => i + 1);
@@ -323,13 +323,13 @@
 
       const savingW = (w.y0 - cPrev[w.news-1]) * (1 + w.r);
       document.getElementById('math-debt-w').innerHTML = `Ahorro generado: ${kHTML(`(${w.y0.toFixed(1)} - ${cPrev[w.news-1].toFixed(1)})(1+${w.r.toFixed(2)}) = ${savingW.toFixed(1)}`)} USD`;
+      // EXPLICACIÓN DETALLADA VOLUNTAD
       document.getElementById('explanation-w').innerHTML = `
         <strong>Desglose de la reducción:</strong><br>
-        1. <strong>Pérdida Futura:</strong> ${kHTML(`${w.impact}\\$ \\times ${futureYearsCountW} \\text{ años} = ${totalFutureLoss.toFixed(1)}\\$`)}<br>
+        1. <strong>Pérdida Futura:</strong> ${kHTML(`${w.impact}\\$ \\times (${w.horizon} - ${w.shock} + 1) \\text{ años} = ${totalFutureLoss.toFixed(1)}\\$`)}<br>
         2. <strong>Valor Actual:</strong> ${kHTML(`\\frac{${totalFutureLoss.toFixed(1)}\\$}{1 + ${w.r.toFixed(2)}} = ${discountedLoss.toFixed(1)}\\$`)}<br>
         3. <strong>Reparto Anual:</strong> ${kHTML(`\\frac{${discountedLoss.toFixed(1)}\\$}{${yearsLeftW} \\text{ años restantes}} = -${decPerPeriod.toFixed(1)}\\$ / \\text{año}`)}
       `;
-
       // Sincronización Sliders
       document.getElementById('valY0C').textContent = '$' + c.y0.toFixed(0);
       document.getElementById('valC0C').textContent = '$' + c.c0.toFixed(0);
