@@ -177,11 +177,23 @@
       </div>
     </div>
 
-    <!-- SECCIÓN TEORÍA INFERIOR -->
+    <!-- SECCIÓN TEORICA INFERIOR -->
     <div class="theory-footer">
       <div class="theory-card">
         <h2>Conceptos Clave</h2>
         <p>Los fallos en la suavización rompen la línea recta de consumo esperado. Utiliza los botones superiores de cada panel para ver la secuencia temporal.</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+          <div class="formula-box">
+            <div id="math-formula-slope"></div>
+            <p style="font-size: 0.7rem; color: #6e6e73; margin-top: 5px;">Costo de oportunidad hoy</p>
+          </div>
+          <div class="formula-box">
+            <div id="math-formula-debt"></div>
+            <p style="font-size: 0.7rem; color: #6e6e73; margin-top: 5px;">Pago de deuda mañana</p>
+          </div>
+        </div>
+
         <div id="math-theory-tn" style="margin: 15px 0"></div>
         <div id="math-theory-c-y" style="margin: 15px 0"></div>
       </div>
@@ -375,6 +387,8 @@
       updateAll(); 
       document.getElementById('math-theory-tn').innerHTML = `Año de la noticia: ${kHTML('t_n')}`;
       document.getElementById('math-theory-c-y').innerHTML = `Situación límite: ${kHTML('c = y')}`;
+      document.getElementById('math-formula-slope').innerHTML = kHTML('-(1+r)');
+      document.getElementById('math-formula-debt').innerHTML = kHTML('(1+r)(c - y)');
     });
   </script>
 </body>
