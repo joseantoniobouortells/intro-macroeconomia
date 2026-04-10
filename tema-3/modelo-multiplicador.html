@@ -176,6 +176,32 @@
               borderWidth: 3,
               pointRadius: 0,
               fill: false
+            },
+            {
+              label: 'Equilibrio (Y*)',
+              data: [], // Se llenará con {x: Ystar, y: Ystar}
+              backgroundColor: '#ff3b30',
+              borderColor: '#ff3b30',
+              pointRadius: 6,
+              pointHoverRadius: 8,
+              showLine: false,
+              z: 10
+            },
+            {
+              label: 'Proyección Eje X',
+              data: [], // Línea vertical
+              borderColor: '#ff3b30',
+              borderDash: [3, 3],
+              pointRadius: 0,
+              fill: false
+            },
+            {
+              label: 'Proyección Eje Y',
+              data: [], // Línea horizontal
+              borderColor: '#ff3b30',
+              borderDash: [3, 3],
+              pointRadius: 0,
+              fill: false
             }
           ]
         },
@@ -184,11 +210,18 @@
           maintainAspectRatio: false,
           animation: false,
           scales: {
-            x: { title: { display: true, text: 'Producción / Renta (Y)' }, min: 0, max: 4000 },
+            x: { type: 'linear', title: { display: true, text: 'Producción / Renta (Y)' }, min: 0, max: 4000 },
             y: { title: { display: true, text: 'Demanda Agregada (DA)' }, min: 0, max: 4000 }
           },
           plugins: {
-            tooltip: { enabled: true }
+            tooltip: { enabled: true },
+            legend: {
+              labels: {
+                filter: function(item, chart) {
+                  return !item.text.includes('Proyección');
+                }
+              }
+            }
           }
         }
       });
@@ -197,11 +230,28 @@
     function update() {
       const A = state.c0 - (state.c1 * state.t0) + state.i0 - (state.i2 * state.r) + state.g0 + state.x0 - state.m0;
       const slope = state.c1 + state.i1 - state.m1;
-      const Ystar = A / (1 - slope);
       const multiplier = 1 / (1 - slope);
+      const Ystar = A * multiplier;
 
+      // 1. Línea DA
       const labels = Array.from({length: 41}, (_, i) => i * 100);
-      chart.data.datasets[1].data = labels.map(y => A + slope * y);
+      chart.data.datasets[1].data = labels.map(y => ({x: y, y: A + slope * y}));
+      
+      // 2. Punto de Equilibrio
+      chart.data.datasets[2].data = [{x: Ystar, y: Ystar}];
+
+      // 3. Proyección Vertical (Eje X)
+      chart.data.datasets[3].data = [
+        {x: Ystar, y: 0},
+        {x: Ystar, y: Ystar}
+      ];
+
+      // 4. Proyección Horizontal (Eje Y)
+      chart.data.datasets[4].data = [
+        {x: 0, y: Ystar},
+        {x: Ystar, y: Ystar}
+      ];
+
       chart.update();
 
       document.getElementById('math-equations').innerHTML = `
@@ -233,7 +283,6 @@
     document.getElementById('paramM1').oninput = (e) => { state.m1 = (e.target.value / 100) * 0.5; update(); };
 
     document.addEventListener('DOMContentLoaded', () => {
-      // Renderizar math inline
       document.querySelectorAll('.m-inline').forEach(el => {
         el.innerHTML = kHTML(el.dataset.latex);
       });
