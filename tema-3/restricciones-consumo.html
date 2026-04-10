@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Restricciones y Voluntad — Tema 3</title>
+  <title>Simulador de Ciclo de Vida — Tema 3</title>
   <link rel="stylesheet" href="../tema-1/assets/style.css">
   <link rel="stylesheet" href="../tema-1/assets/katex.min.css">
   <script src="../tema-1/assets/chart.umd.min.js"></script>
@@ -22,21 +22,23 @@
 
     .main-container {
       max-width: 1400px; margin: 0 auto; display: grid;
-      grid-template-columns: 1fr 420px; gap: 32px; padding: 40px 24px;
+      grid-template-columns: 1fr 400px; gap: 32px; padding: 40px 24px;
       align-items: start;
     }
-    @media (max-width: 1000px) { .main-container { grid-template-columns: 1fr; } }
+    @media (max-width: 1100px) { .main-container { grid-template-columns: 1fr; } }
 
     .card { background: #fff; border-radius: 24px; padding: 28px; border: 1px solid #e5e5e5; margin-bottom: 32px; }
     .card h3 { font-size: 1.1rem; margin-bottom: 20px; color: #1d1d1f; border-bottom: 1px solid #f5f5f7; padding-bottom: 12px; }
 
-    .chart-container { position: relative; height: 320px; margin-bottom: 20px; }
+    .chart-container { position: relative; height: 350px; margin-bottom: 20px; }
     
-    /* Controles dinámicos */
+    /* Controles en 3 columnas */
     .controls-panel { background: #f9f9fb; border-radius: 16px; padding: 20px; margin-bottom: 20px; }
-    .slider-section { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px; }
-    .slider-row { margin-bottom: 10px; }
-    .slider-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.75rem; font-weight: 600; }
+    .controls-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 15px; }
+    @media (max-width: 800px) { .controls-grid-3 { grid-template-columns: 1fr; } }
+
+    .slider-row { margin-bottom: 12px; }
+    .slider-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #86868b; }
     .slider-val { color: #0071e3; font-weight: 800; }
     input[type=range] { width: 100%; cursor: pointer; }
 
@@ -47,10 +49,11 @@
     }
     .time-btn.active { background: #1d1d1f; color: #fff; border-color: #1d1d1f; }
 
-    /* Teoría */
-    .theory-card { background: #fff; border-radius: 20px; padding: 32px; border: 1px solid #e5e5e5; line-height: 1.6; }
-    .theory-card h2 { font-size: 1.4rem; margin-bottom: 16px; }
-    .formula-box { background: #f0f6ff; padding: 16px; border-radius: 12px; margin: 16px 0; text-align: center; }
+    .formula-box { background: #f0f6ff; padding: 12px; border-radius: 10px; margin: 10px 0; text-align: center; font-size: 0.85rem; }
+    .explanation-box { font-size: 0.75rem; color: #1d1d1f; padding: 15px; border-radius: 12px; line-height: 1.5; border: 1px solid transparent; }
+    .exp-blue { background: #f0f6ff; border-color: #d0e3ff; }
+    .exp-gold { background: #fff9e6; border-color: #ffeeba; }
+
     .exam-tip { background: #fff9e6; border: 1.5px solid #ffcc00; border-radius: 16px; padding: 24px; color: #5c4d00; margin-top: 24px; }
   </style>
 </head>
@@ -58,14 +61,14 @@
 
   <nav class="site-nav">
     <a href="index.html" class="nav-back"><span class="chevron">‹</span> Tema 3</a>
-    <span class="nav-center">Restricciones y Voluntad · Capítulo 13</span>
+    <span class="nav-center">Restricciones y Voluntad · Ciclo de Vida Completo</span>
     <span class="nav-spacer"></span>
   </nav>
 
   <div class="main-container">
     
     <div class="visual-section">
-      <!-- PANEL 1: RESTRICCIÓN DE CRÉDITO -->
+      <!-- PANEL 1: CRÉDITO -->
       <div class="card">
         <h3>🛡️ 1. Restricción de Crédito</h3>
         
@@ -76,38 +79,49 @@
             <button class="time-btn" id="btnC3" onclick="setTimeState('credit', 3)">3. Efecto Real</button>
           </div>
           
-          <div class="slider-section">
+          <div class="controls-grid-3">
             <div>
-              <h4 style="font-size: 0.65rem; color: #86868b; text-transform: uppercase; margin-bottom: 10px;">Estado Base</h4>
+              <h4 style="font-size: 0.6rem; color: #86868b; text-transform: uppercase; margin-bottom: 8px;">Estado Base</h4>
               <div class="slider-row">
                 <div class="slider-header"><span>Ingreso (y₀)</span> <span id="valY0C" class="slider-val">$60</span></div>
-                <input type="range" id="paramY0C" min="0" max="100" value="40" step="1">
+                <input type="range" id="paramY0C" min="0" max="100" value="40">
               </div>
               <div class="slider-row">
                 <div class="slider-header"><span>Consumo (c₀)</span> <span id="valC0C" class="slider-val">$60</span></div>
-                <input type="range" id="paramC0C" min="0" max="100" value="40" step="1">
+                <input type="range" id="paramC0C" min="0" max="100" value="40">
               </div>
             </div>
             <div>
-              <h4 style="font-size: 0.65rem; color: #86868b; text-transform: uppercase; margin-bottom: 10px;">Shock Futuro</h4>
+              <h4 style="font-size: 0.6rem; color: #86868b; text-transform: uppercase; margin-bottom: 8px;">Shock Futuro</h4>
               <div class="slider-row">
                 <div class="slider-header"><span>Impacto (Δy)</span> <span id="valImpactC" class="slider-val">$50</span></div>
-                <input type="range" id="paramImpactC" min="0" max="100" value="50" step="1">
+                <input type="range" id="paramImpactC" min="0" max="100" value="50">
               </div>
               <div class="slider-row">
                 <div class="slider-header"><span>Interés (r)</span> <span id="valRC" class="slider-val">5%</span></div>
-                <input type="range" id="paramRC" min="0" max="100" value="25" step="1">
+                <input type="range" id="paramRC" min="0" max="100" value="25">
+              </div>
+            </div>
+            <div>
+              <h4 style="font-size: 0.6rem; color: #86868b; text-transform: uppercase; margin-bottom: 8px;">Cronología</h4>
+              <div class="slider-row">
+                <div class="slider-header"><span>Vida Total</span> <span id="valHorizonC" class="slider-val">10</span></div>
+                <input type="range" id="paramHorizonC" min="0" max="100" value="20">
+              </div>
+              <div class="slider-row">
+                <div class="slider-header"><span>Año Noticia</span> <span id="valNewsC" class="slider-val">3</span></div>
+                <input type="range" id="paramNewsC" min="0" max="100" value="20">
               </div>
             </div>
           </div>
         </div>
 
         <div class="chart-container"><canvas id="creditChart"></canvas></div>
-        <div id="math-debt-c" style="font-size: 0.85rem; text-align: center; padding: 10px; background: #fafafa; border-radius: 10px; margin-bottom: 10px;"></div>
-        <div id="explanation-c" style="font-size: 0.75rem; color: #1d1d1f; padding: 15px; background: #f0f6ff; border-radius: 12px; line-height: 1.4; border: 1px solid #d0e3ff;"></div>
+        <div id="math-debt-c" class="formula-box"></div>
+        <div id="explanation-c" class="explanation-box exp-blue"></div>
       </div>
 
-      <!-- PANEL 2: FALTA DE VOLUNTAD -->
+      <!-- PANEL 2: VOLUNTAD -->
       <div class="card">
         <h3>🧠 2. Falta de Voluntad (Miopía)</h3>
         
@@ -118,58 +132,65 @@
             <button class="time-btn" id="btnW3" onclick="setTimeState('will', 3)">3. Efecto Real</button>
           </div>
 
-          <div class="slider-section">
+          <div class="controls-grid-3">
             <div>
-              <h4 style="font-size: 0.65rem; color: #86868b; text-transform: uppercase; margin-bottom: 10px;">Estado Base</h4>
+              <h4 style="font-size: 0.6rem; color: #86868b; text-transform: uppercase; margin-bottom: 8px;">Estado Base</h4>
               <div class="slider-row">
                 <div class="slider-header"><span>Ingreso (y₀)</span> <span id="valY0W" class="slider-val">$100</span></div>
-                <input type="range" id="paramY0W" min="0" max="100" value="67" step="1">
+                <input type="range" id="paramY0W" min="0" max="100" value="67">
               </div>
               <div class="slider-row">
                 <div class="slider-header"><span>Consumo (c₀)</span> <span id="valC0W" class="slider-val">$100</span></div>
-                <input type="range" id="paramC0W" min="0" max="100" value="67" step="1">
+                <input type="range" id="paramC0W" min="0" max="100" value="67">
               </div>
             </div>
             <div>
-              <h4 style="font-size: 0.65rem; color: #86868b; text-transform: uppercase; margin-bottom: 10px;">Shock Futuro</h4>
+              <h4 style="font-size: 0.6rem; color: #86868b; text-transform: uppercase; margin-bottom: 8px;">Shock Futuro</h4>
               <div class="slider-row">
                 <div class="slider-header"><span>Caída (Δy)</span> <span id="valImpactW" class="slider-val">$50</span></div>
-                <input type="range" id="paramImpactW" min="0" max="100" value="50" step="1">
+                <input type="range" id="paramImpactW" min="0" max="100" value="50">
               </div>
               <div class="slider-row">
                 <div class="slider-header"><span>Interés (r)</span> <span id="valRW" class="slider-val">5%</span></div>
-                <input type="range" id="paramRW" min="0" max="100" value="25" step="1">
+                <input type="range" id="paramRW" min="0" max="100" value="25">
+              </div>
+            </div>
+            <div>
+              <h4 style="font-size: 0.6rem; color: #86868b; text-transform: uppercase; margin-bottom: 8px;">Cronología</h4>
+              <div class="slider-row">
+                <div class="slider-header"><span>Vida Total</span> <span id="valHorizonW" class="slider-val">10</span></div>
+                <input type="range" id="paramHorizonW" min="0" max="100" value="20">
+              </div>
+              <div class="slider-row">
+                <div class="slider-header"><span>Año Noticia</span> <span id="valNewsW" class="slider-val">3</span></div>
+                <input type="range" id="paramNewsW" min="0" max="100" value="20">
               </div>
             </div>
           </div>
         </div>
 
         <div class="chart-container"><canvas id="willChart"></canvas></div>
-        <div id="math-debt-w" style="font-size: 0.85rem; text-align: center; padding: 10px; background: #fafafa; border-radius: 10px; margin-bottom: 10px;"></div>
-        <div id="explanation-w" style="font-size: 0.75rem; color: #1d1d1f; padding: 15px; background: #fff9e6; border-radius: 12px; line-height: 1.4; border: 1px solid #ffeeba;"></div>
+        <div id="math-debt-w" class="formula-box"></div>
+        <div id="explanation-w" class="explanation-box exp-gold"></div>
       </div>
     </div>
 
-    <!-- COLUMNA TEORÍA -->
+    <!-- Columna Derecha -->
     <div class="theory-section">
       <div class="theory-card">
         <h2>Fallos en la Suavización</h2>
-        <p>Los hogares con acceso al crédito y voluntad ahorran o piden prestado para mantener un consumo estable. Los fallos rompen esta estabilidad.</p>
+        <p>En un mundo ideal, los hogares reparten su riqueza total entre todos los años de vida restantes. Pero la realidad impone barreras.</p>
         
-        <h4>Restricción de Crédito</h4>
-        <p>El hogar no puede pedir prestado. Su consumo está topado por su ingreso actual: $c_t \leq y_t$.</p>
+        <h4>Reparto Intertemporal</h4>
+        <p>Cuando recibes una noticia en el año $t_n$, calculas cuánta riqueza extra tendrás hasta el fin de tus días y la divides entre los años que te quedan por vivir ($T - t_n + 1$).</p>
         
-        <h4>Falta de Voluntad</h4>
-        <p>Incapacidad de reducir el gasto hoy para ahorrar ante una caída futura de ingresos.</p>
-
-        <h4>Fórmulas</h4>
-        <div class="formula-box" id="math-slope"></div>
-        <div class="formula-box" id="math-debt-formula"></div>
+        <h4>La Barrera del Crédito</h4>
+        <p>Si no puedes pedir prestado, tu consumo está limitado por tu ingreso de hoy, aunque sepas que mañana serás rico.</p>
       </div>
 
       <div class="exam-tip">
-        <h5>🎓 Tips para el Examen</h5>
-        <p><strong>Clave:</strong> Los hogares restringidos ven su consumo determinado por su renta corriente, no por su riqueza de por vida.</p>
+        <h5>🎓 Tip de Examen</h5>
+        <p>Un hogar que "vive al día" (consumo = ingreso) puede serlo por dos razones: o no tiene acceso a crédito (no puede gastar más) o no tiene voluntad (no quiere ahorrar).</p>
       </div>
     </div>
   </div>
@@ -177,47 +198,40 @@
   <script>
     let creditChart, willChart;
     let states = { 
-      credit: { time: 1, impact: 50, r: 0.05, yBase: 60, cBase: 60 },
-      will: { time: 1, impact: 50, r: 0.05, yBase: 100, cBase: 100 }
+      credit: { time: 1, y0: 60, c0: 60, impact: 50, r: 0.05, horizon: 10, news: 3, shock: 6 },
+      will: { time: 1, y0: 100, c0: 100, impact: 50, r: 0.05, horizon: 10, news: 3, shock: 6 }
     };
 
     function kHTML(latex) { return katex.renderToString(latex, { throwOnError: false }); }
 
     function initCharts() {
-      const timeLabels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
       const commonOptions = { 
         responsive: true, maintainAspectRatio: false, animation: false,
         scales: { 
-          x: { title: { display: true, text: 'Tiempo (periodos)', font: { weight: 'bold', size: 11 } } },
-          y: { min: 0, max: 180, title: { display: true, text: 'Valor (USD $)', font: { weight: 'bold', size: 11 } } } 
+          x: { title: { display: true, text: 'Años (t)', font: { weight: 'bold' } } },
+          y: { min: 0, max: 250, title: { display: true, text: 'USD ($)', font: { weight: 'bold' } } } 
         }
       };
 
       const ctx1 = document.getElementById('creditChart').getContext('2d');
       creditChart = new Chart(ctx1, {
         type: 'line',
-        data: {
-          labels: timeLabels,
-          datasets: [
-            { label: 'Ingresos (y)', data: [], borderColor: '#86868b', borderDash: [5,5], fill: false, pointRadius: 0 },
-            { label: 'Hogar Normal', data: [], borderColor: '#0071e3', borderWidth: 3, fill: false, pointRadius: 0 },
-            { label: 'Hogar Restringido', data: [], borderColor: '#ff3b30', borderWidth: 2, fill: false, pointRadius: 0 }
-          ]
-        },
+        data: { labels: [], datasets: [
+          { label: 'Ingresos', data: [], borderColor: '#86868b', borderDash: [5,5], fill: false, pointRadius: 0 },
+          { label: 'Hogar Normal', data: [], borderColor: '#0071e3', borderWidth: 3, fill: false, pointRadius: 0 },
+          { label: 'Hogar Restringido', data: [], borderColor: '#ff3b30', borderWidth: 2, fill: false, pointRadius: 0 }
+        ]},
         options: commonOptions
       });
 
       const ctx2 = document.getElementById('willChart').getContext('2d');
       willChart = new Chart(ctx2, {
         type: 'line',
-        data: {
-          labels: timeLabels,
-          datasets: [
-            { label: 'Ingresos (y)', data: [], borderColor: '#86868b', borderDash: [5,5], fill: false, pointRadius: 0 },
-            { label: 'Hogar Previsor', data: [], borderColor: '#34c759', borderWidth: 3, fill: false, pointRadius: 0 },
-            { label: 'Hogar sin Voluntad', data: [], borderColor: '#ff9500', borderWidth: 2, fill: false, pointRadius: 0 }
-          ]
-        },
+        data: { labels: [], datasets: [
+          { label: 'Ingresos', data: [], borderColor: '#86868b', borderDash: [5,5], fill: false, pointRadius: 0 },
+          { label: 'Hogar Previsor', data: [], borderColor: '#34c759', borderWidth: 3, fill: false, pointRadius: 0 },
+          { label: 'Hogar sin Voluntad', data: [], borderColor: '#ff9500', borderWidth: 2, fill: false, pointRadius: 0 }
+        ]},
         options: commonOptions
       });
     }
@@ -231,119 +245,131 @@
     }
 
     function updateAll() {
-      // 1. Panel Crédito
+      // Sincronización dinámica de Cronología
+      states.credit.shock = Math.floor(states.credit.horizon / 2) + 1;
+      states.will.shock = Math.floor(states.will.horizon / 2) + 1;
+
+      // 1. Panel CRÉDITO
       const c = states.credit;
-      const yNextC = c.time >= 3 ? c.yBase + c.impact : c.yBase;
-      const incomeC = [c.yBase, c.yBase, c.yBase, c.yBase, c.yBase, yNextC, yNextC, yNextC, yNextC, yNextC];
+      const labelsC = Array.from({length: c.horizon}, (_, i) => i + 1);
+      const yFutureC = c.time === 3 ? c.y0 + c.impact : c.y0;
+      const incomeC = labelsC.map(t => t < c.shock ? c.y0 : yFutureC);
       
-      let cNormal = Array(10).fill(c.cBase);
-      let cRestricted = Array(10).fill(c.cBase);
-      
+      let cNorm = Array(c.horizon).fill(c.c0);
+      let cRest = labelsC.map(t => Math.min(c.c0, incomeC[t-1]));
+
+      const yearsLeft = c.horizon - c.news + 1;
+      const extraWealthC = (c.impact * (c.horizon - c.shock + 1)) / (1 + c.r);
+      const incPerPeriod = extraWealthC / yearsLeft;
+      const smoothLevelC = c.c0 + incPerPeriod;
+
       if (c.time >= 2) {
-        const extraWealth = (c.impact * 5) / (1 + c.r);
-        const increasePerPeriod = extraWealth / 8;
-        const smoothLevel = c.cBase + increasePerPeriod;
-        cNormal = [c.cBase, c.cBase, smoothLevel, smoothLevel, smoothLevel, smoothLevel, smoothLevel, smoothLevel, smoothLevel, smoothLevel];
-        
-        const currentLimit = incomeC;
-        cRestricted = incomeC.map((y, t) => Math.min(c.cBase, y)); // Empieza en cBase pero limitado por y
-        if (c.time === 3) {
-           cRestricted = incomeC.map((y, t) => t < 5 ? Math.min(c.cBase, y) : yNextC);
-        }
-      } else {
-        cRestricted = incomeC.map(y => Math.min(c.cBase, y));
+        cNorm = labelsC.map(t => t < c.news ? c.c0 : smoothLevelC);
+        cRest = labelsC.map((t, i) => {
+          if (t < c.news) return c.c0;
+          if (c.time === 2) return Math.min(c.c0, incomeC[i]);
+          return Math.min(smoothLevelC, incomeC[i]);
+        });
       }
-      
+
+      creditChart.data.labels = labelsC;
       creditChart.data.datasets[0].data = incomeC;
-      creditChart.data.datasets[1].data = cNormal;
-      creditChart.data.datasets[2].data = cRestricted;
+      creditChart.data.datasets[1].data = cNorm;
+      creditChart.data.datasets[2].data = cRest;
       creditChart.update();
 
-      const debtC = (cNormal[2] - c.yBase) * (1 + c.r);
-      const formulaDebtC = `(1+${c.r.toFixed(2)})(${cNormal[2].toFixed(1)} - ${c.yBase.toFixed(1)}) = ${debtC.toFixed(1)}`;
-      document.getElementById('math-debt-c').innerHTML = `Deuda generada: ${kHTML(formulaDebtC)} USD`;
-
-      // Explicación dinámica Crédito
-      const totalFutureImpact = c.impact * 5;
-      const discountedWealth = totalFutureImpact / (1 + c.r);
-      const increasePerPeriod = (discountedWealth / 8).toFixed(1);
+      const debtC = (cNorm[c.news-1] - c.y0) * (1 + c.r);
+      document.getElementById('math-debt-c').innerHTML = `Deuda generada: ${kHTML(`(1+${c.r.toFixed(2)})(${cNorm[c.news-1].toFixed(1)} - ${c.y0.toFixed(1)}) = ${debtC.toFixed(1)}`)} USD`;
       document.getElementById('explanation-c').innerHTML = `
-        <strong>¿Por qué sube el consumo?</strong><br>
-        1. Ganarás <strong>$${c.impact}</strong> extra durante 5 años = <strong>$${totalFutureImpact}</strong> totales.<br>
-        2. Esa riqueza futura vale hoy <strong>$${discountedWealth.toFixed(1)}</strong> (aplicando r).<br>
-        3. El hogar normal reparte esos $${discountedWealth.toFixed(1)} entre los 8 años restantes.<br>
-        4. Resultado: sube su consumo <strong>+$${increasePerPeriod}</strong> cada día desde hoy.
+        <strong>Desglose del aumento:</strong><br>
+        1. Recibirás noticia el año <strong>${c.news}</strong>. Te quedan <strong>${yearsLeft} años</strong> de vida.<br>
+        2. El ingreso sube $${c.impact} durante los últimos <strong>${c.horizon - c.shock + 1} años</strong>.<br>
+        3. Riqueza extra total: <strong>$${(c.impact * (c.horizon - c.shock + 1)).toFixed(0)}</strong>.<br>
+        4. Reparto: subes consumo <strong>+$${incPerPeriod.toFixed(1)}</strong> cada año pidiendo crédito.
       `;
 
-      // 2. Panel Voluntad
+      // 2. Panel VOLUNTAD
       const w = states.will;
-      const yNextW = w.time >= 3 ? Math.max(0, w.yBase - w.impact) : w.yBase;
-      const incomeW = [w.yBase, w.yBase, w.yBase, w.yBase, w.yBase, yNextW, yNextW, yNextW, yNextW, yNextW];
-      
-      let cWise = Array(10).fill(w.cBase);
-      let cWeak = Array(10).fill(w.cBase);
-      
+      const labelsW = Array.from({length: w.horizon}, (_, i) => i + 1);
+      const yFutureW = w.time === 3 ? Math.max(0, w.y0 - w.impact) : w.y0;
+      const incomeW = labelsW.map(t => t < w.shock ? w.y0 : yFutureW);
+
+      let cPrev = Array(w.horizon).fill(w.c0);
+      let cMiope = labelsW.map(t => Math.min(w.c0, incomeW[t-1]));
+
+      const yearsLeftW = w.horizon - w.news + 1;
+      const lossWealthW = (w.impact * (w.horizon - w.shock + 1)) / (1 + w.r);
+      const decPerPeriod = lossWealthW / yearsLeftW;
+      const smoothLevelW = Math.max(0, w.c0 - decPerPeriod);
+
       if (w.time >= 2) {
-        const wealthLoss = (w.impact * 5) / (1 + w.r);
-        const decreasePerPeriod = wealthLoss / 8;
-        const smoothLevelW = Math.max(0, w.cBase - decreasePerPeriod);
-        cWise = [w.cBase, w.cBase, smoothLevelW, smoothLevelW, smoothLevelW, smoothLevelW, smoothLevelW, smoothLevelW, smoothLevelW, smoothLevelW];
-        
-        if (w.time === 3) {
-          cWeak = incomeW.map((y, t) => t < 5 ? w.cBase : y);
-        }
+        cPrev = labelsW.map(t => t < w.news ? w.c0 : smoothLevelW);
+        cMiope = labelsW.map((t, i) => {
+          if (t < w.shock) return w.c0;
+          return incomeW[i];
+        });
       }
-      
+
+      willChart.data.labels = labelsW;
       willChart.data.datasets[0].data = incomeW;
-      willChart.data.datasets[1].data = cWise;
-      willChart.data.datasets[2].data = cWeak;
+      willChart.data.datasets[1].data = cPrev;
+      willChart.data.datasets[2].data = cMiope;
       willChart.update();
 
-      const savingW = (w.yBase - cWise[2]) * (1 + w.r);
-      const formulaSavingW = `(${w.yBase.toFixed(1)} - ${cWise[2].toFixed(1)})(1+${w.r.toFixed(2)}) = ${savingW.toFixed(1)}`;
-      document.getElementById('math-debt-w').innerHTML = `Ahorro generado: ${kHTML(formulaSavingW)} USD`;
-
-      // Explicación dinámica Voluntad
-      const totalFutureLoss = w.impact * 5;
-      const discountedLoss = totalFutureLoss / (1 + w.r);
-      const reductionPerPeriod = (discountedLoss / 8).toFixed(1);
+      const savingW = (w.y0 - cPrev[w.news-1]) * (1 + w.r);
+      document.getElementById('math-debt-w').innerHTML = `Ahorro generado: ${kHTML(`(${w.y0.toFixed(1)} - ${cPrev[w.news-1].toFixed(1)})(1+${w.r.toFixed(2)}) = ${savingW.toFixed(1)}`)} USD`;
       document.getElementById('explanation-w').innerHTML = `
-        <strong>¿Por qué baja el consumo?</strong><br>
-        1. Perderás <strong>$${w.impact}</strong> durante 5 años = <strong>$${totalFutureLoss}</strong> de pérdida total.<br>
-        2. Esa pérdida futura equivale hoy a <strong>$${discountedLoss.toFixed(1)}</strong>.<br>
-        3. El previsor reduce su gasto <strong>-$${reductionPerPeriod}</strong> hoy para ahorrar.<br>
-        4. El hogar sin voluntad ignora esto y sufre la caída de golpe al final.
+        <strong>Desglose de la reducción:</strong><br>
+        1. Sabes en el año <strong>${w.news}</strong> que el sueldo bajará. Quedan <strong>${yearsLeftW} años</strong>.<br>
+        2. Perderás $${w.impact} durante los últimos <strong>${w.horizon - w.shock + 1} años</strong>.<br>
+        3. Pérdida total de riqueza: <strong>$${(w.impact * (w.horizon - w.shock + 1)).toFixed(0)}</strong>.<br>
+        4. Reparto: bajas consumo <strong>-$${decPerPeriod.toFixed(1)}</strong> hoy para ahorrar.
       `;
 
-      // Labels UI
-      document.getElementById('valY0C').textContent = '$' + c.yBase.toFixed(0);
-      document.getElementById('valC0C').textContent = '$' + c.cBase.toFixed(0);
+      // Sincronización Labels Sliders
+      document.getElementById('valY0C').textContent = '$' + c.y0.toFixed(0);
+      document.getElementById('valC0C').textContent = '$' + c.c0.toFixed(0);
       document.getElementById('valImpactC').textContent = '$' + c.impact.toFixed(0);
       document.getElementById('valRC').textContent = (c.r * 100).toFixed(0) + '%';
-      
-      document.getElementById('valY0W').textContent = '$' + w.yBase.toFixed(0);
-      document.getElementById('valC0W').textContent = '$' + w.cBase.toFixed(0);
+      document.getElementById('valHorizonC').textContent = c.horizon;
+      document.getElementById('valNewsC').textContent = c.news;
+
+      document.getElementById('valY0W').textContent = '$' + w.y0.toFixed(0);
+      document.getElementById('valC0W').textContent = '$' + w.c0.toFixed(0);
       document.getElementById('valImpactW').textContent = '$' + w.impact.toFixed(0);
       document.getElementById('valRW').textContent = (w.r * 100).toFixed(0) + '%';
+      document.getElementById('valHorizonW').textContent = w.horizon;
+      document.getElementById('valNewsW').textContent = w.news;
     }
 
-    // Sliders Listeners (0-100% -> scale)
-    document.getElementById('paramY0C').oninput = (e) => { states.credit.yBase = e.target.value * 1.5; updateAll(); };
-    document.getElementById('paramC0C').oninput = (e) => { states.credit.cBase = e.target.value * 1.5; updateAll(); };
-    document.getElementById('paramImpactC').oninput = (e) => { states.credit.impact = e.target.value * 1.0; updateAll(); };
+    // Listeners (0-100 -> scale)
+    document.getElementById('paramY0C').oninput = (e) => { states.credit.y0 = Math.round(e.target.value * 1.5); updateAll(); };
+    document.getElementById('paramC0C').oninput = (e) => { states.credit.c0 = Math.round(e.target.value * 1.5); updateAll(); };
+    document.getElementById('paramImpactC').oninput = (e) => { states.credit.impact = parseInt(e.target.value); updateAll(); };
     document.getElementById('paramRC').oninput = (e) => { states.credit.r = (e.target.value / 100) * 0.2; updateAll(); };
+    document.getElementById('paramHorizonC').oninput = (e) => { 
+      states.credit.horizon = Math.round(5 + (e.target.value / 100) * 25); 
+      updateAll(); 
+    };
+    document.getElementById('paramNewsC').oninput = (e) => { 
+      states.credit.news = Math.round(1 + (e.target.value / 100) * (states.credit.horizon - 3)); 
+      updateAll(); 
+    };
 
-    document.getElementById('paramY0W').oninput = (e) => { states.will.yBase = e.target.value * 1.5; updateAll(); };
-    document.getElementById('paramC0W').oninput = (e) => { states.will.cBase = e.target.value * 1.5; updateAll(); };
-    document.getElementById('paramImpactW').oninput = (e) => { states.will.impact = e.target.value * 1.0; updateAll(); };
+    document.getElementById('paramY0W').oninput = (e) => { states.will.y0 = Math.round(e.target.value * 1.5); updateAll(); };
+    document.getElementById('paramC0W').oninput = (e) => { states.will.c0 = Math.round(e.target.value * 1.5); updateAll(); };
+    document.getElementById('paramImpactW').oninput = (e) => { states.will.impact = parseInt(e.target.value); updateAll(); };
     document.getElementById('paramRW').oninput = (e) => { states.will.r = (e.target.value / 100) * 0.2; updateAll(); };
+    document.getElementById('paramHorizonW').oninput = (e) => { 
+      states.will.horizon = Math.round(5 + (e.target.value / 100) * 25); 
+      updateAll(); 
+    };
+    document.getElementById('paramNewsW').oninput = (e) => { 
+      states.will.news = Math.round(1 + (e.target.value / 100) * (states.will.horizon - 3)); 
+      updateAll(); 
+    };
 
-    document.addEventListener('DOMContentLoaded', () => {
-      initCharts();
-      updateAll();
-      document.getElementById('math-slope').innerHTML = kHTML('\\text{Pendiente} = -(1+r)');
-      document.getElementById('math-debt-formula').innerHTML = kHTML('\\text{Pago Futuro} = (1+r)(c - y)');
-    });
+    document.addEventListener('DOMContentLoaded', () => { initCharts(); updateAll(); });
   </script>
 </body>
 </html>
