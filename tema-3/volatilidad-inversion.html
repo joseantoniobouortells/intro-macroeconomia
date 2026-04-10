@@ -210,22 +210,22 @@
       };
 
       // Análisis Empresa A
-      const respA_ifBInv = p.aII >= p.aNI ? '\\text{Invertir}' : '\\text{No Inv.}';
+      const respA1 = p.aII >= p.aNI ? '\\text{Invertir}' : '\\text{No Inv.}';
       const symbA1 = p.aII >= p.aNI ? '\\ge' : '<';
-      document.getElementById('logic-a-invest').innerHTML = `Si B Invierte: ${kHTML(`${p.aII} ${symbA1} ${p.aNI} \\Rightarrow `)} <strong>${respA_ifBInv}</strong>`;
+      document.getElementById('logic-a-invest').innerHTML = `Si B Invierte: ${kHTML(`${p.aII} ${symbA1} ${p.aNI} \\Rightarrow ${respA1}`)}`;
       
-      const respA_ifBNo = p.aIN >= p.aNN ? '\\text{Invertir}' : '\\text{No Inv.}';
+      const respA2 = p.aIN >= p.aNN ? '\\text{Invertir}' : '\\text{No Inv.}';
       const symbA2 = p.aIN >= p.aNN ? '\\ge' : '<';
-      document.getElementById('logic-a-noinvest').innerHTML = `Si B No Inv.: ${kHTML(`${p.aIN} ${symbA2} ${p.aNN} \\Rightarrow `)} <strong>${respA_ifBNo}</strong>`;
+      document.getElementById('logic-a-noinvest').innerHTML = `Si B No Inv.: ${kHTML(`${p.aIN} ${symbA2} ${p.aNN} \\Rightarrow ${respA2}`)}`;
 
       // Análisis Empresa B
-      const respB_ifAInv = p.bII >= p.bIN ? '\\text{Invertir}' : '\\text{No Inv.}';
+      const respB1 = p.bII >= p.bIN ? '\\text{Invertir}' : '\\text{No Inv.}';
       const symbB1 = p.bII >= p.bIN ? '\\ge' : '<';
-      document.getElementById('logic-b-invest').innerHTML = `Si A Invierte: ${kHTML(`${p.bII} ${symbB1} ${p.bIN} \\Rightarrow `)} <strong>${respB_ifAInv}</strong>`;
+      document.getElementById('logic-b-invest').innerHTML = `Si A Invierte: ${kHTML(`${p.bII} ${symbB1} ${p.bIN} \\Rightarrow ${respB1}`)}`;
       
-      const respB_ifANo = p.bNI >= p.bNN ? '\\text{Invertir}' : '\\text{No Inv.}';
+      const respB2 = p.bNI >= p.bNN ? '\\text{Invertir}' : '\\text{No Inv.}';
       const symbB2 = p.bNI >= p.bNN ? '\\ge' : '<';
-      document.getElementById('logic-b-noinvest').innerHTML = `Si A No Inv.: ${kHTML(`${p.bNI} ${symbB2} ${p.bNN} \\Rightarrow `)} <strong>${respB_ifANo}</strong>`;
+      document.getElementById('logic-b-noinvest').innerHTML = `Si A No Inv.: ${kHTML(`${p.bNI} ${symbB2} ${p.bNN} \\Rightarrow ${respB2}`)}`;
     }
 
     function showBestResponse(player) {
