@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simulador de Ciclo de Vida — Tema 3</title>
+  <title>Dashboard Ciclo de Vida — Tema 3</title>
   <link rel="stylesheet" href="../tema-1/assets/style.css">
   <link rel="stylesheet" href="../tema-1/assets/katex.min.css">
   <script src="../tema-1/assets/chart.umd.min.js"></script>
@@ -21,186 +21,176 @@
     .nav-spacer { width: 120px; }
 
     .main-container {
-      max-width: 1400px; margin: 0 auto; display: grid;
-      grid-template-columns: 1fr 400px; gap: 32px; padding: 40px 24px;
-      align-items: start;
+      max-width: 1600px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px; padding: 32px 24px;
     }
-    @media (max-width: 1100px) { .main-container { grid-template-columns: 1fr; } }
 
-    .card { background: #fff; border-radius: 24px; padding: 28px; border: 1px solid #e5e5e5; margin-bottom: 32px; }
-    .card h3 { font-size: 1.1rem; margin-bottom: 20px; color: #1d1d1f; border-bottom: 1px solid #f5f5f7; padding-bottom: 12px; }
+    /* Layout Horizontal del Panel */
+    .dashboard-card { 
+      background: #fff; border-radius: 24px; padding: 24px; border: 1px solid #e5e5e5; 
+      display: grid; grid-template-columns: 1fr 340px; gap: 32px;
+    }
+    @media (max-width: 1100px) { .dashboard-card { grid-template-columns: 1fr; } }
 
-    .chart-container { position: relative; height: 350px; margin-bottom: 20px; }
+    .visual-side { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+    .chart-container { position: relative; height: 420px; }
     
-    .controls-panel { background: #f9f9fb; border-radius: 16px; padding: 20px; margin-bottom: 20px; }
-    .controls-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 15px; }
-    @media (max-width: 800px) { .controls-grid-3 { grid-template-columns: 1fr; } }
+    /* Columna de Controles */
+    .controls-side { background: #f9f9fb; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+    .control-section { margin-bottom: 5px; }
+    .control-section h4 { font-size: 0.65rem; color: #86868b; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.5px; border-bottom: 1px solid #eee; padding-bottom: 4px; }
 
-    .slider-row { margin-bottom: 12px; }
-    .slider-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #86868b; }
+    .slider-row { margin-bottom: 10px; }
+    .slider-header { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.75rem; font-weight: 600; }
     .slider-val { color: #0071e3; font-weight: 800; }
     input[type=range] { width: 100%; cursor: pointer; }
 
-    .timeline-btns { display: flex; gap: 8px; margin-bottom: 20px; }
+    .timeline-btns { display: flex; gap: 6px; margin-bottom: 10px; }
     .time-btn { 
       flex: 1; padding: 10px; border-radius: 10px; border: 1px solid #d2d2d7; 
-      background: #fff; cursor: pointer; font-size: 0.7rem; font-weight: 700; transition: all 0.2s;
+      background: #fff; cursor: pointer; font-size: 0.65rem; font-weight: 700; transition: all 0.2s;
     }
     .time-btn.active { background: #1d1d1f; color: #fff; border-color: #1d1d1f; }
 
-    .formula-box { background: #f0f6ff; padding: 12px; border-radius: 10px; margin: 10px 0; text-align: center; font-size: 0.85rem; }
-    .explanation-box { font-size: 0.75rem; color: #1d1d1f; padding: 15px; border-radius: 12px; line-height: 1.5; border: 1px solid transparent; }
-    .exp-blue { background: #f0f6ff; border-color: #d0e3ff; }
-    .exp-gold { background: #fff9e6; border-color: #ffeeba; }
+    /* Resultados y Explicación */
+    .result-box { background: #f0f6ff; padding: 12px; border-radius: 12px; text-align: center; font-size: 0.85rem; font-weight: 600; border: 1px solid #d0e3ff; }
+    .explanation-box { font-size: 0.75rem; color: #1d1d1f; padding: 16px; border-radius: 16px; line-height: 1.5; border: 1px solid #eee; background: #fff; }
 
-    .theory-card { background: #fff; border-radius: 20px; padding: 32px; border: 1px solid #e5e5e5; line-height: 1.6; }
-    .exam-tip { background: #fff9e6; border: 1.5px solid #ffcc00; border-radius: 16px; padding: 24px; color: #5c4d00; margin-top: 24px; }
+    .theory-footer { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; padding-bottom: 60px; }
+    @media (max-width: 900px) { .theory-footer { grid-template-columns: 1fr; } }
+    .theory-card { background: #fff; border-radius: 20px; padding: 32px; border: 1px solid #e5e5e5; }
+    .exam-tip { background: #fff9e6; border: 1.5px solid #ffcc00; border-radius: 16px; padding: 24px; color: #5c4d00; }
   </style>
 </head>
 <body>
 
   <nav class="site-nav">
     <a href="index.html" class="nav-back"><span class="chevron">‹</span> Tema 3</a>
-    <span class="nav-center">Restricciones y Voluntad · Ciclo de Vida Completo</span>
+    <span class="nav-center">Restricciones y Voluntad · Ciclo de Vida</span>
     <span class="nav-spacer"></span>
   </nav>
 
   <div class="main-container">
     
-    <div class="visual-section">
-      <!-- PANEL 1: CRÉDITO -->
-      <div class="card">
-        <h3>🛡️ 1. Restricción de Crédito</h3>
-        
-        <div class="controls-panel">
-          <div class="timeline-btns">
-            <button class="time-btn active" id="btnC1" onclick="setTimeState('credit', 1)">1. Inicio</button>
-            <button class="time-btn" id="btnC2" onclick="setTimeState('credit', 2)">2. Noticia (↑y)</button>
-            <button class="time-btn" id="btnC3" onclick="setTimeState('credit', 3)">3. Efecto Real</button>
-          </div>
-          
-          <div class="controls-grid-3">
-            <div>
-              <h4 style="font-size: 0.6rem; color: #86868b; text-transform: uppercase; margin-bottom: 8px;">Estado Base</h4>
-              <div class="slider-row">
-                <div class="slider-header"><span>Ingreso (y₀)</span> <span id="valY0C" class="slider-val">$60</span></div>
-                <input type="range" id="paramY0C" min="0" max="100" value="40">
-              </div>
-              <div class="slider-row">
-                <div class="slider-header"><span>Consumo (c₀)</span> <span id="valC0C" class="slider-val">$60</span></div>
-                <input type="range" id="paramC0C" min="0" max="100" value="40">
-              </div>
-            </div>
-            <div>
-              <h4 style="font-size: 0.6rem; color: #86868b; text-transform: uppercase; margin-bottom: 8px;">Shock Futuro</h4>
-              <div class="slider-row">
-                <div class="slider-header"><span>Impacto (Δy)</span> <span id="valImpactC" class="slider-val">$50</span></div>
-                <input type="range" id="paramImpactC" min="0" max="100" value="50">
-              </div>
-              <div class="slider-row">
-                <div class="slider-header"><span>Interés (r)</span> <span id="valRC" class="slider-val">5%</span></div>
-                <input type="range" id="paramRC" min="0" max="100" value="25">
-              </div>
-            </div>
-            <div>
-              <h4 style="font-size: 0.6rem; color: #86868b; text-transform: uppercase; margin-bottom: 8px;">Cronología</h4>
-              <div class="slider-row">
-                <div class="slider-header"><span>Vida Total</span> <span id="valHorizonC" class="slider-val">10</span></div>
-                <input type="range" id="paramHorizonC" min="0" max="100" value="20">
-              </div>
-              <div class="slider-row">
-                <div class="slider-header"><span>Año Noticia</span> <span id="valNewsC" class="slider-val">3</span></div>
-                <input type="range" id="paramNewsC" min="0" max="100" value="20">
-              </div>
-              <div class="slider-row">
-                <div class="slider-header"><span>Año Cambio</span> <span id="valShockC" class="slider-val">6</span></div>
-                <input type="range" id="paramShockC" min="0" max="100" value="40">
-              </div>
-            </div>
-          </div>
-        </div>
-
+    <!-- PANEL 1: RESTRICCIÓN DE CRÉDITO -->
+    <div class="dashboard-card">
+      <div class="visual-side">
+        <h3 style="margin:0">🛡️ 1. Restricción de Crédito</h3>
         <div class="chart-container"><canvas id="creditChart"></canvas></div>
-        <div id="math-debt-c" class="formula-box"></div>
-        <div id="explanation-c" class="explanation-box exp-blue"></div>
+        <div id="math-debt-c" class="result-box"></div>
+        <div id="explanation-c" class="explanation-box" style="border-left: 4px solid #0071e3;"></div>
       </div>
 
-      <!-- PANEL 2: VOLUNTAD -->
-      <div class="card">
-        <h3>🧠 2. Falta de Voluntad (Miopía)</h3>
-        
-        <div class="controls-panel">
+      <div class="controls-side">
+        <div class="control-section">
+          <h4>Cronología del Evento</h4>
           <div class="timeline-btns">
-            <button class="time-btn active" id="btnW1" onclick="setTimeState('will', 1)">1. Inicio</button>
-            <button class="time-btn" id="btnW2" onclick="setTimeState('will', 2)">2. Noticia (↓y)</button>
-            <button class="time-btn" id="btnW3" onclick="setTimeState('will', 3)">3. Efecto Real</button>
+            <button class="time-btn active" id="btnC1" onclick="setTimeState('credit', 1)">Inicio</button>
+            <button class="time-btn" id="btnC2" onclick="setTimeState('credit', 2)">Noticia</button>
+            <button class="time-btn" id="btnC3" onclick="setTimeState('credit', 3)">Efecto</button>
           </div>
-
-          <div class="controls-grid-3">
-            <div>
-              <h4 style="font-size: 0.6rem; color: #86868b; text-transform: uppercase; margin-bottom: 8px;">Estado Base</h4>
-              <div class="slider-row">
-                <div class="slider-header"><span>Ingreso (y₀)</span> <span id="valY0W" class="slider-val">$100</span></div>
-                <input type="range" id="paramY0W" min="0" max="100" value="67">
-              </div>
-              <div class="slider-row">
-                <div class="slider-header"><span>Consumo (c₀)</span> <span id="valC0W" class="slider-val">$100</span></div>
-                <input type="range" id="paramC0W" min="0" max="100" value="67">
-              </div>
-            </div>
-            <div>
-              <h4 style="font-size: 0.6rem; color: #86868b; text-transform: uppercase; margin-bottom: 8px;">Shock Futuro</h4>
-              <div class="slider-row">
-                <div class="slider-header"><span>Caída (Δy)</span> <span id="valImpactW" class="slider-val">$50</span></div>
-                <input type="range" id="paramImpactW" min="0" max="100" value="50">
-              </div>
-              <div class="slider-row">
-                <div class="slider-header"><span>Interés (r)</span> <span id="valRW" class="slider-val">5%</span></div>
-                <input type="range" id="paramRW" min="0" max="100" value="25">
-              </div>
-            </div>
-            <div>
-              <h4 style="font-size: 0.6rem; color: #86868b; text-transform: uppercase; margin-bottom: 8px;">Cronología</h4>
-              <div class="slider-row">
-                <div class="slider-header"><span>Vida Total</span> <span id="valHorizonW" class="slider-val">10</span></div>
-                <input type="range" id="paramHorizonW" min="0" max="100" value="20">
-              </div>
-              <div class="slider-row">
-                <div class="slider-header"><span>Año Noticia</span> <span id="valNewsW" class="slider-val">3</span></div>
-                <input type="range" id="paramNewsW" min="0" max="100" value="20">
-              </div>
-              <div class="slider-row">
-                <div class="slider-header"><span>Año Cambio</span> <span id="valShockW" class="slider-val">6</span></div>
-                <input type="range" id="paramShockW" min="0" max="100" value="40">
-              </div>
-            </div>
+          <div class="slider-row">
+            <div class="slider-header"><span>Vida Total</span> <span id="valHorizonC" class="slider-val">10</span></div>
+            <input type="range" id="paramHorizonC" min="0" max="100" value="20">
+          </div>
+          <div class="slider-row">
+            <div class="slider-header"><span>Año Noticia</span> <span id="valNewsC" class="slider-val">3</span></div>
+            <input type="range" id="paramNewsC" min="0" max="100" value="20">
+          </div>
+          <div class="slider-row">
+            <div class="slider-header"><span>Año Cambio</span> <span id="valShockC" class="slider-val">6</span></div>
+            <input type="range" id="paramShockC" min="0" max="100" value="40">
           </div>
         </div>
 
+        <div class="control-section">
+          <h4>Parámetros Económicos</h4>
+          <div class="slider-row">
+            <div class="slider-header"><span>Ingreso (y₀)</span> <span id="valY0C" class="slider-val">$60</span></div>
+            <input type="range" id="paramY0C" min="0" max="100" value="40">
+          </div>
+          <div class="slider-row">
+            <div class="slider-header"><span>Consumo (c₀)</span> <span id="valC0C" class="slider-val">$60</span></div>
+            <input type="range" id="paramC0C" min="0" max="100" value="40">
+          </div>
+          <div class="slider-row">
+            <div class="slider-header"><span>Impacto (Δy)</span> <span id="valImpactC" class="slider-val">$50</span></div>
+            <input type="range" id="paramImpactC" min="0" max="100" value="50">
+          </div>
+          <div class="slider-row">
+            <div class="slider-header"><span>Interés (r)</span> <span id="valRC" class="slider-val">5%</span></div>
+            <input type="range" id="paramRC" min="0" max="100" value="25">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL 2: FALTA DE VOLUNTAD -->
+    <div class="dashboard-card">
+      <div class="visual-side">
+        <h3 style="margin:0">🧠 2. Falta de Voluntad (Miopía)</h3>
         <div class="chart-container"><canvas id="willChart"></canvas></div>
-        <div id="math-debt-w" class="formula-box"></div>
-        <div id="explanation-w" class="explanation-box exp-gold"></div>
+        <div id="math-debt-w" class="result-box" style="background:#fff9e6; border-color:#ffeeba"></div>
+        <div id="explanation-w" class="explanation-box" style="border-left: 4px solid #ff9500;"></div>
+      </div>
+
+      <div class="controls-side">
+        <div class="control-section">
+          <h4>Cronología del Evento</h4>
+          <div class="timeline-btns">
+            <button class="time-btn active" id="btnW1" onclick="setTimeState('will', 1)">Inicio</button>
+            <button class="time-btn" id="btnW2" onclick="setTimeState('will', 2)">Noticia</button>
+            <button class="time-btn" id="btnW3" onclick="setTimeState('will', 3)">Efecto</button>
+          </div>
+          <div class="slider-row">
+            <div class="slider-header"><span>Vida Total</span> <span id="valHorizonW" class="slider-val">10</span></div>
+            <input type="range" id="paramHorizonW" min="0" max="100" value="20">
+          </div>
+          <div class="slider-row">
+            <div class="slider-header"><span>Año Noticia</span> <span id="valNewsW" class="slider-val">3</span></div>
+            <input type="range" id="paramNewsW" min="0" max="100" value="20">
+          </div>
+          <div class="slider-row">
+            <div class="slider-header"><span>Año Cambio</span> <span id="valShockW" class="slider-val">6</span></div>
+            <input type="range" id="paramShockW" min="0" max="100" value="40">
+          </div>
+        </div>
+
+        <div class="control-section">
+          <h4>Parámetros Económicos</h4>
+          <div class="slider-row">
+            <div class="slider-header"><span>Ingreso (y₀)</span> <span id="valY0W" class="slider-val">$100</span></div>
+            <input type="range" id="paramY0W" min="0" max="100" value="67">
+          </div>
+          <div class="slider-row">
+            <div class="slider-header"><span>Consumo (c₀)</span> <span id="valC0W" class="slider-val">$100</span></div>
+            <input type="range" id="paramC0W" min="0" max="100" value="67">
+          </div>
+          <div class="slider-row">
+            <div class="slider-header"><span>Caída (Δy)</span> <span id="valImpactW" class="slider-val">$50</span></div>
+            <input type="range" id="paramImpactW" min="0" max="100" value="50">
+          </div>
+          <div class="slider-row">
+            <div class="slider-header"><span>Interés (r)</span> <span id="valRW" class="slider-val">5%</span></div>
+            <input type="range" id="paramRW" min="0" max="100" value="25">
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Columna Derecha -->
-    <div class="theory-section">
+    <!-- SECCIÓN TEORÍA INFERIOR -->
+    <div class="theory-footer">
       <div class="theory-card">
-        <h2>Fallos en la Suavización</h2>
-        <p>Ajusta el <strong>Año de la Noticia</strong> y el <strong>Año del Cambio Real</strong> para ver cómo los hogares previsores anticipan el futuro.</p>
-        
-        <h4>Reparto Intertemporal</h4>
-        <p>Cuando recibes noticia en <span id="math-tn"></span>, calculas cuánta riqueza extra tendrás hasta el fin de tus días y la divides entre los años de vida que te quedan (<span id="math-years-left"></span>).</p>
-        
-        <h4>La Barrera del Crédito</h4>
-        <p>Si no puedes pedir prestado, tu consumo está limitado por tu ingreso actual (<span id="math-c-y"></span>).</p>
+        <h2>Conceptos Clave</h2>
+        <p>Los fallos en la suavización rompen la línea recta de consumo esperado. Utiliza los botones superiores de cada panel para ver la secuencia temporal.</p>
+        <div id="math-theory-tn" style="margin: 15px 0"></div>
+        <div id="math-theory-c-y" style="margin: 15px 0"></div>
       </div>
-
       <div class="exam-tip">
-        <h5>🎓 Tip de Examen</h5>
-        <p>Un hogar restringido solo puede subir su consumo cuando el ingreso llega realmente al bolsillo.</p>
+        <h4 style="font-size:0.8rem; text-transform:uppercase; margin-bottom:10px">🎓 Tip de Examen</h4>
+        <p>Un hogar restringido solo puede subir su consumo cuando el ingreso llega realmente al bolsillo. Si el consumo imita exactamente a los ingresos, hay restricción de crédito y falta de voluntad simultáneas.</p>
       </div>
     </div>
+
   </div>
 
   <script>
@@ -285,13 +275,13 @@
 
       const debtC = (cNorm[c.news-1] - c.y0) * (1 + c.r);
       document.getElementById('math-debt-c').innerHTML = `Deuda generada: ${kHTML(`(1+${c.r.toFixed(2)})(${cNorm[c.news-1].toFixed(1)} - ${c.y0.toFixed(1)}) = ${debtC.toFixed(1)}`)} USD`;
-      // EXPLICACIÓN DETALLADA CRÉDITO
       document.getElementById('explanation-c').innerHTML = `
         <strong>Desglose del aumento:</strong><br>
         1. <strong>Riqueza Futura:</strong> ${kHTML(`${c.impact}\\$ \\times (${c.horizon} - ${c.shock} + 1) \\text{ años} = ${totalFutureImpact.toFixed(1)}\\$`)}<br>
         2. <strong>Valor Actual:</strong> ${kHTML(`\\frac{${totalFutureImpact.toFixed(1)}\\$}{1 + ${c.r.toFixed(2)}} = ${discountedWealth.toFixed(1)}\\$`)}<br>
         3. <strong>Reparto Anual:</strong> ${kHTML(`\\frac{${discountedWealth.toFixed(1)}\\$}{${yearsLeft} \\text{ años restantes}} = +${incPerPeriod.toFixed(1)}\\$ / \\text{año}`)}
       `;
+
       // 2. Panel VOLUNTAD
       const w = states.will;
       const labelsW = Array.from({length: w.horizon}, (_, i) => i + 1);
@@ -309,10 +299,7 @@
 
       if (w.time >= 2) {
         cPrev = labelsW.map(t => t < w.news ? w.c0 : Math.max(0, w.c0 - decPerPeriod));
-        cMiope = labelsW.map((t, i) => {
-          if (t < w.shock) return w.c0;
-          return incomeW[i];
-        });
+        cMiope = labelsW.map((t, i) => (t < w.shock) ? w.c0 : incomeW[i]);
       }
 
       willChart.data.labels = labelsW;
@@ -323,14 +310,14 @@
 
       const savingW = (w.y0 - cPrev[w.news-1]) * (1 + w.r);
       document.getElementById('math-debt-w').innerHTML = `Ahorro generado: ${kHTML(`(${w.y0.toFixed(1)} - ${cPrev[w.news-1].toFixed(1)})(1+${w.r.toFixed(2)}) = ${savingW.toFixed(1)}`)} USD`;
-      // EXPLICACIÓN DETALLADA VOLUNTAD
       document.getElementById('explanation-w').innerHTML = `
         <strong>Desglose de la reducción:</strong><br>
         1. <strong>Pérdida Futura:</strong> ${kHTML(`${w.impact}\\$ \\times (${w.horizon} - ${w.shock} + 1) \\text{ años} = ${totalFutureLoss.toFixed(1)}\\$`)}<br>
         2. <strong>Valor Actual:</strong> ${kHTML(`\\frac{${totalFutureLoss.toFixed(1)}\\$}{1 + ${w.r.toFixed(2)}} = ${discountedLoss.toFixed(1)}\\$`)}<br>
         3. <strong>Reparto Anual:</strong> ${kHTML(`\\frac{${discountedLoss.toFixed(1)}\\$}{${yearsLeftW} \\text{ años restantes}} = -${decPerPeriod.toFixed(1)}\\$ / \\text{año}`)}
       `;
-      // Sincronización Sliders
+
+      // Sincronización Labels
       document.getElementById('valY0C').textContent = '$' + c.y0.toFixed(0);
       document.getElementById('valC0C').textContent = '$' + c.c0.toFixed(0);
       document.getElementById('valImpactC').textContent = '$' + c.impact.toFixed(0);
@@ -346,10 +333,6 @@
       document.getElementById('valHorizonW').textContent = w.horizon;
       document.getElementById('valNewsW').textContent = w.news;
       document.getElementById('valShockW').textContent = w.shock;
-
-      document.getElementById('math-tn').innerHTML = kHTML('t_n');
-      document.getElementById('math-years-left').innerHTML = kHTML('T - t_n + 1');
-      document.getElementById('math-c-y').innerHTML = kHTML('c = y');
     }
 
     // Listeners (0-100 -> scale)
@@ -359,13 +342,10 @@
     document.getElementById('paramRC').oninput = (e) => { states.credit.r = (e.target.value / 100) * 0.2; updateAll(); };
     document.getElementById('paramHorizonC').oninput = (e) => { 
       states.credit.horizon = Math.round(5 + (e.target.value / 100) * 25); 
-      states.credit.news = Math.min(states.credit.news, states.credit.horizon - 2);
-      states.credit.shock = Math.min(states.credit.shock, states.credit.horizon);
       updateAll(); 
     };
     document.getElementById('paramNewsC').oninput = (e) => { 
       states.credit.news = Math.round(1 + (e.target.value / 100) * (states.credit.horizon - 3)); 
-      states.credit.shock = Math.max(states.credit.shock, states.credit.news + 1);
       updateAll(); 
     };
     document.getElementById('paramShockC').oninput = (e) => { 
@@ -379,13 +359,10 @@
     document.getElementById('paramRW').oninput = (e) => { states.will.r = (e.target.value / 100) * 0.2; updateAll(); };
     document.getElementById('paramHorizonW').oninput = (e) => { 
       states.will.horizon = Math.round(5 + (e.target.value / 100) * 25); 
-      states.will.news = Math.min(states.will.news, states.will.horizon - 2);
-      states.will.shock = Math.min(states.will.shock, states.will.horizon);
       updateAll(); 
     };
     document.getElementById('paramNewsW').oninput = (e) => { 
       states.will.news = Math.round(1 + (e.target.value / 100) * (states.will.horizon - 3)); 
-      states.will.shock = Math.max(states.will.shock, states.will.news + 1);
       updateAll(); 
     };
     document.getElementById('paramShockW').oninput = (e) => { 
@@ -393,7 +370,12 @@
       updateAll(); 
     };
 
-    document.addEventListener('DOMContentLoaded', () => { initCharts(); updateAll(); });
+    document.addEventListener('DOMContentLoaded', () => { 
+      initCharts(); 
+      updateAll(); 
+      document.getElementById('math-theory-tn').innerHTML = `Año de la noticia: ${kHTML('t_n')}`;
+      document.getElementById('math-theory-c-y').innerHTML = `Situación límite: ${kHTML('c = y')}`;
+    });
   </script>
 </body>
 </html>
