@@ -259,16 +259,17 @@
       let cRest = labelsC.map(t => Math.min(c.c0, incomeC[t-1]));
 
       const yearsLeft = c.horizon - c.news + 1;
-      const extraWealthC = (c.impact * (c.horizon - c.shock + 1)) / (1 + c.r);
-      const incPerPeriod = extraWealthC / yearsLeft;
-      const smoothLevelC = c.c0 + incPerPeriod;
+      const futureYears = c.horizon - c.shock + 1;
+      const totalFutureImpact = c.impact * futureYears;
+      const discountedWealth = totalFutureImpact / (1 + c.r);
+      const incPerPeriod = discountedWealth / yearsLeft;
 
       if (c.time >= 2) {
-        cNorm = labelsC.map(t => t < c.news ? c.c0 : smoothLevelC);
+        cNorm = labelsC.map(t => t < c.news ? c.c0 : c.c0 + incPerPeriod);
         cRest = labelsC.map((t, i) => {
           if (t < c.news) return c.c0;
           if (c.time === 2) return Math.min(c.c0, incomeC[i]);
-          return Math.min(smoothLevelC, incomeC[i]);
+          return Math.min(c.c0 + incPerPeriod, incomeC[i]);
         });
       }
 
@@ -280,12 +281,13 @@
 
       const debtC = (cNorm[c.news-1] - c.y0) * (1 + c.r);
       document.getElementById('math-debt-c').innerHTML = `Deuda generada: ${kHTML(`(1+${c.r.toFixed(2)})(${cNorm[c.news-1].toFixed(1)} - ${c.y0.toFixed(1)}) = ${debtC.toFixed(1)}`)} USD`;
+      
+      // EXPLICACIÓN DETALLADA CRÉDITO
       document.getElementById('explanation-c').innerHTML = `
-        <strong>Desglose del aumento:</strong><br>
-        1. Recibirás noticia el año <strong>${c.news}</strong>. Te quedan <strong>${yearsLeft} años</strong> de vida.<br>
-        2. El ingreso sube $${c.impact} durante los últimos <strong>${c.horizon - c.shock + 1} años</strong>.<br>
-        3. Riqueza extra total: <strong>$${(c.impact * (c.horizon - c.shock + 1)).toFixed(0)}</strong>.<br>
-        4. Reparto: subes consumo <strong>+$${incPerPeriod.toFixed(1)}</strong> cada año pidiendo crédito.
+        <strong>Desglose del valor a repartir:</strong><br>
+        1. <strong>Riqueza Futura:</strong> ${kHTML(`${c.impact}\\$ \\times ${futureYears} \\text{ años} = ${totalFutureImpact.toFixed(1)}\\$`)}<br>
+        2. <strong>Valor Actual (con r=${(c.r*100).toFixed(0)}%):</strong> ${kHTML(`\\frac{${totalFutureImpact.toFixed(1)}\\$}{1 + ${c.r.toFixed(2)}} = ${discountedWealth.toFixed(1)}\\$`)}<br>
+        3. <strong>Reparto Anual:</strong> ${kHTML(`\\frac{${discountedWealth.toFixed(1)}\\$}{${yearsLeft} \\text{ años restantes}} = +${incPerPeriod.toFixed(1)}\\$ / \\text{año}`)}
       `;
 
       // 2. Panel VOLUNTAD
@@ -298,8 +300,10 @@
       let cMiope = labelsW.map(t => Math.min(w.c0, incomeW[t-1]));
 
       const yearsLeftW = w.horizon - w.news + 1;
-      const lossWealthW = (w.impact * (w.horizon - w.shock + 1)) / (1 + w.r);
-      const decPerPeriod = lossWealthW / yearsLeftW;
+      const futureYearsW = w.horizon - w.shock + 1;
+      const totalFutureLoss = w.impact * futureYearsW;
+      const discountedLoss = totalFutureLoss / (1 + w.r);
+      const decPerPeriod = discountedLoss / yearsLeftW;
       const smoothLevelW = Math.max(0, w.c0 - decPerPeriod);
 
       if (w.time >= 2) {
@@ -318,12 +322,13 @@
 
       const savingW = (w.y0 - cPrev[w.news-1]) * (1 + w.r);
       document.getElementById('math-debt-w').innerHTML = `Ahorro generado: ${kHTML(`(${w.y0.toFixed(1)} - ${cPrev[w.news-1].toFixed(1)})(1+${w.r.toFixed(2)}) = ${savingW.toFixed(1)}`)} USD`;
+      
+      // EXPLICACIÓN DETALLADA VOLUNTAD
       document.getElementById('explanation-w').innerHTML = `
         <strong>Desglose de la reducción:</strong><br>
-        1. Sabes en el año <strong>${w.news}</strong> que el sueldo bajará. Quedan <strong>${yearsLeftW} años</strong>.<br>
-        2. Perderás $${w.impact} durante los últimos <strong>${w.horizon - w.shock + 1} años</strong>.<br>
-        3. Pérdida total de riqueza: <strong>$${(w.impact * (w.horizon - w.shock + 1)).toFixed(0)}</strong>.<br>
-        4. Reparto: bajas consumo <strong>-$${decPerPeriod.toFixed(1)}</strong> hoy para ahorrar.
+        1. <strong>Pérdida Futura:</strong> ${kHTML(`${w.impact}\\$ \\times ${futureYearsW} \\text{ años} = ${totalFutureLoss.toFixed(1)}\\$`)}<br>
+        2. <strong>Valor Actual (con r=${(w.r*100).toFixed(0)}%):</strong> ${kHTML(`\\frac{${totalFutureLoss.toFixed(1)}\\$}{1 + ${w.r.toFixed(2)}} = ${discountedLoss.toFixed(1)}\\$`)}<br>
+        3. <strong>Reparto Anual:</strong> ${kHTML(`\\frac{${discountedLoss.toFixed(1)}\\$}{${yearsLeftW} \\text{ años restantes}} = -${decPerPeriod.toFixed(1)}\\$ / \\text{año}`)}
       `;
 
       // Sincronización Labels Sliders
