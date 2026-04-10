@@ -90,6 +90,14 @@ Este documento centraliza la lógica económica y los estándares de construcci�
 - **Círculo Virtuoso:** Alta confianza → Inversión → Alta demanda → Beneficios.
 - **Círculo Vicioso:** Baja confianza → Desinversión → Baja demanda → Estancamiento.
 
+### 🔄 Modelo del Multiplicador (Cruz Keynesiana)
+- **Concepto:** Explica cómo un cambio inicial en el gasto autónomo genera un aumento mayor en el PIB debido al consumo inducido.
+- **Ecuación de Demanda (DA):** $DA = A + sY$, donde $A$ es el gasto autónomo y $s$ es la pendiente.
+- **Pendiente ($s$):** $s = c_1 + i_1 - m_1$.
+- **Multiplicador ($k$):** $k = \frac{1}{1-s}$.
+- **Equilibrio ($Y^*$):** $Y = DA \Rightarrow Y^* = \frac{A}{1-s}$.
+- **Propensiones:** $c_1$ (consumo), $i_1$ (inversión inducida), $m_1$ (importaciones).
+
 ## 🎨 Estándares de UI (Apple Ecosystem Style)
 
 Para mantener la consistencia visual y el ahorro de tokens, **use SIEMPRE** estas clases CSS definidas en `assets/style.css`:

@@ -63,3 +63,9 @@ Este documento cataloga las preguntas recurrentes de los exámenes finales (2024
 - **Respuesta:** Porque el consumo depende de la renta (suavizada), mientras que la inversión depende de las expectativas de demanda futura de otras empresas.
 - **Lógica de Juego:** Existe un fallo de coordinación si las empresas eligen (NI, NI) por falta de confianza, aun siendo (I, I) mejor para ambas.
 - **Uso en Web:** `volatilidad-inversion.html`.
+
+### 4. El Modelo del Multiplicador (Cruz Keynesiana)
+- **Pregunta Típica:** "Calcule el PIB de equilibrio dado $c_0, c_1, G, I...$".
+- **Trampa del Gasto:** Las transferencias (pensiones) **no son G**. Se suman a la renta disponible $Y_d$ multiplicadas por $c_1$.
+- **Propensiones:** El multiplicador es mayor cuanto más alta sea $c_1$ y más bajas las fugas ($m_1$).
+- **Uso en Web:** `modelo-multiplicador.html`.

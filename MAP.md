@@ -30,6 +30,7 @@ Este mapa permite a los agentes de IA localizar la lógica del proyecto rápidam
     - `suavizacion-consumo.html`: Modelo intertemporal de dos periodos.
     - `restricciones-consumo.html`: Fallos en la suavización (crédito y voluntad).
     - `volatilidad-inversion.html`: Juego de coordinación y círculos virtuosos/viciosos.
+    - `modelo-multiplicador.html`: Equilibrio Y* y multiplicador (Cruz Keynesiana).
 
 ## 🧠 Núcleo de Inteligencia (Assets)
 - `tema-1/assets/style.css`: Estilos UI Apple-style unificados (heredado por Tema 2).
