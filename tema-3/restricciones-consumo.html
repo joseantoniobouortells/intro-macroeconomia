@@ -182,7 +182,7 @@
         <p>En un mundo ideal, los hogares reparten su riqueza total entre todos los años de vida restantes. Pero la realidad impone barreras.</p>
         
         <h4>Reparto Intertemporal</h4>
-        <p>Cuando recibes una noticia en el año $t_n$, calculas cuánta riqueza extra tendrás hasta el fin de tus días y la divides entre los años que te quedan por vivir ($T - t_n + 1$).</p>
+        <p>Cuando recibes una noticia en el año <span id="math-tn"></span>, calculas cuánta riqueza extra tendrás hasta el fin de tus días y la divides entre los años que te quedan por vivir (<span id="math-years-left"></span>).</p>
         
         <h4>La Barrera del Crédito</h4>
         <p>Si no puedes pedir prestado, tu consumo está limitado por tu ingreso de hoy, aunque sepas que mañana serás rico.</p>
@@ -190,7 +190,7 @@
 
       <div class="exam-tip">
         <h5>🎓 Tip de Examen</h5>
-        <p>Un hogar que "vive al día" (consumo = ingreso) puede serlo por dos razones: o no tiene acceso a crédito (no puede gastar más) o no tiene voluntad (no quiere ahorrar).</p>
+        <p>Un hogar que "vive al día" (<span id="math-c-y"></span>) puede serlo por dos razones: o no tiene acceso a crédito (no puede gastar más) o no tiene voluntad (no quiere ahorrar).</p>
       </div>
     </div>
   </div>
@@ -369,7 +369,13 @@
       updateAll(); 
     };
 
-    document.addEventListener('DOMContentLoaded', () => { initCharts(); updateAll(); });
+    document.addEventListener('DOMContentLoaded', () => { 
+      initCharts(); 
+      updateAll(); 
+      document.getElementById('math-tn').innerHTML = kHTML('t_n');
+      document.getElementById('math-years-left').innerHTML = kHTML('T - t_n + 1');
+      document.getElementById('math-c-y').innerHTML = kHTML('c = y');
+    });
   </script>
 </body>
 </html>
