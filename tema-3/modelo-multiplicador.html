@@ -35,8 +35,8 @@
     .control-section h4 { font-size: 0.65rem; color: #86868b; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px; border-bottom: 1px solid #eee; padding-bottom: 4px; }
 
     .slider-row { margin-bottom: 12px; }
-    .slider-header { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.75rem; font-weight: 600; }
-    .slider-val { color: #0071e3; font-weight: 800; }
+    .slider-header { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.75rem; font-weight: 600; align-items: center; }
+    .slider-val { color: #0071e3; font-weight: 800; font-size: 0.85rem; }
     input[type=range] { width: 100%; cursor: pointer; }
 
     .math-panel { margin-top: 24px; padding: 20px; border-radius: 16px; background: #f0f6ff; border: 1px solid #d0e3ff; }
@@ -72,45 +72,45 @@
 
     <div class="controls-side">
       <div class="control-section">
-        <h4>Componentes Autónomos ($A$)</h4>
+        <h4>Componentes Autónomos (<span class="m-inline" data-latex="A"></span>)</h4>
         <div class="slider-row">
-          <div class="slider-header"><span>Consumo Autónomo ($c_0$)</span> <span id="valC0" class="slider-val">500</span></div>
+          <div class="slider-header"><span>Cons. Autónomo (<span class="m-inline" data-latex="c_0"></span>)</span> <span id="valC0" class="slider-val">500</span></div>
           <input type="range" id="paramC0" min="0" max="100" value="50">
         </div>
         <div class="slider-row">
-          <div class="slider-header"><span>Inversión Autónoma ($i_0$)</span> <span id="valI0" class="slider-val">300</span></div>
+          <div class="slider-header"><span>Inv. Autónoma (<span class="m-inline" data-latex="i_0"></span>)</span> <span id="valI0" class="slider-val">300</span></div>
           <input type="range" id="paramI0" min="0" max="100" value="30">
         </div>
         <div class="slider-row">
-          <div class="slider-header"><span>Gasto Público ($G$)</span> <span id="valG0" class="slider-val">400</span></div>
+          <div class="slider-header"><span>Gasto Público (<span class="m-inline" data-latex="G"></span>)</span> <span id="valG0" class="slider-val">400</span></div>
           <input type="range" id="paramG0" min="0" max="100" value="40">
         </div>
         <div class="slider-row">
-          <div class="slider-header"><span>Impuestos Fijos ($t_0$)</span> <span id="valT0" class="slider-val">200</span></div>
+          <div class="slider-header"><span>Impuestos Fijos (<span class="m-inline" data-latex="t_0"></span>)</span> <span id="valT0" class="slider-val">200</span></div>
           <input type="range" id="paramT0" min="0" max="100" value="20">
         </div>
       </div>
 
       <div class="control-section">
-        <h4>Propensiones y Pendiente ($s$)</h4>
+        <h4>Propensiones y Pendiente (<span class="m-inline" data-latex="s"></span>)</h4>
         <div class="slider-row">
-          <div class="slider-header"><span>Prop. a Consumir ($c_1$)</span> <span id="valC1" class="slider-val">0.60</span></div>
+          <div class="slider-header"><span>Prop. Consumir (<span class="m-inline" data-latex="c_1"></span>)</span> <span id="valC1" class="slider-val">0.60</span></div>
           <input type="range" id="paramC1" min="0" max="100" value="60">
         </div>
         <div class="slider-row">
-          <div class="slider-header"><span>Prop. a Invertir ($i_1$)</span> <span id="valI1" class="slider-val">0.10</span></div>
+          <div class="slider-header"><span>Prop. Invertir (<span class="m-inline" data-latex="i_1"></span>)</span> <span id="valI1" class="slider-val">0.10</span></div>
           <input type="range" id="paramI1" min="0" max="100" value="10">
         </div>
         <div class="slider-row">
-          <div class="slider-header"><span>Prop. a Importar ($m_1$)</span> <span id="valM1" class="slider-val">0.20</span></div>
+          <div class="slider-header"><span>Prop. Importar (<span class="m-inline" data-latex="m_1"></span>)</span> <span id="valM1" class="slider-val">0.20</span></div>
           <input type="range" id="paramM1" min="0" max="100" value="20">
         </div>
       </div>
 
       <div class="exam-tip" style="background:#fff9e6; border:1.5px solid #ffcc00; border-radius:12px; padding:15px; color:#5c4d00; font-size:0.75rem;">
         <h5 style="margin:0 0 8px 0; text-transform:uppercase">🎓 Tip de Examen</h5>
-        <p style="margin-bottom:8px">• Las transferencias (pensiones) <strong>NO</strong> se suman a $G$. Van dentro de la renta disponible del consumo.</p>
-        <p>• El equilibrio $Y^*$ ocurre donde $Y = DA$. Gráficamente es la intersección con la bisectriz de 45°.</p>
+        <p style="margin-bottom:8px">• Las transferencias (pensiones) <strong>NO</strong> se suman a <span class="m-inline" data-latex="G"></span>. Van dentro de la renta disponible del consumo.</p>
+        <p>• El equilibrio <span class="m-inline" data-latex="Y^*"></span> ocurre donde <span class="m-inline" data-latex="Y = DA"></span>. Gráficamente es la intersección con la bisectriz de 45°.</p>
       </div>
     </div>
 
@@ -167,25 +167,15 @@
     }
 
     function update() {
-      // 1. Componente Autónomo (Intersección)
-      // A = c0 - c1*t0 + i0 - i2*r + g0 + x0 - m0
       const A = state.c0 - (state.c1 * state.t0) + state.i0 - (state.i2 * state.r) + state.g0 + state.x0 - state.m0;
-      
-      // 2. Pendiente (s)
-      // s = c1 + i1 - m1
       const slope = state.c1 + state.i1 - state.m1;
-      
-      // 3. Producción de Equilibrio
-      // Y* = A / (1 - s)
       const Ystar = A / (1 - slope);
       const multiplier = 1 / (1 - slope);
 
-      // Actualizar Gráfico
       const labels = Array.from({length: 41}, (_, i) => i * 100);
       chart.data.datasets[1].data = labels.map(y => A + slope * y);
       chart.update();
 
-      // Actualizar Ecuaciones
       document.getElementById('math-equations').innerHTML = `
         ${kHTML(`DA = C + I + G + X - M`)}<br>
         ${kHTML(`DA = [${state.c0} + ${state.c1}(Y - ${state.t0})] + [${state.i0} + ${state.i1}Y] + ${state.g0} + ${state.x0} - [${state.m0} + ${state.m1}Y]`)}<br>
@@ -197,17 +187,15 @@
         ${kHTML(`Y^* = k \\times A = ${multiplier.toFixed(2)} \\times ${A.toFixed(0)} = ${Ystar.toFixed(0)} \\text{ USD}`)}
       `;
 
-      // Labels
-      document.getElementById('valC0').textContent = state.c0;
-      document.getElementById('valI0').textContent = state.i0;
-      document.getElementById('valG0').textContent = state.g0;
-      document.getElementById('valT0').textContent = state.t0;
+      document.getElementById('valC0').textContent = '$' + state.c0;
+      document.getElementById('valI0').textContent = '$' + state.i0;
+      document.getElementById('valG0').textContent = '$' + state.g0;
+      document.getElementById('valT0').textContent = '$' + state.t0;
       document.getElementById('valC1').textContent = state.c1.toFixed(2);
       document.getElementById('valI1').textContent = state.i1.toFixed(2);
       document.getElementById('valM1').textContent = state.m1.toFixed(2);
     }
 
-    // Sliders
     document.getElementById('paramC0').oninput = (e) => { state.c0 = e.target.value * 10; update(); };
     document.getElementById('paramI0').oninput = (e) => { state.i0 = e.target.value * 10; update(); };
     document.getElementById('paramG0').oninput = (e) => { state.g0 = e.target.value * 10; update(); };
@@ -217,6 +205,10 @@
     document.getElementById('paramM1').oninput = (e) => { state.m1 = (e.target.value / 100) * 0.5; update(); };
 
     document.addEventListener('DOMContentLoaded', () => {
+      // Renderizar math inline
+      document.querySelectorAll('.m-inline').forEach(el => {
+        el.innerHTML = kHTML(el.dataset.latex);
+      });
       initChart();
       update();
     });
