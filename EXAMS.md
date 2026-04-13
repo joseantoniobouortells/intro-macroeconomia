@@ -69,3 +69,8 @@ Este documento cataloga las preguntas recurrentes de los exámenes finales (2024
 - **Trampa del Gasto:** Las transferencias (pensiones) **no son G**. Se suman a la renta disponible $Y_d$ multiplicadas por $c_1$.
 - **Propensiones:** El multiplicador es mayor cuanto más alta sea $c_1$ y más bajas las fugas ($m_1$).
 - **Uso en Web:** `modelo-multiplicador.html`.
+
+### 5. Política Fiscal y Estabilización
+- **Pregunta sobre Estabilizadores:** "¿Por qué los impuestos proporcionales estabilizan la economía?". Respuesta: Porque reducen el tamaño del multiplicador, haciendo que el PIB varíe menos ante shocks externos.
+- **Trampa de la Austeridad:** Reducir gasto en recesión reduce la demanda agregada y puede llevar a una caída del PIB mayor que el ahorro de gasto pretendido.
+- **Uso en Web:** `simulador-politica-fiscal.html`.

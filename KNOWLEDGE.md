@@ -103,6 +103,11 @@ Este documento centraliza la lógica económica y los estándares de construcci�
     - **$t$ (Tipo Impositivo):** Estabilizador automático. Reduce el multiplicador al detraer renta del ciclo de consumo.
     - **$m$ (Propensión a Importar):** Reduce el multiplicador. Parte del gasto se "escapa" al extranjero.
 - **Relación:** A mayor carga fiscal ($t$) o mayor apertura exterior ($m$), menor es el impacto de un shock de demanda en el PIB (la recta $DA$ es más plana).
+
+### 📈 Shocks y Escenarios Fiscales
+- **Paradoja del Ahorro:** Un intento colectivo de ahorrar más (caída de $c_0$) reduce la demanda agregada y el PIB, pudiendo dejar el ahorro total invariable o menor.
+- **Estímulo Fiscal:** Aumento de $G$ para desplazar $DA$ hacia arriba y salir de una recesión.
+- **Austeridad:** Reducción de $G$ en recesión. Es contraproducente si el multiplicador es alto, ya que contrae el PIB más que el ahorro inicial de gasto.
 - **Propensiones:** $c_1$ (consumo), $i_1$ (inversión inducida), $m_1$ (importaciones).
 
 ## 🎨 Estándares de UI (Apple Ecosystem Style)

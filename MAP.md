@@ -35,6 +35,7 @@ Este mapa permite a los agentes de IA localizar la lógica del proyecto rápidam
 - `tema-4/`: Política Fiscal (Capítulo 14 CORE).
     - `index.html`: Menú de herramientas del tema.
     - `calculadora-multiplicador.html`: Simulador del tamaño del multiplicador con fugas (t, m).
+    - `simulador-politica-fiscal.html`: Análisis de shocks (Paradoja ahorro, Estímulo, Austeridad).
 
 ## 🧠 Núcleo de Inteligencia (Assets)
 - `tema-1/assets/style.css`: Estilos UI Apple-style unificados (heredado por Tema 2).
