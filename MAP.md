@@ -32,6 +32,10 @@ Este mapa permite a los agentes de IA localizar la lógica del proyecto rápidam
     - `volatilidad-inversion.html`: Juego de coordinación y círculos virtuosos/viciosos.
     - `modelo-multiplicador.html`: Equilibrio Y* y multiplicador (Cruz Keynesiana).
 
+- `tema-4/`: Política Fiscal (Capítulo 14 CORE).
+    - `index.html`: Menú de herramientas del tema.
+    - `calculadora-multiplicador.html`: Simulador del tamaño del multiplicador con fugas (t, m).
+
 ## 🧠 Núcleo de Inteligencia (Assets)
 - `tema-1/assets/style.css`: Estilos UI Apple-style unificados (heredado por Tema 2).
 - `tema-1/assets/economic-logic.js`: **Tema 1** — Contiene las fórmulas de WS, PS y Equilibrio de Nash.

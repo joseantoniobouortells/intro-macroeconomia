@@ -96,6 +96,13 @@ Este documento centraliza la lógica económica y los estándares de construcci�
 - **Pendiente ($s$):** $s = c_1 + i_1 - m_1$.
 - **Multiplicador ($k$):** $k = \frac{1}{1-s}$.
 - **Equilibrio ($Y^*$):** $Y = DA \Rightarrow Y^* = \frac{A}{1-s}$.
+
+### 🏛️ Política Fiscal y Multiplicador Completo
+- **Fórmula del Multiplicador:** $k = \frac{1}{1 - c_1(1-t) + m}$
+- **Variables de Estabilización:**
+    - **$t$ (Tipo Impositivo):** Estabilizador automático. Reduce el multiplicador al detraer renta del ciclo de consumo.
+    - **$m$ (Propensión a Importar):** Reduce el multiplicador. Parte del gasto se "escapa" al extranjero.
+- **Relación:** A mayor carga fiscal ($t$) o mayor apertura exterior ($m$), menor es el impacto de un shock de demanda en el PIB (la recta $DA$ es más plana).
 - **Propensiones:** $c_1$ (consumo), $i_1$ (inversión inducida), $m_1$ (importaciones).
 
 ## 🎨 Estándares de UI (Apple Ecosystem Style)

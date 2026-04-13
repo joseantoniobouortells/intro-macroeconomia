@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora del Multiplicador — Tema 4</title>
+  <link rel="stylesheet" href="../tema-1/assets/style.css">
+  <link rel="stylesheet" href="../tema-1/assets/katex.min.css">
+  <script src="../tema-1/assets/katex.min.js"></script>
+  <style>
+    body { padding: 0; background: #f5f5f7; color: #1d1d1f; }
+    .site-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.85); backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.08); height: 48px;
+      display: flex; align-items: center; padding: 0 24px;
+    }
+    .nav-back { display: flex; align-items: center; gap: 4px; font-size: 0.8rem; font-weight: 500; color: #0071e3; text-decoration: none; width: 120px; }
+    .nav-center { flex: 1; text-align: center; font-size: 0.8rem; font-weight: 500; color: #1d1d1f; pointer-events: none; }
+    .nav-spacer { width: 120px; }
+
+    .main-container {
+      max-width: 1200px; margin: 0 auto; padding: 40px 24px;
+      display: grid; grid-template-columns: 1fr 400px; gap: 40px;
+    }
+    @media (max-width: 1000px) { .main-container { grid-template-columns: 1fr; } }
+
+    .card { background: #fff; border-radius: 24px; padding: 32px; border: 1px solid #e5e5e5; }
+    .card h2 { font-size: 1.6rem; font-weight: 700; margin-bottom: 24px; letter-spacing: -0.5px; }
+
+    .formula-section { margin-bottom: 32px; }
+    .formula-box { background: #f9f9fb; padding: 24px; border-radius: 18px; margin-bottom: 20px; text-align: center; border: 1px solid #eee; }
+    
+    /* Panel de Cálculo */
+    .result-panel { 
+      background: #0071e3; color: #fff; border-radius: 20px; padding: 32px; 
+      text-align: center; margin-bottom: 32px; box-shadow: 0 20px 40px rgba(0,113,227,0.2);
+    }
+    .result-val { font-size: 4rem; font-weight: 800; margin: 10px 0; line-height: 1; }
+    .result-label { font-size: 0.9rem; font-weight: 600; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* Sliders */
+    .controls-panel { display: flex; flex-direction: column; gap: 24px; }
+    .slider-group { margin-bottom: 8px; }
+    .slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .slider-title { font-size: 0.85rem; font-weight: 600; color: #1d1d1f; }
+    .slider-val { font-size: 1rem; font-weight: 700; color: #0071e3; background: #e3f2fd; padding: 4px 12px; border-radius: 8px; min-width: 60px; text-align: center; }
+    input[type=range] { width: 100%; cursor: pointer; }
+
+    .explanation-card { background: #fff; border-radius: 20px; padding: 24px; border: 1px solid #e5e5e5; font-size: 0.9rem; line-height: 1.6; }
+    .explanation-card h4 { margin-bottom: 12px; font-size: 1rem; }
+    .tag { display: inline-block; padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; margin-right: 4px; }
+    .tag-leak { background: #fff0f0; color: #ff3b30; } /* Fugas */
+    .tag-boost { background: #f0fff0; color: #34c759; } /* Impulso */
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="index.html" class="nav-back"><span class="chevron">‹</span> Tema 4</a>
+    <span class="nav-center">Calculadora del Multiplicador</span>
+    <span class="nav-spacer"></span>
+  </nav>
+
+  <div class="main-container">
+    <div class="theory-side">
+      <div class="card">
+        <h2>Calculadora Dinámica del Multiplicador</h2>
+        
+        <div class="formula-section">
+          <p style="color:#6e6e73; margin-bottom:15px">La demanda agregada en una economía abierta con sector público se define como:</p>
+          <div class="formula-box" id="math-da"></div>
+          
+          <p style="color:#6e6e73; margin-bottom:15px">El tamaño del multiplicador (<span id="math-k-symbol"></span>) depende de la propensión al consumo y las "fugas" (impuestos e importaciones):</p>
+          <div class="formula-box" id="math-multiplier"></div>
+        </div>
+
+        <div class="result-panel">
+          <div class="result-label">Multiplicador Final</div>
+          <div class="result-val" id="res-k">1.54</div>
+          <div id="math-derivation" style="font-size: 0.9rem; opacity: 0.9;"></div>
+        </div>
+
+        <div class="explanation-card">
+          <h4>💡 ¿Por qué cambia el tamaño?</h4>
+          <p>• <span class="tag tag-leak">Impuestos (<span id="math-t-tag"></span>)</span>: Reducen la renta disponible. De cada euro extra de PIB, llega menos dinero al bolsillo de la gente.</p>
+          <p>• <span class="tag tag-leak">Importaciones (<span id="math-m-tag"></span>)</span>: Son gasto que "se escapa" al extranjero. No genera demanda ni empleo dentro del país.</p>
+          <p>• <span class="tag tag-boost">Consumo (<span id="math-c1-tag"></span>)</span>: Es el motor. Cuanto más gastamos internamente, más se retroalimenta el ciclo.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-side">
+      <div class="card" style="padding: 24px;">
+        <h3 style="font-size: 0.8rem; text-transform: uppercase; color: #86868b; margin-bottom: 20px;">Ajuste de Parámetros</h3>
+        
+        <div class="controls-panel">
+          <!-- c1 -->
+          <div class="slider-group">
+            <div class="slider-header">
+              <span class="slider-title" id="lbl-c1"></span>
+              <span class="slider-val" id="val-c1">0.60</span>
+            </div>
+            <input type="range" id="param-c1" min="0" max="100" value="60">
+          </div>
+
+          <!-- t -->
+          <div class="slider-group">
+            <div class="slider-header">
+              <span class="slider-title" id="lbl-t"></span>
+              <span class="slider-val" id="val-t">0.20</span>
+            </div>
+            <input type="range" id="param-t" min="0" max="100" value="20">
+          </div>
+
+          <!-- m -->
+          <div class="slider-group">
+            <div class="slider-header">
+              <span class="slider-title" id="lbl-m"></span>
+              <span class="slider-val" id="val-m">0.10</span>
+            </div>
+            <input type="range" id="param-m" min="0" max="100" value="10">
+          </div>
+
+          <!-- G -->
+          <div class="slider-group">
+            <div class="slider-header">
+              <span class="slider-title" id="lbl-G"></span>
+              <span class="slider-val" id="val-G">400</span>
+            </div>
+            <input type="range" id="param-G" min="0" max="100" value="40">
+          </div>
+        </div>
+
+        <div style="margin-top:30px; padding-top:20px; border-top:1px solid #eee;">
+          <p id="equilibrium-text" style="font-size:0.85rem; font-weight:600; color:#1d1d1f; text-align:center;"></p>
+        </div>
+      </div>
+
+      <div class="exam-tip" style="background:#fff9e6; border:1.5px solid #ffcc00; border-radius:16px; padding:20px; color:#5c4d00; margin-top:24px; font-size:0.85rem;">
+        <strong>🎓 Tip de Examen:</strong>
+        <p style="margin-top:8px">En las preguntas de desarrollo de 1,5 puntos, siempre te pedirán representar el efecto de subir un parámetro. Recuerda: <strong>más fugas (<span id="math-fugas"></span>) = multiplicador más pequeño = recta <span id="math-da-tip"></span> más plana.</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function kHTML(latex) { return katex.renderToString(latex, { throwOnError: false }); }
+
+    let state = { c1: 0.6, t: 0.2, m: 0.1, G: 400, A: 1000 };
+
+    function update() {
+      const denom = 1 - (state.c1 * (1 - state.t)) + state.m;
+      const k = 1 / denom;
+      const Ystar = state.G * k;
+
+      document.getElementById('res-k').textContent = k.toFixed(2);
+      document.getElementById('val-c1').textContent = state.c1.toFixed(2);
+      document.getElementById('val-t').textContent = (state.t * 100).toFixed(0) + '%';
+      document.getElementById('val-m').textContent = state.m.toFixed(2);
+      document.getElementById('val-G').textContent = '$' + state.G;
+
+      const formulaStr = `k = \\frac{1}{1 - ${state.c1.toFixed(2)}(1 - ${state.t.toFixed(2)}) + ${state.m.toFixed(2)}} = ${k.toFixed(2)}`;
+      document.getElementById('math-derivation').innerHTML = kHTML(formulaStr);
+      
+      document.getElementById('equilibrium-text').innerHTML = `Impacto de G: un gasto de $${state.G} genera un PIB de <strong>$${Ystar.toFixed(0)}</strong> (donde ${kHTML('Y^*')} es aproximado)`;
+    }
+
+    document.getElementById('param-c1').oninput = (e) => { state.c1 = e.target.value / 100; update(); };
+    document.getElementById('param-t').oninput = (e) => { state.t = e.target.value / 100; update(); };
+    document.getElementById('param-m').oninput = (e) => { state.m = (e.target.value / 100) * 0.5; update(); };
+    document.getElementById('param-G').oninput = (e) => { state.G = e.target.value * 10; update(); };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('math-da').innerHTML = kHTML('Y = C + I + G + NX');
+      document.getElementById('math-multiplier').innerHTML = kHTML('k = \\frac{1}{1 - c_1(1 - t) + m}');
+      document.getElementById('math-k-symbol').innerHTML = kHTML('k');
+      document.getElementById('math-t-tag').innerHTML = kHTML('t');
+      document.getElementById('math-m-tag').innerHTML = kHTML('m');
+      document.getElementById('math-c1-tag').innerHTML = kHTML('c_1');
+      document.getElementById('math-fugas').innerHTML = kHTML('t, m');
+      document.getElementById('math-da-tip').innerHTML = kHTML('DA');
+      
+      document.getElementById('lbl-c1').innerHTML = `Propensión al Consumo (${kHTML('c_1')})`;
+      document.getElementById('lbl-t').innerHTML = `Tipo Impositivo (${kHTML('t')})`;
+      document.getElementById('lbl-m').innerHTML = `Propensión a Importar (${kHTML('m')})`;
+      document.getElementById('lbl-G').innerHTML = `Gasto Público (${kHTML('G')})`;
+
+      update();
+    });
+  </script>
+</body>
+</html>
