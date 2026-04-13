@@ -39,6 +39,7 @@
 - `tema-5/`: Inflación (Capítulo 15 CORE).
     - `index.html`: Menú de herramientas del tema.
     - `calculadora-fisher.html`: Ecuación de Fisher (Interés nominal vs real).
+    - `simulador-espiral-inflacionista.html`: Espiral de precios y salarios y Curva de Phillips.
 
 ## 🧠 Núcleo de Inteligencia (Assets)
 - `tema-1/assets/style.css`: Estilos UI Apple-style unificados.

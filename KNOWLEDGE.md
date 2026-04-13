@@ -24,10 +24,7 @@ Este documento consolida las fórmulas, lógicas y variables clave utilizadas en
 - **Paradoja del Ahorro:** Un intento de aumentar el ahorro reduciendo $c_0$ puede acabar reduciendo la renta total sin aumentar el ahorro agregado.
 
 ### 🎈 Tema 5: Inflación (Cap. 15)
-- **Ecuación de Fisher:** $r \approx i - \pi^e$. 
-    - $r$: Tasa de interés real (poder adquisitivo).
-    - $i$: Tasa de interés nominal (lo que dice el contrato).
-    - $\pi^e$: Inflación esperada.
-- **Efectos Redistributivos:**
-    - **Inflación > Esperada:** Beneficia a los deudores (el valor real de su deuda cae).
-    - **Deflación ($\pi < 0$):** Perjudica a los deudores (el interés real sube por encima del nominal).
+- **Ecuación de Fisher:** $r \approx i - \pi^e$.
+- **Efectos Redistributivos:** La inflación inesperada beneficia a deudores y perjudica a prestamistas.
+- **Brecha de Negociación:** Diferencia entre el salario real de WS y el de PS. Si $u < u^*$, la brecha es positiva.
+- **Espiral Inflacionista:** $\pi_t = \pi_{t-1} + \text{Brecha}$. El ajuste de expectativas desplaza la Curva de Phillips hacia arriba cada año si el desempleo se mantiene bajo.
