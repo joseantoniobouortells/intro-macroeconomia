@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conexión Mercado Laboral — Tema 4</title>
+  <link rel="stylesheet" href="../tema-1/assets/style.css">
+  <link rel="stylesheet" href="../tema-1/assets/katex.min.css">
+  <script src="../tema-1/assets/chart.umd.min.js"></script>
+  <script src="../tema-1/assets/katex.min.js"></script>
+  <style>
+    body { padding: 0; background: #f5f5f7; color: #1d1d1f; }
+    .site-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.85); backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.08); height: 48px;
+      display: flex; align-items: center; padding: 0 24px;
+    }
+    .nav-back { display: flex; align-items: center; gap: 4px; font-size: 0.8rem; font-weight: 500; color: #0071e3; text-decoration: none; width: 120px; }
+    .nav-center { flex: 1; text-align: center; font-size: 0.8rem; font-weight: 500; color: #1d1d1f; pointer-events: none; }
+    .nav-spacer { width: 120px; }
+
+    .main-container {
+      max-width: 1400px; margin: 0 auto; display: grid;
+      grid-template-columns: 1fr 400px; gap: 32px; padding: 32px 24px;
+    }
+    @media (max-width: 1100px) { .main-container { grid-template-columns: 1fr; } }
+
+    .card { background: #fff; border-radius: 24px; padding: 28px; border: 1px solid #e5e5e5; margin-bottom: 24px; }
+    
+    .chart-stack { display: flex; flex-direction: column; gap: 10px; }
+    .chart-container { position: relative; height: 320px; }
+
+    .controls-side { position: sticky; top: 80px; }
+    .control-panel { background: #f9f9fb; border-radius: 20px; padding: 24px; }
+    .slider-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.8rem; font-weight: 600; }
+    .slider-val { color: #0071e3; font-weight: 800; }
+    input[type=range] { width: 100%; cursor: pointer; }
+
+    .explanation-box { margin-top: 20px; padding: 20px; border-radius: 16px; background: #f0f6ff; font-size: 0.85rem; line-height: 1.6; }
+    .highlight { color: #ff3b30; font-weight: 700; }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="index.html" class="nav-back"><span class="chevron">‹</span> Tema 4</a>
+    <span class="nav-center">Mercado Laboral y Multiplicador · Conexión</span>
+    <span class="nav-spacer"></span>
+  </nav>
+
+  <div class="main-container">
+    
+    <div class="visual-side">
+      <div class="card">
+        <div class="chart-stack">
+          <!-- Gráfico 1: Mercado Laboral -->
+          <div class="chart-container">
+            <canvas id="laborChart"></canvas>
+          </div>
+          <!-- Gráfico 2: Multiplicador -->
+          <div class="chart-container">
+            <canvas id="multiplierChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="explanation-box" id="dynamic-expl">
+        <!-- Contenido dinámico -->
+      </div>
+    </div>
+
+    <div class="controls-side">
+      <div class="control-panel">
+        <h4 style="font-size: 0.65rem; color: #86868b; text-transform: uppercase; margin-bottom: 20px; letter-spacing: 0.5px;">Control de Demanda Agregada</h4>
+        
+        <div class="slider-header">
+          <span>Gasto Autónomo (<span id="math-A"></span>)</span>
+          <span id="valA" class="slider-val">1000</span>
+        </div>
+        <input type="range" id="paramA" min="0" max="100" value="50">
+        
+        <p style="font-size: 0.75rem; color: #6e6e73; margin-top: 15px;">Mueve el slider para simular un auge o una recesión y observa cómo el nivel de empleo se separa del equilibrio estructural.</p>
+      </div>
+
+      <div class="exam-tip" style="background:#fff9e6; border:1.5px solid #ffcc00; border-radius:16px; padding:24px; color:#5c4d00; margin-top:24px; font-size:0.85rem;">
+        <strong>🎓 Tip de Examen:</strong>
+        <p style="margin-top:8px">• <strong>Desempleo Cíclico:</strong> Es el aumento del desempleo por encima del nivel estructural debido a una caída de la demanda agregada.</p>
+        <p style="margin-top:12px">• <strong>Corto vs Medio Plazo:</strong> El multiplicador asume precios fijos (corto plazo). El mercado laboral determina el equilibrio estructural (medio plazo).</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function kHTML(latex) { return katex.renderToString(latex, { throwOnError: false }); }
+    let laborChart, multiplierChart;
+
+    // Parámetros fijos
+    const lambda = 1; // Productividad (Y = lambda * N)
+    const PS = 0.6;   // Salario de fijación de precios
+    const n_max = 100; // Fuerza laboral total
+
+    // Estado dinámico (Ajustado para escala 0-100)
+    let state = { A: 25, s: 0.5 }; // DA = A + sY
+
+    function initCharts() {
+      const commonScales = {
+        x: { type: 'linear', min: 0, max: 100, title: { display: true, text: 'Empleo (N) / Producción (Y)' } },
+        y: { min: 0, max: 1.2 }
+      };
+
+      // Gráfico Laboral
+      const ctxL = document.getElementById('laborChart').getContext('2d');
+      laborChart = new Chart(ctxL, {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [
+            { label: 'Fijación Precios (PS)', data: [{x:0, y:PS}, {x:100, y:PS}], borderColor: '#ff9500', borderWidth: 2, pointRadius: 0 },
+            { label: 'Fijación Salarios (WS)', data: Array.from({length: 101}, (_, i) => ({x: i, y: 0.2 + Math.pow(i/100, 2)})), borderColor: '#af52de', borderWidth: 2, pointRadius: 0 },
+            { label: 'Nivel de Empleo Actual', data: [], backgroundColor: '#ff3b30', pointRadius: 6, showLine: false }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false, animation: false, scales: commonScales }
+      });
+
+      // Gráfico Multiplicador
+      const ctxM = document.getElementById('multiplierChart').getContext('2d');
+      multiplierChart = new Chart(ctxM, {
+        type: 'line',
+        data: {
+          datasets: [
+            { label: 'Bisectriz 45°', data: [{x:0, y:0}, {x:100, y:100}], borderColor: '#86868b', borderDash: [5,5], pointRadius: 0 },
+            { label: 'Demanda Agregada (DA)', data: [], borderColor: '#0071e3', borderWidth: 3, pointRadius: 0 },
+            { label: 'Equilibrio Y*', data: [], backgroundColor: '#ff3b30', pointRadius: 6, showLine: false }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false, animation: false,
+          scales: {
+            x: { type: 'linear', min: 0, max: 100, title: { display: true, text: 'Producción (Y)' } },
+            y: { min: 0, max: 100, title: { display: true, text: 'Demanda (DA)' } }
+          }
+        }
+      });
+    }
+
+    function update() {
+      // 1. Calcular Equilibrio Multiplicador
+      // Y* = A / (1 - s). Normalizamos para que Y max sea 100.
+      const Ystar = state.A / (1 - state.s);
+      
+      // 2. Transmitir a Mercado Laboral (N = Y / lambda)
+      const Ncurr = Ystar / lambda;
+
+      // Actualizar Multiplicador
+      multiplierChart.data.datasets[1].data = [
+        {x: 0, y: state.A},
+        {x: 100, y: state.A + state.s * 100}
+      ];
+      multiplierChart.data.datasets[2].data = [{x: Ystar, y: Ystar}];
+      multiplierChart.update();
+
+      // Actualizar Laboral
+      laborChart.data.datasets[2].data = [{x: Ncurr, y: PS}];
+      laborChart.update();
+
+      // Labels y Explicación
+      document.getElementById('valA').textContent = state.A.toFixed(0);
+      
+      const n_eq = 63; // Equilibrio estructural aproximado donde WS cruza PS
+      let gap_text = "";
+      if (Ncurr < n_eq) {
+        gap_text = `La demanda es insuficiente. El empleo actual (${Ncurr.toFixed(0)}) está por debajo del equilibrio estructural (${n_eq}). 
+                    La diferencia es el <span class="highlight">Desempleo Cíclico</span>.`;
+      } else if (Ncurr > n_eq) {
+        gap_text = `La economía está en auge. El empleo (${Ncurr.toFixed(0)}) supera el nivel estructural. 
+                    Esto generará presiones al alza en los salarios y precios (inflación).`;
+      } else {
+        gap_text = `La economía está en su equilibrio de medio plazo. No hay desempleo cíclico.`;
+      }
+
+      document.getElementById('dynamic-expl').innerHTML = `
+        <h4>Análisis de la Conexión:</h4>
+        <p>Con un gasto autónomo de <strong>${state.A.toFixed(0)}</strong> y un multiplicador de <strong>${(1/(1-state.s)).toFixed(1)}</strong>, 
+        la producción se sitúa en <strong>${Ystar.toFixed(0)}</strong>.</p>
+        <p>${gap_text}</p>
+      `;
+    }
+
+    document.getElementById('paramA').oninput = (e) => {
+      state.A = (e.target.value / 100) * 50; // Escalado para el gráfico
+      update();
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('math-A').innerHTML = kHTML('A');
+      initCharts();
+      update();
+    });
+  </script>
+</body>
+</html>
