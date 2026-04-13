@@ -31,10 +31,14 @@
     - `modelo-multiplicador.html`: Equilibrio Y* y multiplicador (Cruz Keynesiana).
 
 - `tema-4/`: Política Fiscal (Capítulo 14 CORE).
-    - `index.html`: Menú del tema.
+    - `index.html`: Menú de herramientas del tema.
     - `calculadora-multiplicador.html`: Simulador del tamaño del multiplicador con fugas (t, m).
     - `simulador-politica-fiscal.html`: Análisis de shocks (Paradoja ahorro, Estímulo, Austeridad).
     - `conexion-mercado-laboral.html`: Unificación de corto plazo (DA) y medio plazo (WS-PS).
+
+- `tema-5/`: Inflación (Capítulo 15 CORE).
+    - `index.html`: Menú de herramientas del tema.
+    - `calculadora-fisher.html`: Ecuación de Fisher (Interés nominal vs real).
 
 ## 🧠 Núcleo de Inteligencia (Assets)
 - `tema-1/assets/style.css`: Estilos UI Apple-style unificados.

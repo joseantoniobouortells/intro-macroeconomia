@@ -22,3 +22,12 @@ Este documento consolida las fórmulas, lógicas y variables clave utilizadas en
 - **Estabilizadores Automáticos:** El tipo impositivo ($t$) y las importaciones ($m$) reducen el tamaño del multiplicador, haciendo la economía menos volátil ante shocks.
 - **Desempleo Cíclico:** Desviación del empleo respecto al equilibrio WS-PS causada por una Demanda Agregada insuficiente ($Y < Y_{estructural}$).
 - **Paradoja del Ahorro:** Un intento de aumentar el ahorro reduciendo $c_0$ puede acabar reduciendo la renta total sin aumentar el ahorro agregado.
+
+### 🎈 Tema 5: Inflación (Cap. 15)
+- **Ecuación de Fisher:** $r \approx i - \pi^e$. 
+    - $r$: Tasa de interés real (poder adquisitivo).
+    - $i$: Tasa de interés nominal (lo que dice el contrato).
+    - $\pi^e$: Inflación esperada.
+- **Efectos Redistributivos:**
+    - **Inflación > Esperada:** Beneficia a los deudores (el valor real de su deuda cae).
+    - **Deflación ($\pi < 0$):** Perjudica a los deudores (el interés real sube por encima del nominal).

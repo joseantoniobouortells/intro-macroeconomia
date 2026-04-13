@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Fisher — Tema 5</title>
+  <link rel="stylesheet" href="../tema-1/assets/style.css">
+  <link rel="stylesheet" href="../tema-1/assets/katex.min.css">
+  <script src="../tema-1/assets/katex.min.js"></script>
+  <style>
+    body { padding: 0; background: #f5f5f7; color: #1d1d1f; }
+    .site-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.85); backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.08); height: 48px;
+      display: flex; align-items: center; padding: 0 24px;
+    }
+    .nav-back { display: flex; align-items: center; gap: 4px; font-size: 0.8rem; font-weight: 500; color: #0071e3; text-decoration: none; width: 120px; }
+    .nav-center { flex: 1; text-align: center; font-size: 0.8rem; font-weight: 500; color: #1d1d1f; pointer-events: none; }
+    .nav-spacer { width: 120px; }
+
+    .main-container {
+      max-width: 1200px; margin: 0 auto; padding: 40px 24px;
+      display: grid; grid-template-columns: 1fr 400px; gap: 40px;
+    }
+    @media (max-width: 1000px) { .main-container { grid-template-columns: 1fr; } }
+
+    .card { background: #fff; border-radius: 24px; padding: 32px; border: 1px solid #e5e5e5; }
+    .card h2 { font-size: 1.6rem; font-weight: 700; margin-bottom: 24px; letter-spacing: -0.5px; }
+
+    .formula-box { background: #f9f9fb; padding: 24px; border-radius: 18px; margin-bottom: 32px; text-align: center; border: 1px solid #eee; }
+    
+    /* Panel de Resultado Principal */
+    .result-panel { 
+      background: #1d1d1f; color: #fff; border-radius: 20px; padding: 40px; 
+      text-align: center; margin-bottom: 32px; transition: background 0.3s;
+    }
+    .result-panel.danger { background: #ff3b30; }
+    .result-val { font-size: 4.5rem; font-weight: 800; margin: 10px 0; line-height: 1; }
+    .result-label { font-size: 0.9rem; font-weight: 600; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* Alertas de Ganadores/Perdedores */
+    .alerts-container { display: flex; flex-direction: column; gap: 16px; }
+    .alert-card { padding: 20px; border-radius: 16px; border: 1px solid transparent; line-height: 1.5; }
+    .alert-green { background: #f0fff0; border-color: #34c759; color: #1a5e20; }
+    .alert-red { background: #fff0f0; border-color: #ff3b30; color: #a51d1d; }
+    .alert-gold { background: #fff9e6; border-color: #ffcc00; color: #5c4d00; }
+
+    /* Controles */
+    .slider-group { margin-bottom: 24px; }
+    .slider-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.85rem; font-weight: 600; }
+    .slider-val { color: #0071e3; font-weight: 800; background: #e3f2fd; padding: 4px 10px; border-radius: 8px; }
+    input[type=range] { width: 100%; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="index.html" class="nav-back"><span class="chevron">‹</span> Tema 5</a>
+    <span class="nav-center">Inflación · Ecuación de Fisher</span>
+    <span class="nav-spacer"></span>
+  </nav>
+
+  <div class="main-container">
+    <div class="theory-side">
+      <div class="card">
+        <h2>Calculadora de la Ecuación de Fisher</h2>
+        <p style="color:#6e6e73; margin-bottom:20px">La tasa de interés real mide el poder adquisitivo real de tus ahorros o el coste real de tu deuda una vez descontada la subida de precios.</p>
+        
+        <div class="formula-box" id="math-fisher"></div>
+
+        <div class="result-panel" id="main-panel">
+          <div class="result-label">Interés Real (<span id="math-r-label"></span>)</div>
+          <div class="result-val" id="res-r">3.00%</div>
+          <div id="math-derivation" style="font-size: 1rem; opacity: 0.8; margin-top: 10px;"></div>
+        </div>
+
+        <div class="alerts-container">
+          <div id="alert-debtor" class="alert-card alert-green">
+            <strong>🤝 Prestatarios (Deudores):</strong>
+            <p id="txt-debtor"></p>
+          </div>
+          <div id="alert-creditor" class="alert-card alert-red">
+            <strong>🏦 Prestamistas (Ahorradores):</strong>
+            <p id="txt-creditor"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-side">
+      <div class="card">
+        <h3 style="font-size: 0.8rem; text-transform: uppercase; color: #86868b; margin-bottom: 24px;">Ajuste de Tasas</h3>
+        
+        <div class="slider-group">
+          <div class="slider-header">
+            <span>Interés Nominal (<span id="math-i-label"></span>)</span>
+            <span id="val-i" class="slider-val">5%</span>
+          </div>
+          <input type="range" id="param-i" min="0" max="100" value="25">
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-header">
+            <span>Inflación Esperada (<span id="math-pi-label"></span>)</span>
+            <span id="val-pi" class="slider-val">2%</span>
+          </div>
+          <input type="range" id="param-pi" min="0" max="100" value="60">
+        </div>
+
+        <div id="deflation-warning" class="alert-card alert-gold" style="display:none; margin-top:20px; font-size:0.8rem;">
+          <strong>⚠️ Alerta de Deflación:</strong> Cuando la inflación es negativa, el interés real es MAYOR que el nominal. La deuda se vuelve más pesada cada día.
+        </div>
+      </div>
+
+      <div class="exam-tip" style="background:#fff9e6; border:1.5px solid #ffcc00; border-radius:16px; padding:20px; color:#5c4d00; margin-top:24px; font-size:0.85rem;">
+        <strong>🎓 Tip de Examen:</strong>
+        <p style="margin-top:8px">Si la inflación es mayor de lo esperado, hay una transferencia de riqueza de prestamistas a deudores. Por eso a los bancos les asusta la inflación inesperada.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function kHTML(latex) { return katex.renderToString(latex, { throwOnError: false }); }
+
+    let state = { i: 0.05, pi: 0.02 };
+
+    function update() {
+      const r = state.i - state.pi;
+      
+      // Actualizar UI numérica
+      document.getElementById('res-r').textContent = (r * 100).toFixed(2) + '%';
+      document.getElementById('val-i').textContent = (state.i * 100).toFixed(0) + '%';
+      document.getElementById('val-pi').textContent = (state.pi * 100).toFixed(0) + '%';
+
+      // Derivación Matemática
+      document.getElementById('math-derivation').innerHTML = kHTML(`${(state.i*100).toFixed(0)}\\% - ${(state.pi*100).toFixed(0)}\\% = ${(r*100).toFixed(2)}\\%`);
+
+      // Feedback Visual y Alertas
+      const panel = document.getElementById('main-panel');
+      const deflWarning = document.getElementById('deflation-warning');
+      
+      if (r < 0) {
+        panel.classList.add('danger');
+        document.getElementById('txt-debtor').textContent = "¡Felicidades! La inflación es tan alta que el interés real es negativo. Tu deuda se está " + (state.pi > 0 ? "evaporando" : "reduciendo") + " sola.";
+        document.getElementById('txt-creditor').textContent = "Estás perdiendo dinero en términos reales. El poder de compra de tus ahorros disminuye.";
+      } else {
+        panel.classList.remove('danger');
+        document.getElementById('txt-debtor').textContent = "Estás pagando un coste real razonable por tu crédito.";
+        document.getElementById('txt-creditor').textContent = "Tus ahorros están creciendo por encima del coste de la vida.";
+      }
+
+      // Alerta Deflación
+      deflWarning.style.display = state.pi < 0 ? 'block' : 'none';
+    }
+
+    // Sliders (Nominal 0-20%, Inflación -5% a 15%)
+    document.getElementById('param-i').oninput = (e) => { 
+      state.i = (e.target.value / 100) * 0.20; 
+      update(); 
+    };
+    document.getElementById('param-pi').oninput = (e) => { 
+      state.pi = -0.05 + (e.target.value / 100) * 0.20; 
+      update(); 
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('math-fisher').innerHTML = kHTML('r \\approx i - \\pi^e');
+      document.getElementById('math-r-label').innerHTML = kHTML('r');
+      document.getElementById('math-i-label').innerHTML = kHTML('i');
+      document.getElementById('math-pi-label').innerHTML = kHTML('\\pi^e');
+      update();
+    });
+  </script>
+</body>
+</html>

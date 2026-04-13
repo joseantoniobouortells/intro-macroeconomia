@@ -17,8 +17,9 @@ Plataforma educativa de alta fidelidad para el Grado en Economía. Contiene simu
 | **Tema 1** | Mercado de Trabajo | ✅ Completo | WS-PS, Gini, Sindicatos, Tecnología |
 | **Tema 2** | Bancos y Crédito | ✅ Completo | Valor Presente, Apalancamiento, Bonos |
 | **Tema 3** | Fluctuaciones | ✅ Completo | Okun, Suavización, Multiplicador, Inversión |
-| **Tema 4** | Política Fiscal | ✅ Completo | Estabilizadores, Shocks, Conexión Laboral |
-| **Tema 5** | Inflación | ⏳ Próximamente | Curva de Phillips, Política Monetaria |
+| Tema 4 | Política Fiscal | ✅ Completo | Estabilizadores, Shocks, Conexión Laboral |
+| **Tema 5** | Inflación | ✅ Parcial | Ecuación de Fisher, Phillips (Próx.) |
+| **Tema 6** | Macro. Abierta | ⏳ Próximamente | Balanza de Pagos, Tipos de Cambio |
 
 ---
 

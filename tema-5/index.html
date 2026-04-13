@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tema 5 — Inflación y Política Monetaria | Intro. Macroeconomía</title>
+  <link rel="stylesheet" href="../tema-1/assets/style.css">
+  <link rel="stylesheet" href="../tema-1/assets/katex.min.css">
+  <script src="../tema-1/assets/katex.min.js"></script>
+  <style>
+    body { padding: 0; background: #f5f5f7; }
+    .site-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.85); backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.08); height: 48px;
+      display: flex; align-items: center; padding: 0 24px;
+    }
+    .nav-back { display: flex; align-items: center; gap: 4px; font-size: 0.8rem; font-weight: 500; color: #0071e3; text-decoration: none; width: 120px; }
+    .nav-center { flex: 1; text-align: center; font-size: 0.8rem; font-weight: 500; color: #1d1d1f; pointer-events: none; }
+    .nav-spacer { width: 120px; }
+    .inner { max-width: 980px; margin: 0 auto; padding: 48px 24px 80px; }
+    
+    .page-header { text-align: center; margin-bottom: 48px; }
+    .page-header h1 { font-size: 2.4rem; font-weight: 700; letter-spacing: -0.8px; color: #1d1d1f; margin-bottom: 12px; }
+    .page-header p { font-size: 1rem; color: #6e6e73; max-width: 520px; margin: 0 auto; }
+
+    .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .tool-card {
+      background: #fff; border: 1px solid #e5e5e5; border-radius: 18px; padding: 24px;
+      text-decoration: none; color: inherit; transition: all 0.2s;
+    }
+    .tool-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); border-color: #d2d2d7; }
+    .tool-card h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; color: #1d1d1f; }
+    .tool-card p { font-size: 0.88rem; color: #6e6e73; line-height: 1.5; margin-bottom: 16px; }
+    .status { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 12px; }
+    .available { background: #e3f2fd; color: #0071e3; }
+  </style>
+</head>
+<body>
+  <nav class="site-nav">
+    <a href="../index.html" class="nav-back"><span class="chevron">‹</span> Menú General</a>
+    <span class="nav-center">Introducción a la Macroeconomía</span>
+    <span class="nav-spacer"></span>
+  </nav>
+
+  <div class="inner">
+    <header class="page-header">
+      <h1>Inflación y Estabilidad</h1>
+      <p>Capítulo 15: Los costes de la inflación, la curva de Phillips y el papel de la política monetaria.</p>
+    </header>
+
+    <div class="tools-grid">
+      <a href="calculadora-fisher.html" class="tool-card">
+        <h2>⚖️ Ecuación de Fisher</h2>
+        <p>Calcula la relación entre el tipo de interés nominal, el real y la inflación esperada (<span class="m-inline" data-latex="\pi^e"></span>).</p>
+        <span class="status available">✓ Disponible</span>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    function kHTML(latex) { return katex.renderToString(latex, { throwOnError: false }); }
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.m-inline').forEach(el => {
+        el.innerHTML = kHTML(el.dataset.latex);
+      });
+    });
+  </script>
+</body>
+</html>
