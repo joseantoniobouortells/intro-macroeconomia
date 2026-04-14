@@ -50,3 +50,8 @@ Este documento consolida las fórmulas, lógicas y variables clave utilizadas en
 - **Desplazamiento de la curva:** Cambios en la eficiencia del mercado laboral (habilidades, geografía, servicios de empleo).
     - **Hacia el origen:** Mayor eficiencia (mejor emparejamiento).
     - **Hacia afuera:** Menor eficiencia (desajuste estructural).
+
+### 🕰️ Tema 7: Historia y Crisis (Cap. 17)
+- **Edad de Oro (1950-1973):** Periodo de alta inversión y productividad que desplazó PS hacia arriba, compensando las subidas de WS y manteniendo bajo desempleo.
+- **Estanflación (Años 70):** Crisis de oferta (petróleo) que bajó la curva PS y ruptura de acuerdos sociales que subió la curva WS, generando inflación y desempleo altos simultáneamente.
+- **Brecha de Negociación Histórica:** En los 70, la suma de las demandas de trabajadores y dueños superaba la tarta total disponible, retroalimentando la espiral inflacionista.

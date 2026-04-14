@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mercado Laboral Histórico — Tema 7</title>
+  <link rel="stylesheet" href="../tema-1/assets/style.css">
+  <link rel="stylesheet" href="../tema-1/assets/katex.min.css">
+  <script src="../tema-1/assets/chart.umd.min.js"></script>
+  <script src="../tema-1/assets/katex.min.js"></script>
+  <style>
+    body { padding: 0; background: #f5f5f7; color: #1d1d1f; }
+    .site-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.85); backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.08); height: 48px;
+      display: flex; align-items: center; padding: 0 24px;
+    }
+    .nav-back { display: flex; align-items: center; gap: 4px; font-size: 0.8rem; font-weight: 500; color: #0071e3; text-decoration: none; width: 120px; }
+    .nav-center { flex: 1; text-align: center; font-size: 0.8rem; font-weight: 500; color: #1d1d1f; pointer-events: none; }
+    .nav-spacer { width: 120px; }
+
+    .main-container {
+      max-width: 1400px; margin: 0 auto; display: grid;
+      grid-template-columns: 1fr 400px; gap: 32px; padding: 32px 24px;
+      align-items: start;
+    }
+    @media (max-width: 1100px) { .main-container { grid-template-columns: 1fr; } }
+
+    .card { background: #fff; border-radius: 24px; padding: 28px; border: 1px solid #e5e5e5; margin-bottom: 24px; }
+    .chart-container { position: relative; height: 450px; }
+
+    .controls-side { position: sticky; top: 80px; }
+    .control-panel { background: #f9f9fb; border-radius: 20px; padding: 24px; }
+    
+    .epoch-btn { 
+      padding: 16px; border-radius: 14px; border: 1px solid #d2d2d7; 
+      background: #fff; cursor: pointer; width: 100%; font-size: 0.85rem; font-weight: 700; margin-bottom: 12px; transition: all 0.2s;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .epoch-btn:hover { border-color: #0071e3; background: #f0f7ff; }
+    .epoch-btn.active { background: #0071e3; color: #fff; border-color: #0071e3; }
+    .epoch-btn .icon { font-size: 1.2rem; }
+
+    .explanation-box { 
+      margin-top: 20px; padding: 20px; border-radius: 16px; 
+      background: #fff; border: 1px solid #eee; font-size: 0.85rem; line-height: 1.6;
+    }
+    .highlight-positive { color: #34c759; font-weight: 700; }
+    .highlight-negative { color: #ff3b30; font-weight: 700; }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="index.html" class="nav-back"><span class="chevron">‹</span> Tema 7</a>
+    <span class="nav-center">Historia · Modelos en el Tiempo</span>
+    <span class="nav-spacer"></span>
+  </nav>
+
+  <div class="main-container">
+    
+    <div class="visual-side">
+      <div class="card">
+        <h3 style="margin:0 0 15px 0">📉 El Mercado Laboral en Perspectiva Histórica</h3>
+        <div class="chart-container">
+          <canvas id="historyChart"></canvas>
+        </div>
+      </div>
+
+      <div id="dynamic-info" class="explanation-box">
+        Selecciona una época para analizar los desplazamientos institucionales y tecnológicos.
+      </div>
+    </div>
+
+    <div class="controls-side">
+      <div class="control-panel">
+        <h4 style="font-size: 0.65rem; color: #86868b; text-transform: uppercase; margin-bottom: 20px; letter-spacing: 0.5px;">Periodos Históricos</h4>
+        
+        <button class="epoch-btn" id="btn-gold" onclick="setEpoch('gold')">
+          <span class="icon">✨</span>
+          <div>Edad de Oro (1950-1973)</div>
+        </button>
+
+        <button class="epoch-btn" id="btn-stag" onclick="setEpoch('stag')">
+          <span class="icon">⛽</span>
+          <div>Estanflación (Años 70)</div>
+        </button>
+
+        <button class="epoch-btn" style="background:#f5f5f7; border:none; justify-content:center;" onclick="resetSim()">
+          Restablecer
+        </button>
+      </div>
+
+      <div class="exam-tip" style="background:#fff9e6; border:1.5px solid #ffcc00; border-radius:16px; padding:24px; color:#5c4d00; margin-top:24px; font-size:0.85rem;">
+        <strong>🎓 Tip de Examen:</strong>
+        <p style="margin-top:8px"><strong>Ojo al test:</strong> La estanflación se define como la combinación inusual de alta inflación y alto desempleo, originada por una crisis del lado de la oferta.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function kHTML(latex) { return katex.renderToString(latex, { throwOnError: false }); }
+    let chart;
+
+    // Lógica de curvas
+    function getWS(e, shift = 0) {
+      return (0.48 + shift) + (0.0072 / (1.01 - e));
+    }
+
+    // Hallar e donde PS = WS
+    function findIntersection(ps, shift) {
+      return 1.01 - (0.0072 / (ps - 0.48 - shift));
+    }
+
+    function initChart() {
+      const ctx = document.getElementById('historyChart').getContext('2d');
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          datasets: [
+            { label: 'WS (Salarios)', data: [], borderColor: '#af52de', borderWidth: 3, pointRadius: 0, fill: false },
+            { label: 'PS (Precios)', data: [], borderColor: '#ff9500', borderWidth: 3, pointRadius: 0, fill: false },
+            { label: 'Estado Anterior', data: [], borderColor: '#8e8e93', borderWidth: 2, borderDash: [6,4], pointRadius: 0, fill: false },
+            { label: 'Equilibrio', data: [], backgroundColor: '#ff3b30', pointRadius: 6, showLine: false }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false, animation: { duration: 800 },
+          scales: {
+            x: { type: 'linear', min: 0.8, max: 1.0, title: { display: true, text: 'Tasa de Empleo (e)' } },
+            y: { min: 0.4, max: 0.8, title: { display: true, text: 'Salario Real' } }
+          }
+        }
+      });
+    }
+
+    function setEpoch(type) {
+      document.querySelectorAll('.epoch-btn').forEach(b => b.classList.remove('active'));
+      const info = document.getElementById('dynamic-info');
+      const e_axis = Array.from({length: 21}, (_, i) => 0.8 + i/100);
+
+      // Guardar actual como anterior
+      chart.data.datasets[2].data = chart.data.datasets[1].data;
+
+      if (type === 'gold') {
+        document.getElementById('btn-gold').classList.add('active');
+        const ps_val = 0.7;
+        const ws_shift = 0.05;
+        const eqE = findIntersection(ps_val, ws_shift);
+
+        chart.data.datasets[1].data = [{x:0.8, y:ps_val}, {x:1.0, y:ps_val}];
+        chart.data.datasets[0].data = e_axis.map(ex => ({x: ex, y: getWS(ex, ws_shift)}));
+        
+        info.innerHTML = `<strong>Edad de Oro:</strong> Gran crecimiento de productividad (<span class="highlight-positive">PS ↑</span>) y paz social. El resultado es un equilibrio con <span class="highlight-positive">alto empleo</span> y salarios reales crecientes.`;
+        chart.data.datasets[3].data = [{x: eqE, y: ps_val}];
+      } 
+      else if (type === 'stag') {
+        document.getElementById('btn-stag').classList.add('active');
+        const ps_val = 0.55;
+        const ws_shift = -0.05;
+        const eqE = findIntersection(ps_val, ws_shift);
+
+        chart.data.datasets[1].data = [{x:0.8, y:ps_val}, {x:1.0, y:ps_val}];
+        chart.data.datasets[0].data = e_axis.map(ex => ({x: ex, y: getWS(ex, ws_shift)}));
+
+        info.innerHTML = `<strong>Estanflación:</strong> El shock del petróleo reduce la productividad neta (<span class="highlight-negative">PS ↓</span>) mientras los sindicatos exigen mantener salarios (<span class="highlight-negative">WS ↑</span>). Se abre una <strong>brecha de negociación</strong> que genera <span class="highlight-negative">inflación</span> y <span class="highlight-negative">alto desempleo</span> simultáneo.`;
+        chart.data.datasets[3].data = [{x: eqE, y: ps_val}];
+      }
+
+      chart.update();
+    }
+
+    function resetSim() {
+      const e_axis = Array.from({length: 21}, (_, i) => 0.8 + i/100);
+      const ps_val = 0.6;
+      const ws_shift = 0;
+      const eqE = findIntersection(ps_val, ws_shift);
+
+      chart.data.datasets[1].data = [{x:0.8, y:ps_val}, {x:1.0, y:ps_val}];
+      chart.data.datasets[0].data = e_axis.map(ex => ({x: ex, y: getWS(ex, ws_shift)}));
+      chart.data.datasets[2].data = [];
+      chart.data.datasets[3].data = [{x: eqE, y: ps_val}];
+      document.getElementById('dynamic-info').innerText = "Selecciona una época para analizar los desplazamientos.";
+      document.querySelectorAll('.epoch-btn').forEach(b => b.classList.remove('active'));
+      chart.update();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initChart();
+      resetSim();
+    });
+  </script>
+</body>
+</html>

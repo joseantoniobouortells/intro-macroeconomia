@@ -48,6 +48,10 @@
     - `calculadora-desigualdad.html`: Impacto de la automatización en el Gini y Lorenz.
     - `simulador-curva-beveridge.html`: Eficiencia de emparejamiento y ciclo económico.
 
+- `tema-7/`: Historia y Crisis (Capítulo 17 CORE).
+    - `index.html`: Menú de herramientas del tema.
+    - `mercado-laboral-historico.html`: Comparativa Edad de Oro vs Estanflación.
+
 ## 🧠 Núcleo de Inteligencia (Assets)
 - `tema-1/assets/style.css`: Estilos UI Apple-style unificados.
 - `tema-1/assets/katex.min.js`: Motor de renderizado matemático.
