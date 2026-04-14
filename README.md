@@ -21,7 +21,8 @@ Plataforma educativa de alta fidelidad para el Grado en Economía. Contiene simu
 | **Tema 5** | Inflación | ✅ Completo | Ecuación de Fisher, Phillips, Banco Central |
 | **Tema 6** | Progreso Técnico | ✅ Completo | Dinámica A-D-E-B, Lorenz, Beveridge |
 | **Tema 7** | Historia y Crisis | ✅ Completo | Edad de Oro, Burbujas, Apalancamiento |
-| **Tema 8** | Economía Global | ⏳ Próximamente | Balanza de Pagos, Tipos de Cambio |
+| **Tema 8** | Economía Global | ✅ Parcial | Ventaja Comparativa, Shocks de Comercio |
+| **Tema 9** | Desigualdad Global | ⏳ Próximamente | Convergencia, Instituciones |
 
 ---
 

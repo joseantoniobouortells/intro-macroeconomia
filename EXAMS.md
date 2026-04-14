@@ -36,3 +36,9 @@ Este documento recopila la lógica de las preguntas más frecuentes en los exám
 - **Burbujas de Activos:** "¿Qué es el punto de inflexión en la curva CDP?". Respuesta: Es un equilibrio inestable. Un precio ligeramente superior inicia una burbuja; uno inferior, un crash.
 - **Apalancamiento:** "¿Por qué un alto ratio de apalancamiento es peligroso?". Respuesta: Porque hace que el patrimonio neto sea muy sensible a pequeñas caídas en el precio de los activos, pudiendo llevar a la insolvencia y a ventas forzosas.
 - **Herramientas:** `mercado-laboral-historico.html`, `simulador-burbujas.html` y `calculadora-apalancamiento.html`.
+
+## 🌍 Tema 8: Economía Global (NUEVO)
+- **Ventaja Comparativa:** "Greta produce trigo más barato que Carlos en términos relativos. ¿Deberían comerciar?". Respuesta: Sí, Greta debe especializarse en trigo y Carlos en el otro bien para que ambos consuman más allá de sus fronteras iniciales.
+- **Ganadores por Factores:** "¿Quién pierde con la globalización en un país rico?". Respuesta: Los trabajadores poco cualificados (factor escaso), ya que compiten con importaciones de países donde ese factor es abundante y barato.
+- **Comercio vs Tecnología:** "Compare el efecto del comercio a largo plazo con el del progreso técnico". Respuesta: Ambos elevan la curva PS al aumentar la eficiencia y productividad agregada.
+- **Herramientas:** `simulador-ventaja-comparativa.html` y `simulador-shocks-comerciales.html`.

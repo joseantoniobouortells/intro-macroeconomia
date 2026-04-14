@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shocks Comerciales — Tema 8</title>
+  <link rel="stylesheet" href="../tema-1/assets/style.css">
+  <link rel="stylesheet" href="../tema-1/assets/katex.min.css">
+  <script src="../tema-1/assets/chart.umd.min.js"></script>
+  <script src="../tema-1/assets/katex.min.js"></script>
+  <style>
+    body { padding: 0; background: #f5f5f7; color: #1d1d1f; }
+    .site-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.85); backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.08); height: 48px;
+      display: flex; align-items: center; padding: 0 24px;
+    }
+    .nav-back { display: flex; align-items: center; gap: 4px; font-size: 0.8rem; font-weight: 500; color: #0071e3; text-decoration: none; width: 120px; }
+    .nav-center { flex: 1; text-align: center; font-size: 0.8rem; font-weight: 500; color: #1d1d1f; pointer-events: none; }
+    .nav-spacer { width: 120px; }
+
+    .main-container {
+      max-width: 1400px; margin: 0 auto; display: grid;
+      grid-template-columns: 1fr 420px; gap: 32px; padding: 32px 24px;
+      align-items: start;
+    }
+    @media (max-width: 1100px) { .main-container { grid-template-columns: 1fr; } }
+
+    .card { background: #fff; border-radius: 24px; padding: 28px; border: 1px solid #e5e5e5; margin-bottom: 24px; }
+    .chart-container { position: relative; height: 450px; }
+
+    .controls-side { position: sticky; top: 80px; }
+    .control-panel { background: #f9f9fb; border-radius: 20px; padding: 24px; }
+    
+    .btn-action { 
+      background: #0071e3; color: #fff; border: none; padding: 16px; border-radius: 12px; 
+      width: 100%; font-weight: 700; cursor: pointer; margin-bottom: 12px; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .btn-action:hover { background: #005bb5; transform: scale(1.02); }
+    .btn-action:disabled { background: #d2d2d7; cursor: not-allowed; transform: none; }
+
+    .winners-perders-card { 
+      margin-top: 20px; padding: 20px; border-radius: 16px; 
+      background: #fff; border: 1px solid #eee; font-size: 0.85rem; line-height: 1.6;
+    }
+    .tag { padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: 0.7rem; margin-right: 5px; }
+    .tag-win { background: #e8f5e9; color: #2e7d32; }
+    .tag-loss { background: #fff2f2; color: #ff3b30; }
+
+    .step-indicator { font-size: 0.85rem; color: #3a3a3c; margin-top: 15px; padding: 15px; background: #f0f6ff; border-radius: 12px; }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="index.html" class="nav-back"><span class="chevron">‹</span> Tema 8</a>
+    <span class="nav-center">Economía Global · Shocks Comerciales</span>
+    <span class="nav-spacer"></span>
+  </nav>
+
+  <div class="main-container">
+    
+    <div class="visual-side">
+      <div class="card">
+        <h3 style="margin:0 0 15px 0">📉 Impacto del Comercio en el Mercado Laboral</h3>
+        <div class="chart-container">
+          <canvas id="tradeLaborChart"></canvas>
+        </div>
+      </div>
+
+      <div id="status-panel" class="winners-perders-card">
+        <h4>👥 Ganadores y Perdedores (Factor Abundancia)</h4>
+        <div id="winners-content" style="margin-top:10px">
+          Selecciona "Apertura Comercial" para ver la redistribución de rentas.
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-side">
+      <div class="control-panel">
+        <h4 style="font-size: 0.65rem; color: #86868b; text-transform: uppercase; margin-bottom: 20px; letter-spacing: 0.5px;">Simulador de Apertura</h4>
+        
+        <button id="btn-trade" class="btn-action" onclick="runTradeShock()">
+          <span>🚢 Apertura Comercial (EE.UU. - China)</span>
+        </button>
+
+        <div id="step-info" class="step-indicator">
+          <strong>Estado:</strong> Autarquía (Sin comercio). El equilibrio está determinado por la productividad local.
+        </div>
+
+        <button class="btn-action" style="background:#f5f5f7; color:#1d1d1f; margin-top:20px; border:1px solid #d2d2d7" onclick="resetSim()">
+          Reiniciar Simulación
+        </button>
+      </div>
+
+      <div class="exam-tip" style="background:#fff9e6; border:1.5px solid #ffcc00; border-radius:16px; padding:24px; color:#5c4d00; margin-top:24px; font-size:0.85rem;">
+        <strong>🎓 Tip de Examen:</strong>
+        <p style="margin-top:8px"><strong>Efecto en Factores:</strong> Los propietarios de factores escasos en su país (ej. trabajadores no cualificados en países ricos) pierden con el comercio. Los dueños del factor abundante ganan.</p>
+        <p style="margin-top:12px"><strong>Largo Plazo:</strong> Similar al progreso técnico, el comercio eleva la curva PS al aumentar la eficiencia mediante la especialización.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function kHTML(latex) { return katex.renderToString(latex, { throwOnError: false }); }
+    let chart;
+
+    // Puntos de la trayectoria (e, w)
+    const points = {
+      A: { e: 0.90, w: 0.60 }, // Inicial
+      D: { e: 0.82, w: 0.60 }, // Corto plazo (importaciones compiten)
+      B: { e: 0.94, w: 0.70 }  // Largo plazo (especialización exitosa)
+    };
+
+    let currentStep = 0;
+    const steps = ['A', 'D', 'B'];
+
+    function initChart() {
+      const ctx = document.getElementById('tradeLaborChart').getContext('2d');
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          datasets: [
+            { label: 'WS (Salarios)', data: Array.from({length: 21}, (_, i) => {
+                let ev = 0.8 + i/100;
+                return {x: ev, y: 0.48 + (0.0072 / (1.01 - ev)) - 0.12}; // Re-escalado para este gráfico
+              }), borderColor: '#af52de', borderWidth: 2, pointRadius: 0, fill: false },
+            { label: 'PS Inicial', data: [{x:0.8, y:0.6}, {x:1.0, y:0.6}], borderColor: '#ff9500', borderWidth: 2, borderDash: [5,5], pointRadius: 0, fill: false },
+            { label: 'PS Post-Comercio', data: [], borderColor: '#ff9500', borderWidth: 3, pointRadius: 0, fill: false },
+            { 
+              label: 'Equilibrio Actual', 
+              data: [{x: points.A.e, y: points.A.w}], 
+              backgroundColor: '#ff3b30', 
+              pointRadius: 8, 
+              showLine: true,
+              borderColor: 'rgba(255,59,48,0.2)',
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false, animation: { duration: 1000 },
+          scales: {
+            x: { type: 'linear', min: 0.8, max: 1.0, title: { display: true, text: 'Tasa de Empleo (e)' } },
+            y: { min: 0.4, max: 0.8, title: { display: true, text: 'Salario Real' } }
+          }
+        }
+      });
+    }
+
+    function runTradeShock() {
+      if (currentStep >= steps.length - 1) return;
+      currentStep++;
+      updateUI();
+    }
+
+    function updateUI() {
+      const step = steps[currentStep];
+      const info = document.getElementById('step-info');
+      const winners = document.getElementById('winners-content');
+      const btn = document.getElementById('btn-trade');
+
+      if (step === 'D') {
+        info.innerHTML = `<strong>Corto Plazo (Punto D):</strong> La apertura inunda el mercado con bienes intensivos en mano de obra. Las industrias locales cierran, el empleo cae al 82%. El salario real se mantiene estancado.`;
+        chart.data.datasets[3].data.push(points.D);
+        
+        winners.innerHTML = `
+          • <span class="tag tag-win">Dueños del Capital:</span> Ganan acceso a mercados globales.<br>
+          • <span class="tag tag-loss">Trabajadores:</span> Pierden empleo y poder de negociación.
+        `;
+      } else if (step === 'B') {
+        info.innerHTML = `<strong>Largo Plazo (Punto B):</strong> La economía se especializa en sectores de alto valor (tecnología/servicios). La productividad sube y la curva PS se desplaza hacia arriba. El empleo se recupera y los salarios reales aumentan.`;
+        chart.data.datasets[2].data = [{x:0.8, y:0.7}, {x:1.0, y:0.7}];
+        chart.data.datasets[3].data.push(points.B);
+        
+        winners.innerHTML = `
+          • <span class="tag tag-win">Consumidores:</span> Precios más bajos en bienes importados.<br>
+          • <span class="tag tag-win">País (Total):</span> Mayor nivel de vida y eficiencia agregada.
+        `;
+        btn.disabled = true;
+        btn.innerText = "Simulación Completada";
+      }
+
+      chart.update();
+    }
+
+    function resetSim() {
+      currentStep = 0;
+      chart.data.datasets[2].data = [];
+      chart.data.datasets[3].data = [{x: points.A.e, y: points.A.w}];
+      document.getElementById('step-info').innerHTML = "<strong>Estado:</strong> Autarquía (Sin comercio). El equilibrio está determinado por la productividad local.";
+      document.getElementById('winners-content').innerHTML = "Selecciona 'Apertura Comercial' para ver la redistribución de rentas.";
+      const btn = document.getElementById('btn-trade');
+      btn.disabled = false;
+      btn.innerHTML = "<span>🚢 Apertura Comercial (EE.UU. - China)</span>";
+      chart.update();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initChart();
+    });
+  </script>
+</body>
+</html>

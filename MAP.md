@@ -54,6 +54,11 @@
     - `simulador-burbujas.html`: Dinámica de precios de activos y burbujas.
     - `calculadora-apalancamiento.html`: Balances financieros, apalancamiento e insolvencia.
 
+- `tema-8/`: Economía Global (Capítulo 18 CORE).
+    - `index.html`: Menú de herramientas del tema.
+    - `simulador-ventaja-comparativa.html`: Especialización y ganancias del comercio.
+    - `simulador-shocks-comerciales.html`: Transición del mercado laboral y efecto en factores.
+
 ## 🧠 Núcleo de Inteligencia (Assets)
 - `tema-1/assets/style.css`: Estilos UI Apple-style unificados.
 - `tema-1/assets/katex.min.js`: Motor de renderizado matemático.

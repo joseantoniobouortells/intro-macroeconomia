@@ -64,4 +64,14 @@ Este documento consolida las fórmulas, lógicas y variables clave utilizadas en
     - **Leverage (Apalancamiento):** Activos Totales / Patrimonio Neto.
     - **Insolvencia (Patrimonio Negativo):** Situación donde el valor de la deuda supera al de los activos tras una caída de precios.
     - **Ventas Forzosas (Fire Sales):** Ventas masivas de activos para reducir deuda que hunden aún más los precios de mercado.
+
+### 🌍 Tema 8: Economía Global (Cap. 18)
+- **Ventaja Absoluta:** Capacidad de producir más de un bien con los mismos recursos.
+- **Ventaja Comparativa:** Capacidad de producir un bien con un **menor coste de oportunidad** que otros agentes.
+- **Coste de Oportunidad (TMT):** Cantidad de un bien a la que se debe renunciar para producir una unidad adicional de otro bien.
+- **Ganancias del Comercio:** El comercio permite que la frontera de consumo factible se desplace hacia afuera del área limitada por la producción propia.
+- **Shocks Comerciales:** 
+    - **Corto Plazo:** Desempleo en sectores que compiten con importaciones.
+    - **Largo Plazo:** Especialización → Mayor productividad → Desplazamiento de la curva PS hacia arriba → Mayor salario real y empleo.
+- **Redistribución (Factores):** El comercio beneficia a los propietarios del factor **abundante** en el país (ej. capital en EE.UU.) y perjudica a los del factor **escaso** (ej. trabajo no cualificado en países ricos).
 - **Brecha de Negociación Histórica:** En los 70, la suma de las demandas de trabajadores y dueños superaba la tarta total disponible, retroalimentando la espiral inflacionista.
