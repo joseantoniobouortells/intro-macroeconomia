@@ -17,19 +17,18 @@ Plataforma educativa de alta fidelidad para el Grado en Economía. Contiene simu
 | **Tema 1** | Mercado de Trabajo | ✅ Completo | WS-PS, Gini, Sindicatos, Tecnología |
 | **Tema 2** | Bancos y Crédito | ✅ Completo | Valor Presente, Apalancamiento, Bonos |
 | **Tema 3** | Fluctuaciones | ✅ Completo | Okun, Suavización, Multiplicador, Inversión |
-| Tema 4 | Política Fiscal | ✅ Completo | Estabilizadores, Shocks, Conexión Laboral |
-| **Tema 5** | Inflación | ✅ Parcial | Ecuación de Fisher, Phillips (Próx.) |
-| **Tema 6** | Macro. Abierta | ⏳ Próximamente | Balanza de Pagos, Tipos de Cambio |
+| **Tema 4** | Política Fiscal | ✅ Completo | Estabilizadores, Shocks, Conexión Laboral |
+| **Tema 5** | Inflación | ✅ Completo | Ecuación de Fisher, Phillips, Banco Central |
+| **Tema 6** | Progreso Técnico | ✅ Completo | Dinámica A-D-E-B, Lorenz, Beveridge |
+| **Tema 7** | Historia y Crisis | ✅ Completo | Edad de Oro, Burbujas, Apalancamiento |
+| **Tema 8** | Economía Global | ⏳ Próximamente | Balanza de Pagos, Tipos de Cambio |
 
 ---
 
 ## 📁 Estructura del Repositorio
 
 - `index.html`: Portal principal.
-- `tema-1/`: Modelos de salarios, precios y desigualdad.
-- `tema-2/`: Funcionamiento del sistema financiero y dinero.
-- `tema-3/`: Ciclos económicos y determinantes de la demanda.
-- `tema-4/`: El papel del gobierno y estabilización automática.
+- `tema-1/` al `tema-7/`: Unidades didácticas independientes.
 - `assets/`: Motores compartidos (Chart.js, KaTeX, CSS unificado).
 
 ---

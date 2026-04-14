@@ -59,4 +59,9 @@ Este documento consolida las fórmulas, lógicas y variables clave utilizadas en
     - **Equilibrios Estables:** Puntos donde la CDP cruza la bisectriz con pendiente menor a 1 (Nivel bajo y nivel de burbuja).
     - **Punto de Inflexión:** Equilibrio inestable. Si el precio sube por encima, se crea una burbuja; si baja, un desplome.
     - **Colapso:** Un cambio en las expectativas (pesimismo) desplaza la CDP hacia abajo, eliminando el equilibrio de burbuja y provocando una caída libre de precios.
+- **Balances y Apalancamiento:**
+    - **Patrimonio Neto:** Activos (Vivienda + Financieros) - Pasivos (Deuda).
+    - **Leverage (Apalancamiento):** Activos Totales / Patrimonio Neto.
+    - **Insolvencia (Patrimonio Negativo):** Situación donde el valor de la deuda supera al de los activos tras una caída de precios.
+    - **Ventas Forzosas (Fire Sales):** Ventas masivas de activos para reducir deuda que hunden aún más los precios de mercado.
 - **Brecha de Negociación Histórica:** En los 70, la suma de las demandas de trabajadores y dueños superaba la tarta total disponible, retroalimentando la espiral inflacionista.

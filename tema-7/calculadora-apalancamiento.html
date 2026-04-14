@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Apalancamiento — Tema 7</title>
+  <link rel="stylesheet" href="../tema-1/assets/style.css">
+  <link rel="stylesheet" href="../tema-1/assets/katex.min.css">
+  <script src="../tema-1/assets/chart.umd.min.js"></script>
+  <script src="../tema-1/assets/katex.min.js"></script>
+  <style>
+    body { padding: 0; background: #f5f5f7; color: #1d1d1f; }
+    .site-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.85); backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.08); height: 48px;
+      display: flex; align-items: center; padding: 0 24px;
+    }
+    .nav-back { display: flex; align-items: center; gap: 4px; font-size: 0.8rem; font-weight: 500; color: #0071e3; text-decoration: none; width: 120px; }
+    .nav-center { flex: 1; text-align: center; font-size: 0.8rem; font-weight: 500; color: #1d1d1f; pointer-events: none; }
+    .nav-spacer { width: 120px; }
+
+    .main-container {
+      max-width: 1200px; margin: 0 auto; display: grid;
+      grid-template-columns: 1fr 400px; gap: 32px; padding: 32px 24px;
+      align-items: start;
+    }
+    @media (max-width: 1000px) { .main-container { grid-template-columns: 1fr; } }
+
+    .card { background: #fff; border-radius: 24px; padding: 28px; border: 1px solid #e5e5e5; margin-bottom: 24px; }
+    .chart-container { position: relative; height: 400px; margin-top: 20px; }
+
+    /* Estilo del Balance */
+    .balance-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+    .metric-box { background: #f9f9fb; padding: 20px; border-radius: 16px; text-align: center; border: 1px solid #eee; }
+    .metric-val { font-size: 1.8rem; font-weight: 800; color: #1d1d1f; display: block; }
+    .metric-label { font-size: 0.75rem; color: #86868b; text-transform: uppercase; font-weight: 700; margin-top: 4px; }
+    
+    .leveraged { color: #ff3b30 !important; }
+    .insolvent-alert { 
+      background: #ff3b30; color: #fff; padding: 15px; border-radius: 12px; 
+      text-align: center; font-weight: 700; font-size: 0.9rem; margin-top: 20px; 
+      animation: pulse 2s infinite; display: none;
+    }
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+
+    /* Controles */
+    .profile-selector { display: flex; gap: 10px; margin-bottom: 25px; }
+    .profile-btn { 
+      flex: 1; padding: 12px; border-radius: 12px; border: 1px solid #d2d2d7; 
+      background: #fff; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: all 0.2s;
+    }
+    .profile-btn.active { background: #0071e3; color: #fff; border-color: #0071e3; }
+
+    .slider-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.85rem; font-weight: 600; }
+    input[type=range] { width: 100%; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="index.html" class="nav-back"><span class="chevron">‹</span> Tema 7</a>
+    <span class="nav-center">Fragilidad Financiera · Apalancamiento</span>
+    <span class="nav-spacer"></span>
+  </nav>
+
+  <div class="main-container">
+    <div class="visual-side">
+      <div class="card">
+        <h3>🏦 Balance del Hogar (Activos vs Pasivos)</h3>
+        <div id="math-equations" style="margin: 15px 0; font-size: 0.9rem; color: #6e6e73;"></div>
+        
+        <div class="balance-summary">
+          <div class="metric-box">
+            <span id="val-networth" class="metric-val">$50,000</span>
+            <span class="metric-label">Patrimonio Neto</span>
+          </div>
+          <div class="metric-box">
+            <span id="val-leverage" class="metric-val">4.0</span>
+            <span class="metric-label">Ratio Apalancamiento</span>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="balanceChart"></canvas>
+        </div>
+
+        <div id="insolvency-alert" class="insolvent-alert">
+          🚨 PATRIMONIO INMOBILIARIO NEGATIVO (INSOLVENCIA)
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-side">
+      <div class="card" style="background: #f9f9fb; border: none;">
+        <h4 style="font-size: 0.65rem; color: #86868b; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 0.5px;">Selecciona Perfil de Hogar</h4>
+        <div class="profile-selector">
+          <button class="profile-btn active" id="btn-poor" onclick="setProfile('poor')">Hogar Vulnerable</button>
+          <button class="profile-btn" id="btn-rich" onclick="setProfile('rich')">Hogar Rico</button>
+        </div>
+
+        <h4 style="font-size: 0.65rem; color: #86868b; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 0.5px;">Crisis Inmobiliaria</h4>
+        <div class="slider-header">
+          <span>Valor de la Vivienda</span>
+          <span id="val-housing" style="font-weight:800; color:#0071e3">$200,000</span>
+        </div>
+        <input type="range" id="param-housing" min="50" max="250" value="200">
+        
+        <p style="font-size: 0.75rem; color: #6e6e73; margin-top: 20px; line-height: 1.5;">
+          Mueve el control para simular una caída en el precio de los activos. Observa cómo el patrimonio neto desaparece rápidamente en el hogar vulnerable.
+        </p>
+      </div>
+
+      <div class="exam-tip" style="background:#fff9e6; border:1.5px solid #ffcc00; border-radius:16px; padding:24px; color:#5c4d00; margin-top:24px; font-size:0.85rem;">
+        <strong>🎓 Tips para el Examen:</strong>
+        <p style="margin-top:8px">• <strong>Apalancamiento:</strong> Cuanto mayor es el ratio, mayor es el riesgo de que una pequeña caída en el valor de los activos volatilice todo el patrimonio neto.</p>
+        <p style="margin-top:12px">• <strong>Ventas Forzosas:</strong> Si el patrimonio es negativo, el hogar puede verse obligado a vender su activo, hundiendo aún más los precios del mercado (externalidad negativa).</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function kHTML(latex) { return katex.renderToString(latex, { throwOnError: false }); }
+    let chart;
+
+    let profiles = {
+      poor: { housing: 200000, debt: 180000, financial: 5000 },
+      rich: { housing: 500000, debt: 50000, financial: 200000 }
+    };
+
+    let state = { ...profiles.poor };
+
+    function initChart() {
+      const ctx = document.getElementById('balanceChart').getContext('2d');
+      chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Activos', 'Pasivos + Patrimonio'],
+          datasets: [
+            { label: 'Deuda (Pasivo)', data: [0, 0], backgroundColor: '#ff3b30' },
+            { label: 'Patrimonio Neto', data: [0, 0], backgroundColor: '#34c759' },
+            { label: 'Activo (Vivienda)', data: [0, 0], backgroundColor: '#0071e3' },
+            { label: 'Otros Activos', data: [0, 0], backgroundColor: '#5856d6' }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false, animation: false,
+          scales: {
+            x: { stacked: true },
+            y: { stacked: true, min: -50000, max: 800000, title: { display: true, text: 'Valor ($)' } }
+          },
+          plugins: { legend: { position: 'bottom' } }
+        }
+      });
+    }
+
+    function update() {
+      const totalAssets = state.housing + state.financial;
+      const netWorth = totalAssets - state.debt;
+      const leverage = netWorth > 0 ? (totalAssets / netWorth) : Infinity;
+
+      // UI
+      document.getElementById('val-networth').textContent = '$' + netWorth.toLocaleString();
+      document.getElementById('val-leverage').textContent = isFinite(leverage) ? leverage.toFixed(1) : "INSOLVENTE";
+      document.getElementById('val-housing').textContent = '$' + state.housing.toLocaleString();
+      
+      const leverageVal = document.getElementById('val-leverage');
+      if (leverage > 10 || !isFinite(leverage)) leverageVal.classList.add('leveraged');
+      else leverageVal.classList.remove('leveraged');
+
+      const alert = document.getElementById('insolvency-alert');
+      alert.style.display = netWorth < 0 ? 'block' : 'none';
+
+      // Gráfico
+      chart.data.datasets[0].data = [0, state.debt]; // Deuda a la derecha
+      chart.data.datasets[1].data = [0, Math.max(0, netWorth)]; // Patrimonio a la derecha
+      chart.data.datasets[2].data = [state.housing, 0]; // Vivienda a la izquierda
+      chart.data.datasets[3].data = [state.financial, 0]; // Otros a la izquierda
+      
+      // Manejar patrimonio negativo visualmente
+      if (netWorth < 0) {
+        chart.data.datasets[1].data = [0, 0]; // No hay barra positiva
+      }
+
+      chart.update();
+    }
+
+    function setProfile(type) {
+      state = { ...profiles[type] };
+      document.querySelectorAll('.profile-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('btn-' + type).classList.add('active');
+      document.getElementById('param-housing').value = state.housing / 1000;
+      update();
+    }
+
+    document.getElementById('param-housing').oninput = (e) => {
+      state.housing = e.target.value * 1000;
+      update();
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('math-equations').innerHTML = 
+        `${kHTML('\\text{Patrimonio Neto} = \\text{Activos} - \\text{Pasivos}')} <br> ${kHTML('\\text{Apalancamiento} = \\frac{\\text{Activos Totales}}{\\text{Patrimonio Neto}}')}`;
+      initChart();
+      update();
+    });
+  </script>
+</body>
+</html>

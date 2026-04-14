@@ -27,8 +27,12 @@ Este documento recopila la lógica de las preguntas más frecuentes en los exám
 - **Lógica:** La curva de Phillips se desplaza hacia arriba. El BC debe subir tipos para controlar la inflación, reduciendo el empleo.
 - **Herramientas:** `calculadora-fisher.html`, `simulador-espiral-inflacionista.html` y `simulador-banco-central.html`.
 
-## 🏗️ Tema 6: Progreso Técnico y Largo Plazo (NUEVO)
-- **Dinámica A-D-E-B:** "Explique por qué el progreso técnico puede reducir el empleo a corto plazo pero aumentarlo a largo plazo". Respuesta: A corto plazo sustituye mano de obra (punto D), pero a largo plazo los beneficios atraen a nuevas empresas (punto E) que crean empleo y suben salarios (punto B).
-- **Curva de Beveridge:** "Diferencie entre un movimiento a lo largo de la curva y un desplazamiento". Movimiento = Ciclo (demanda); Desplazamiento = Eficiencia/Habilidades (oferta/instituciones).
-- **Desigualdad:** "¿Cómo afecta la automatización a la curva de Lorenz?". Respuesta: Aumenta el desempleo y reduce la participación salarial, alejando la curva de la línea de igualdad (sube el Gini).
+## 🏗️ Tema 6: Progreso Técnico y Largo Plazo
+- **Dinámica A-D-E-B:** "Explique por qué el progreso técnico puede reducir el empleo a corto plazo pero aumentarlo a largo plazo". Respuesta: A corto plazo sustituye mano de obra, pero a largo plazo los beneficios atraen a nuevas empresas.
 - **Herramientas:** `mercado-laboral-largo-plazo.html`, `calculadora-desigualdad.html` y `simulador-curva-beveridge.html`.
+
+## 📜 Tema 7: Historia y Crisis (NUEVO)
+- **Estanflación:** "Diferencie la crisis de los 70 de la Edad de Oro". Respuesta: La Edad de Oro tuvo PS creciente por productividad; los 70 tuvieron PS decreciente (petróleo) y WS creciente (pugna distributiva), creando la brecha de negociación.
+- **Burbujas de Activos:** "¿Qué es el punto de inflexión en la curva CDP?". Respuesta: Es un equilibrio inestable. Un precio ligeramente superior inicia una burbuja; uno inferior, un crash.
+- **Apalancamiento:** "¿Por qué un alto ratio de apalancamiento es peligroso?". Respuesta: Porque hace que el patrimonio neto sea muy sensible a pequeñas caídas en el precio de los activos, pudiendo llevar a la insolvencia y a ventas forzosas.
+- **Herramientas:** `mercado-laboral-historico.html`, `simulador-burbujas.html` y `calculadora-apalancamiento.html`.
