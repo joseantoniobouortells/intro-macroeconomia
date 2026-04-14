@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador de Burbujas — Tema 7</title>
+  <link rel="stylesheet" href="../tema-1/assets/style.css">
+  <link rel="stylesheet" href="../tema-1/assets/katex.min.css">
+  <script src="../tema-1/assets/chart.umd.min.js"></script>
+  <script src="../tema-1/assets/katex.min.js"></script>
+  <style>
+    body { padding: 0; background: #f5f5f7; color: #1d1d1f; }
+    .site-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.85); backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.08); height: 48px;
+      display: flex; align-items: center; padding: 0 24px;
+    }
+    .nav-back { display: flex; align-items: center; gap: 4px; font-size: 0.8rem; font-weight: 500; color: #0071e3; text-decoration: none; width: 120px; }
+    .nav-center { flex: 1; text-align: center; font-size: 0.8rem; font-weight: 500; color: #1d1d1f; pointer-events: none; }
+    .nav-spacer { width: 120px; }
+
+    .main-container {
+      max-width: 1400px; margin: 0 auto; display: grid;
+      grid-template-columns: 1fr 400px; gap: 32px; padding: 32px 24px;
+      align-items: start;
+    }
+    @media (max-width: 1100px) { .main-container { grid-template-columns: 1fr; } }
+
+    .card { background: #fff; border-radius: 24px; padding: 28px; border: 1px solid #e5e5e5; margin-bottom: 24px; }
+    .chart-container { position: relative; height: 500px; }
+
+    .controls-side { position: sticky; top: 80px; }
+    .control-panel { background: #f9f9fb; border-radius: 20px; padding: 24px; }
+    
+    .btn-panic { 
+      background: #ff3b30; color: #fff; border: none; padding: 18px; border-radius: 14px; 
+      width: 100%; font-weight: 700; cursor: pointer; margin-top: 10px; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .btn-panic:hover { background: #d72c21; transform: scale(1.02); }
+    .btn-panic:active { transform: scale(0.98); }
+    .btn-panic:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .status-badge { 
+      padding: 8px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 700;
+      text-transform: uppercase; margin-bottom: 15px; display: inline-block;
+    }
+    .status-bubble { background: #fff9e6; color: #b38f00; }
+    .status-crash { background: #fff0f0; color: #ff3b30; }
+
+    .explanation-box { 
+      margin-top: 20px; padding: 20px; border-radius: 16px; 
+      background: #fff; border: 1px solid #eee; font-size: 0.85rem; line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="index.html" class="nav-back"><span class="chevron">‹</span> Tema 7</a>
+    <span class="nav-center">Crisis Financieras · Burbujas de Activos</span>
+    <span class="nav-spacer"></span>
+  </nav>
+
+  <div class="main-container">
+    
+    <div class="visual-side">
+      <div class="card">
+        <h3 style="margin:0 0 15px 0">📈 Dinámica de Precios: Curva en forma de S</h3>
+        <div class="chart-container">
+          <canvas id="bubbleChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-side">
+      <div class="control-panel">
+        <div id="market-status" class="status-badge status-bubble">Mercado en Auge</div>
+        
+        <h4 style="font-size: 0.65rem; color: #86868b; text-transform: uppercase; margin-bottom: 20px; letter-spacing: 0.5px;">Gestión de Expectativas</h4>
+        
+        <p style="font-size: 0.8rem; color: #6e6e73; margin-bottom: 20px;">
+          Actualmente el mercado cree que los precios seguirán subiendo. El equilibrio superior es estable pero frágil.
+        </p>
+
+        <button id="btn-panic" class="btn-panic" onclick="triggerPanic()">
+          <span>😱 Activar Pánico (Miedo)</span>
+        </button>
+
+        <button class="btn-panic" style="background:#f5f5f7; color:#1d1d1f; margin-top:10px; border:1px solid #d2d2d7" onclick="resetMarket()">
+          Reiniciar Mercado
+        </button>
+
+        <div id="step-info" class="explanation-box">
+          Observa cómo el <strong>Punto de Inflexión</strong> actúa como frontera. Si el precio cae por debajo, la espiral de pánico comienza.
+        </div>
+      </div>
+
+      <div class="exam-tip" style="background:#fff9e6; border:1.5px solid #ffcc00; border-radius:16px; padding:24px; color:#5c4d00; margin-top:24px; font-size:0.85rem;">
+        <strong>🎓 Tip de Examen:</strong>
+        <p style="margin-top:8px"><strong>Punto de Inflexión:</strong> Es un equilibrio inestable. Un ligero cambio de precio desencadena una retroalimentación positiva (burbuja o desplome).</p>
+        <p style="margin-top:12px"><strong>Ojo al test:</strong> Cuando el pesimismo desplaza la curva por debajo de la bisectriz, el mercado colapsa hasta el equilibrio bajo.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function kHTML(latex) { return katex.renderToString(latex, { throwOnError: false }); }
+    let chart;
+    let isAnimating = false;
+    let animationTimer = null;
+
+    function getCDP(p, shift = 0) {
+      const base = 10 / (1 + Math.exp(-0.8 * (p - 50)));
+      return base + p * 0.1 + 40 + shift;
+    }
+
+    function initChart() {
+      const ctx = document.getElementById('bubbleChart').getContext('2d');
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          datasets: [
+            { label: 'Bisectriz', data: [{x:0, y:0}, {x:100, y:100}], borderColor: '#86868b', borderDash: [5, 5], pointRadius: 0, fill: false },
+            { label: 'CDP', data: [], borderColor: '#0071e3', borderWidth: 4, pointRadius: 0, fill: false, tension: 0.4 },
+            { label: 'Equilibrios', data: [], backgroundColor: ['#34c759', '#ffcc00', '#34c759'], pointRadius: 8, showLine: false },
+            { label: 'Caída de Precios', data: [], borderColor: '#ff3b30', borderWidth: 2, pointRadius: 4, showLine: true, segment: { borderDash: [2, 2] } }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false, animation: false,
+          scales: {
+            x: { type: 'linear', min: 0, max: 100, title: { display: true, text: 'Precio Hoy (P t)' } },
+            y: { type: 'linear', min: 0, max: 100, title: { display: true, text: 'Precio Mañana (P t+1)' } }
+          }
+        }
+      });
+    }
+
+    function update(shift = 0) {
+      const axis = Array.from({length: 51}, (_, i) => i * 2);
+      chart.data.datasets[1].data = axis.map(p => ({ x: p, y: getCDP(p, shift) }));
+
+      if (shift === 0) {
+        chart.data.datasets[2].data = [{x: 8, y: 8}, {x: 45, y: 45}, {x: 92, y: 92}];
+        chart.data.datasets[2].backgroundColor = ['#34c759', '#ffcc00', '#34c759'];
+      } else {
+        chart.data.datasets[2].data = [{x: 16.6, y: 16.6}];
+        chart.data.datasets[2].backgroundColor = ['#34c759'];
+      }
+      chart.update();
+    }
+
+    function triggerPanic() {
+      if (isAnimating) return;
+      isAnimating = true;
+      document.getElementById('btn-panic').disabled = true;
+      
+      const status = document.getElementById('market-status');
+      status.textContent = "¡COLAPSO DEL MERCADO!";
+      status.className = "status-badge status-crash";
+      
+      update(-25);
+      animateCrash(92);
+    }
+
+    function animateCrash(startP) {
+      let currentP = startP;
+      let trajectory = [{x: currentP, y: currentP}];
+      
+      const step = () => {
+        if (!isAnimating) return;
+        
+        const nextP = getCDP(currentP, -25);
+        
+        // Parar si la caída es insignificante (llegada al equilibrio estable bajo)
+        if (Math.abs(nextP - currentP) < 0.1) {
+          isAnimating = false;
+          return;
+        }
+        
+        trajectory.push({x: currentP, y: nextP});
+        currentP = nextP;
+        trajectory.push({x: currentP, y: currentP});
+        
+        chart.data.datasets[3].data = [...trajectory];
+        chart.update();
+        
+        animationTimer = setTimeout(step, 400);
+      };
+      
+      step();
+    }
+
+    function resetMarket() {
+      isAnimating = false;
+      clearTimeout(animationTimer);
+      document.getElementById('btn-panic').disabled = false;
+      const status = document.getElementById('market-status');
+      status.textContent = "Mercado en Auge";
+      status.className = "status-badge status-bubble";
+      chart.data.datasets[3].data = [];
+      update(0);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initChart();
+      update(0);
+    });
+  </script>
+</body>
+</html>

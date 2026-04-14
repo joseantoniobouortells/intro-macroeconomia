@@ -54,4 +54,9 @@ Este documento consolida las fórmulas, lógicas y variables clave utilizadas en
 ### 🕰️ Tema 7: Historia y Crisis (Cap. 17)
 - **Edad de Oro (1950-1973):** Periodo de alta inversión y productividad que desplazó PS hacia arriba, compensando las subidas de WS y manteniendo bajo desempleo.
 - **Estanflación (Años 70):** Crisis de oferta (petróleo) que bajó la curva PS y ruptura de acuerdos sociales que subió la curva WS, generando inflación y desempleo altos simultáneamente.
+- **Burbujas de Activos (CDP):**
+    - **Curva de Dinámica de Precios (CDP):** Curva en forma de S que relaciona el precio actual con el esperado mañana.
+    - **Equilibrios Estables:** Puntos donde la CDP cruza la bisectriz con pendiente menor a 1 (Nivel bajo y nivel de burbuja).
+    - **Punto de Inflexión:** Equilibrio inestable. Si el precio sube por encima, se crea una burbuja; si baja, un desplome.
+    - **Colapso:** Un cambio en las expectativas (pesimismo) desplaza la CDP hacia abajo, eliminando el equilibrio de burbuja y provocando una caída libre de precios.
 - **Brecha de Negociación Histórica:** En los 70, la suma de las demandas de trabajadores y dueños superaba la tarta total disponible, retroalimentando la espiral inflacionista.

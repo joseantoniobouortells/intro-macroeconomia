@@ -51,6 +51,7 @@
 - `tema-7/`: Historia y Crisis (Capítulo 17 CORE).
     - `index.html`: Menú de herramientas del tema.
     - `mercado-laboral-historico.html`: Comparativa Edad de Oro vs Estanflación.
+    - `simulador-burbujas.html`: Dinámica de precios de activos y burbujas.
 
 ## 🧠 Núcleo de Inteligencia (Assets)
 - `tema-1/assets/style.css`: Estilos UI Apple-style unificados.
