@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Desigualdad — Tema 6</title>
+  <link rel="stylesheet" href="../tema-1/assets/style.css">
+  <link rel="stylesheet" href="../tema-1/assets/katex.min.css">
+  <script src="../tema-1/assets/chart.umd.min.js"></script>
+  <script src="../tema-1/assets/katex.min.js"></script>
+  <style>
+    body { padding: 0; background: #f5f5f7; color: #1d1d1f; }
+    .site-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.85); backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.08); height: 48px;
+      display: flex; align-items: center; padding: 0 24px;
+    }
+    .nav-back { display: flex; align-items: center; gap: 4px; font-size: 0.8rem; font-weight: 500; color: #0071e3; text-decoration: none; width: 120px; }
+    .nav-center { flex: 1; text-align: center; font-size: 0.8rem; font-weight: 500; color: #1d1d1f; pointer-events: none; }
+    .nav-spacer { width: 120px; }
+
+    .main-container {
+      max-width: 1400px; margin: 0 auto; display: grid;
+      grid-template-columns: 1fr 420px; gap: 32px; padding: 32px 24px;
+      align-items: start;
+    }
+    @media (max-width: 1100px) { .main-container { grid-template-columns: 1fr; } }
+
+    .card { background: #fff; border-radius: 24px; padding: 28px; border: 1px solid #e5e5e5; margin-bottom: 24px; }
+    .chart-container { position: relative; height: 450px; }
+
+    /* Controles de Entrada */
+    .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+    .input-group { display: flex; flex-direction: column; gap: 6px; }
+    .input-group label { font-size: 0.7rem; font-weight: 700; color: #86868b; text-transform: uppercase; }
+    .input-group input { 
+      padding: 10px; border-radius: 10px; border: 1px solid #d2d2d7; 
+      font-size: 1rem; font-weight: 600; text-align: center;
+    }
+
+    /* Botones Escenario */
+    .scenario-btns { display: flex; gap: 10px; margin-bottom: 24px; }
+    .btn-scen { 
+      flex: 1; padding: 12px; border-radius: 12px; border: 1px solid #d2d2d7;
+      background: #fff; cursor: pointer; font-size: 0.75rem; font-weight: 700; transition: all 0.2s;
+    }
+    .btn-scen:hover { border-color: #0071e3; background: #f0f7ff; }
+    .btn-scen.active { background: #0071e3; color: #fff; border-color: #0071e3; }
+
+    /* Métricas Gini */
+    .gini-display { 
+      background: #1d1d1f; color: #fff; border-radius: 20px; padding: 30px; 
+      text-align: center; margin-bottom: 24px; 
+    }
+    .gini-val { font-size: 3.5rem; font-weight: 800; line-height: 1; margin: 10px 0; }
+    .gini-label { font-size: 0.8rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="index.html" class="nav-back"><span class="chevron">‹</span> Tema 6</a>
+    <span class="nav-center">Automatización y Desigualdad · Lorenz</span>
+    <span class="nav-spacer"></span>
+  </nav>
+
+  <div class="main-container">
+    
+    <div class="visual-side">
+      <div class="card">
+        <h3 style="margin:0 0 20px 0">📊 Curva de Lorenz (Distribución de la Renta)</h3>
+        <div class="chart-container">
+          <canvas id="lorenzChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-side">
+      <div class="gini-display">
+        <div class="gini-label">Coeficiente de Gini</div>
+        <div id="res-gini" class="gini-val">0.36</div>
+        <p id="gini-desc" style="font-size: 0.75rem; opacity: 0.8; margin-top: 10px;"></p>
+      </div>
+
+      <div class="card" style="padding: 24px;">
+        <h4 style="font-size: 0.65rem; color: #86868b; text-transform: uppercase; margin-bottom: 20px; letter-spacing: 0.5px;">Simular Automatización</h4>
+        <div class="scenario-btns">
+          <button class="btn-scen active" id="btn-base" onclick="setScenario('base')">Inicial</button>
+          <button class="btn-scen" id="btn-short" onclick="setScenario('short')">Corto Plazo</button>
+          <button class="btn-scen" id="btn-long" onclick="setScenario('long')">Largo Plazo</button>
+        </div>
+
+        <div class="controls-grid">
+          <div class="input-group">
+            <label>Dueños</label>
+            <input type="number" id="in-owners" value="10" oninput="update()">
+          </div>
+          <div class="input-group">
+            <label>% Renta Dueños</label>
+            <input type="number" id="in-share-o" value="40" oninput="update()">
+          </div>
+          <div class="input-group">
+            <label>Empleados</label>
+            <input type="number" id="in-workers" value="80" oninput="update()">
+          </div>
+          <div class="input-group">
+            <label>Desempleados</label>
+            <input type="number" id="in-unemp" value="10" oninput="update()">
+          </div>
+        </div>
+      </div>
+
+      <div class="exam-tip" style="background:#fff9e6; border:1.5px solid #ffcc00; border-radius:16px; padding:24px; color:#5c4d00; margin-top:24px; font-size:0.85rem;">
+        <strong>🎓 Tip de Examen:</strong>
+        <p style="margin-top:8px">A corto plazo, la automatización destruye empleo, aumentando el grupo con renta cero. Esto desplaza la curva de Lorenz hacia afuera y sube el Gini.</p>
+        <p style="margin-top:12px">A largo plazo, el empleo se recupera y la mayor productividad puede subir el salario real, reduciendo la desigualdad.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let chart;
+    
+    function initChart() {
+      const ctx = document.getElementById('lorenzChart').getContext('2d');
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          datasets: [
+            {
+              label: 'Perfecta Igualdad',
+              data: [{x:0, y:0}, {x:100, y:100}],
+              borderColor: '#86868b',
+              borderDash: [5, 5],
+              pointRadius: 0,
+              fill: false
+            },
+            {
+              label: 'Curva de Lorenz',
+              data: [],
+              borderColor: '#0071e3',
+              backgroundColor: 'rgba(0, 113, 227, 0.1)',
+              borderWidth: 3,
+              fill: true,
+              tension: 0.1
+            }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false, animation: false,
+          scales: {
+            x: { type: 'linear', min: 0, max: 100, title: { display: true, text: '% Población Acumulada' } },
+            y: { type: 'linear', min: 0, max: 100, title: { display: true, text: '% Renta Acumulada' } }
+          }
+        }
+      });
+    }
+
+    function update() {
+      const nO = parseFloat(document.getElementById('in-owners').value) || 0;
+      const nW = parseFloat(document.getElementById('in-workers').value) || 0;
+      const nU = parseFloat(document.getElementById('in-unemp').value) || 0;
+      const sO = parseFloat(document.getElementById('in-share-o').value) || 0;
+      const sW = 100 - sO;
+
+      const totalPop = nO + nW + nU;
+      
+      // Coordenadas Lorenz
+      // 1. Desempleados (Renta 0)
+      const p1 = { x: (nU / totalPop) * 100, y: 0 };
+      // 2. Trabajadores (Suman su parte de la tarta)
+      const p2 = { x: ((nU + nW) / totalPop) * 100, y: sW };
+      // 3. Dueños (Llegan al 100%)
+      const p3 = { x: 100, y: 100 };
+
+      chart.data.datasets[1].data = [{x:0, y:0}, p1, p2, p3];
+      chart.update();
+
+      // Cálculo Gini (Basado en áreas de trapecios)
+      // Area bajo Lorenz = Suma de áreas de los 3 segmentos
+      const a1 = 0.5 * (p1.x / 100) * (0 + 0); // 0
+      const a2 = 0.5 * (nW / totalPop) * (0 + sW / 100);
+      const a3 = 0.5 * (nO / totalPop) * (sW / 100 + 1);
+      const areaUnder = a1 + a2 + a3;
+      
+      const gini = (0.5 - areaUnder) / 0.5;
+      document.getElementById('res-gini').textContent = gini.toFixed(3);
+      
+      let desc = "";
+      if (gini < 0.3) desc = "Distribución relativamente igualitaria.";
+      else if (gini < 0.5) desc = "Desigualdad moderada (estándar OCDE).";
+      else desc = "Desigualdad alta. Concentración extrema de renta.";
+      document.getElementById('gini-desc').textContent = desc;
+    }
+
+    function setScenario(type) {
+      document.querySelectorAll('.btn-scen').forEach(b => b.classList.remove('active'));
+      document.getElementById('btn-' + type).classList.add('active');
+
+      if (type === 'base') {
+        document.getElementById('in-owners').value = 10;
+        document.getElementById('in-workers').value = 80;
+        document.getElementById('in-unemp').value = 10;
+        document.getElementById('in-share-o').value = 40;
+      } else if (type === 'short') {
+        // La automatización despide a 20 trabajadores
+        document.getElementById('in-workers').value = 60;
+        document.getElementById('in-unemp').value = 30;
+        // Los dueños se quedan con el ahorro de costes (sube su share)
+        document.getElementById('in-share-o').value = 55;
+      } else if (type === 'long') {
+        // Se reabsorbe el empleo
+        document.getElementById('in-workers').value = 85;
+        document.getElementById('in-unemp').value = 5;
+        // Los salarios suben por la mayor productividad
+        document.getElementById('in-share-o').value = 42;
+      }
+      update();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initChart();
+      update();
+    });
+  </script>
+</body>
+</html>

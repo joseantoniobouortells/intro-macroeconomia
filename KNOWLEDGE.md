@@ -25,6 +25,28 @@ Este documento consolida las fórmulas, lógicas y variables clave utilizadas en
 
 ### 🎈 Tema 5: Inflación (Cap. 15)
 - **Ecuación de Fisher:** $r \approx i - \pi^e$.
-- **Efectos Redistributivos:** La inflación inesperada beneficia a deudores y perjudica a prestamistas.
-- **Brecha de Negociación:** Diferencia entre el salario real de WS y el de PS. Si $u < u^*$, la brecha es positiva.
-- **Espiral Inflacionista:** $\pi_t = \pi_{t-1} + \text{Brecha}$. El ajuste de expectativas desplaza la Curva de Phillips hacia arriba cada año si el desempleo se mantiene bajo.
+- **Brecha de Negociación:** Diferencia entre WS y PS. Si $u < u^*$, genera inflación creciente.
+- **Espiral Inflacionista:** $\pi_t = \pi_{t-1} + \text{Brecha}$.
+- **Banco Central:** Estabiliza la economía mediante el tipo de interés ($i$) para alcanzar su objetivo de inflación y empleo estructural ($e^*$).
+- **Curvas de Indiferencia:** Elipses que muestran la pérdida de bienestar del BC cuando se aleja de sus objetivos de inflación y empleo.
+
+### 🏗️ Tema 6: Progreso Técnico (Cap. 16)
+- **Dinámica A-D-E-B:**
+    - **A:** Equilibrio inicial.
+    - **D:** Nueva tecnología desplaza PS hacia arriba, pero el empleo cae a corto plazo (sustitución de mano de obra).
+    - **E:** Los altos beneficios atraen a nuevas empresas (entrada de capital).
+    - **B:** El nuevo equilibrio a largo plazo tiene mayor empleo y salarios reales más altos.
+- **Relación con Desigualdad:** El progreso técnico puede aumentar la desigualdad a corto plazo si los beneficios no se reinvierten en creación de empleo.
+- **Curva de Lorenz en Cap. 16:** 
+    - **Eje X:** Porcentaje de población (desempleados, empleados, dueños).
+    - **Eje Y:** Porcentaje de renta acumulada.
+    - **Efecto Automatización:** Aumenta el número de desempleados y reduce el "wage share" (participación salarial), alejando la curva de la línea de igualdad.
+
+### 📉 Curva de Beveridge (Emparejamiento)
+- **Concepto:** Relación inversa entre la tasa de vacantes ($v$) y la tasa de desempleo ($u$).
+- **Movimiento a lo largo de la curva:** Cambios en la demanda agregada (Ciclo económico). 
+    - **Auge:** Altas vacantes, bajo desempleo.
+    - **Recesión:** Bajas vacantes, alto desempleo.
+- **Desplazamiento de la curva:** Cambios en la eficiencia del mercado laboral (habilidades, geografía, servicios de empleo).
+    - **Hacia el origen:** Mayor eficiencia (mejor emparejamiento).
+    - **Hacia afuera:** Menor eficiencia (desajuste estructural).

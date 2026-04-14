@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Curva de Beveridge (Empleo) — Tema 6</title>
+  <link rel="stylesheet" href="../tema-1/assets/style.css">
+  <link rel="stylesheet" href="../tema-1/assets/katex.min.css">
+  <script src="../tema-1/assets/chart.umd.min.js"></script>
+  <script src="../tema-1/assets/katex.min.js"></script>
+  <style>
+    body { padding: 0; background: #f5f5f7; color: #1d1d1f; }
+    .site-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.85); backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.08); height: 48px;
+      display: flex; align-items: center; padding: 0 24px;
+    }
+    .nav-back { display: flex; align-items: center; gap: 4px; font-size: 0.8rem; font-weight: 500; color: #0071e3; text-decoration: none; width: 120px; }
+    .nav-center { flex: 1; text-align: center; font-size: 0.8rem; font-weight: 500; color: #1d1d1f; pointer-events: none; }
+    .nav-spacer { width: 120px; }
+
+    .main-container {
+      max-width: 1400px; margin: 0 auto; display: grid;
+      grid-template-columns: 1fr 400px; gap: 32px; padding: 32px 24px;
+      align-items: start;
+    }
+    @media (max-width: 1100px) { .main-container { grid-template-columns: 1fr; } }
+
+    .card { background: #fff; border-radius: 24px; padding: 28px; border: 1px solid #e5e5e5; margin-bottom: 24px; }
+    .chart-container { position: relative; height: 450px; }
+
+    .controls-side { position: sticky; top: 80px; }
+    .control-panel { background: #f9f9fb; border-radius: 20px; padding: 24px; }
+    
+    .slider-header { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.8rem; font-weight: 600; }
+    .slider-val { color: #0071e3; font-weight: 800; background: #e3f2fd; padding: 4px 10px; border-radius: 8px; }
+    input[type=range] { width: 100%; cursor: pointer; }
+
+    .btn-policy { 
+      padding: 14px; border-radius: 12px; border: 1px solid #d2d2d7; 
+      background: #fff; cursor: pointer; width: 100%; font-size: 0.8rem; font-weight: 700; margin-bottom: 10px; transition: all 0.2s;
+      text-align: left; display: flex; align-items: center; gap: 10px;
+    }
+    .btn-policy:hover { border-color: #0071e3; background: #f0f7ff; }
+    .btn-policy.active { background: #0071e3; color: #fff; border-color: #0071e3; }
+
+    .status-box { 
+      margin-top: 20px; padding: 15px; border-radius: 12px; 
+      background: #fff; border: 1px solid #eee; font-size: 0.8rem; line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <a href="index.html" class="nav-back"><span class="chevron">‹</span> Tema 6</a>
+    <span class="nav-center">Mercado Laboral · Beveridge (Eje Empleo)</span>
+    <span class="nav-spacer"></span>
+  </nav>
+
+  <div class="main-container">
+    
+    <div class="visual-side">
+      <div class="card">
+        <h3 style="margin:0 0 15px 0">📉 Beveridge: Empleo vs Vacantes</h3>
+        <div class="chart-container">
+          <canvas id="beveridgeChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-side">
+      <div class="control-panel">
+        <h4 style="font-size: 0.65rem; color: #86868b; text-transform: uppercase; margin-bottom: 20px; letter-spacing: 0.5px;">Ciclo Económico</h4>
+        
+        <div class="slider-header">
+          <span>Tasa de Empleo (<span id="math-e"></span>)</span>
+          <span id="val-e" class="slider-val">94.0%</span>
+        </div>
+        <input type="range" id="param-e" min="850" max="990" value="940">
+        
+        <div class="status-box" id="cycle-desc">
+          Mueve el control para ver cómo la economía se desplaza <strong>a lo largo de la curva</strong> entre auges y recesiones.
+        </div>
+
+        <h4 style="font-size: 0.65rem; color: #86868b; text-transform: uppercase; margin: 30px 0 15px; letter-spacing: 0.5px;">Eficiencia Institucional</h4>
+        
+        <button class="btn-policy active" id="btn-normal" onclick="setEfficiency('normal')">
+          <span>⚙️</span> Eficiencia Estándar
+        </button>
+        <button class="btn-policy" id="btn-better" onclick="setEfficiency('better')">
+          <span>✨</span> Mejor Emparejamiento (Origen)
+        </button>
+        <button class="btn-policy" id="btn-worse" onclick="setEfficiency('worse')">
+          <span>⚠️</span> Desajuste Estructural (Afuera)
+        </button>
+      </div>
+
+      <div class="exam-tip" style="background:#fff9e6; border:1.5px solid #ffcc00; border-radius:16px; padding:24px; color:#5c4d00; margin-top:24px; font-size:0.85rem;">
+        <strong>🎓 Tip de Examen:</strong>
+        <p style="margin-top:8px">Al usar el eje de <strong>Empleo</strong>, la curva de Beveridge tiene <strong>pendiente positiva</strong>: a mayor empleo (menor desempleo), más difícil es cubrir las vacantes existentes.</p>
+        <p style="margin-top:12px">El desplazamiento hacia la <strong>izquierda/arriba</strong> de la curva indica una pérdida de eficiencia estructural.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function kHTML(latex) { return katex.renderToString(latex, { throwOnError: false }); }
+    let chart;
+    
+    let state = {
+      e: 0.94,
+      efficiency: 0.002 // Factor base para la curva v = A / (1 - e)
+    };
+
+    function initChart() {
+      const ctx = document.getElementById('beveridgeChart').getContext('2d');
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          datasets: [
+            {
+              label: 'Curva de Beveridge (e)',
+              data: [],
+              borderColor: '#0071e3',
+              borderWidth: 3,
+              pointRadius: 0,
+              fill: false,
+              tension: 0.3
+            },
+            {
+              label: 'Punto Actual',
+              data: [],
+              backgroundColor: '#ff3b30',
+              pointRadius: 7,
+              showLine: false
+            }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false, animation: false,
+          scales: {
+            x: { type: 'linear', min: 0.85, max: 1.0, title: { display: true, text: 'Tasa de Empleo (e)' } },
+            y: { type: 'linear', min: 0, max: 0.15, title: { display: true, text: 'Tasa de Vacantes (v)' } }
+          }
+        }
+      });
+    }
+
+    function update() {
+      // Eje X: Empleo de 85% a 99%
+      const e_axis = Array.from({length: 30}, (_, i) => 0.85 + i * 0.005);
+      
+      // Curva: v = efficiency / (1 - e)
+      chart.data.datasets[0].data = e_axis.map(ex => ({
+        x: ex,
+        y: state.efficiency / (1 - ex)
+      }));
+
+      // Punto actual
+      const v = state.efficiency / (1 - state.e);
+      chart.data.datasets[1].data = [{x: state.e, y: v}];
+
+      // Descripciones
+      const lbl = document.getElementById('val-e');
+      const desc = document.getElementById('cycle-desc');
+      lbl.textContent = (state.e * 100).toFixed(1) + '%';
+
+      if (state.e > 0.96) {
+        desc.innerHTML = "<strong>Auge Económico:</strong> El empleo es muy alto. Las empresas compiten por pocos trabajadores disponibles, disparando las vacantes.";
+      } else if (state.e < 0.92) {
+        desc.innerHTML = "<strong>Recesión:</strong> El empleo cae. Las empresas dejan de publicar vacantes porque no necesitan ampliar su producción.";
+      } else {
+        desc.innerHTML = "<strong>Situación de Equilibrio:</strong> El mercado laboral opera a niveles normales de tensión.";
+      }
+
+      chart.update();
+    }
+
+    function setEfficiency(type) {
+      document.querySelectorAll('.btn-policy').forEach(b => b.classList.remove('active'));
+      document.getElementById('btn-' + type).classList.add('active');
+
+      // Un aumento de 'efficiency' en la fórmula v = A/(1-e) desplaza la curva HACIA ARRIBA (peor)
+      if (type === 'better') state.efficiency = 0.0012; // Más eficiente (hacia abajo/derecha)
+      else if (type === 'worse') state.efficiency = 0.0035; // Menos eficiente (hacia arriba/izquierda)
+      else state.efficiency = 0.002;
+
+      update();
+    }
+
+    document.getElementById('param-e').oninput = (e) => {
+      state.e = e.target.value / 1000;
+      update();
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('math-e').innerHTML = kHTML('e');
+      initChart();
+      update();
+    });
+  </script>
+</body>
+</html>
